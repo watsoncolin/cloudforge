@@ -32,6 +32,7 @@ import {
   ShoppingCartIcon,
   ReceiptPercentIcon,
   ChartBarIcon,
+  UserGroupIcon,
 } from "@heroicons/react/20/solid";
 import { ThemeProvider } from "next-themes";
 
@@ -135,6 +136,10 @@ export default function RootLayout({
                     <SidebarItem href="/">
                       <HomeIcon />
                       <SidebarLabel>Dashboard</SidebarLabel>
+                    </SidebarItem>
+                    <SidebarItem href="/customers">
+                      <UserGroupIcon />
+                      <SidebarLabel>Customers</SidebarLabel>
                     </SidebarItem>
                     <SidebarItem href="/suppliers">
                       <TruckIcon />

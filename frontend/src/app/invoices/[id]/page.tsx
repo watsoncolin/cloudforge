@@ -70,17 +70,17 @@ export default async function Invoice({ params }: { params: { id: string } }) {
 
           <DescriptionTerm>Email</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`mailto:${invoice.customer.contactEmail}`} className="flex items-center gap-2">
+            <Link href={`mailto:${invoice.customer.contact.email}`} className="flex items-center gap-2">
               <EnvelopeIcon className="size-4" />
-              {invoice.customer.contactEmail}
+              {invoice.customer.contact.email}
             </Link>
           </DescriptionDetails>
 
           <DescriptionTerm>Phone</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`tel:${invoice.customer.contactPhone}`} className="flex items-center gap-2">
+            <Link href={`tel:${invoice.customer.contact.phone}`} className="flex items-center gap-2">
               <PhoneIcon className="size-4" />
-              {invoice.customer.contactPhone}
+              {invoice.customer.contact.phone}
             </Link>
           </DescriptionDetails>
         </DescriptionList>

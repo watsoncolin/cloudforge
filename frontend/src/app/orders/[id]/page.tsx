@@ -60,7 +60,7 @@ export default async function Order({ params }: { params: { id: string } }) {
         <DescriptionList>
           <DescriptionTerm>Customer</DescriptionTerm>
           <DescriptionDetails>
-            {order.customer.name} {order.customer.contactName}
+            {order.customer.name} {order.customer.contact.name}
           </DescriptionDetails>
           <DescriptionTerm>Amount</DescriptionTerm>
           <DescriptionDetails>{order.totalPrice}</DescriptionDetails>

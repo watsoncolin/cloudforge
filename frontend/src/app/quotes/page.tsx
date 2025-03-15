@@ -28,8 +28,8 @@ export default function Quotes() {
         </TableHead>
         <TableBody>
           {quotes.map((quote) => (
-            <TableRow key={quote.id} href={`/quotes/${quote.id}`} title={quote.customer.name}>
-              <TableCell>{quote.id}</TableCell>
+            <TableRow key={quote.quoteId} href={`/quotes/${quote.quoteId}`} title={quote.customer.name}>
+              <TableCell>{quote.quoteId}</TableCell>
               <TableCell>{quote.customer.name}</TableCell>
               <TableCell>{quote.rfqId ? "RFQ" : "Manual"}</TableCell>
               <TableCell>{quote.status}</TableCell>

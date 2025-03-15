@@ -1,3 +1,4 @@
+import { Customer } from "./domain/customer";
 import { MaterialType } from "./domain/enums.ts/materialTypes.enum";
 import { Units } from "./domain/enums.ts/units.enum";
 import { InventoryItem } from "./domain/inventory-item";
@@ -506,11 +507,20 @@ export const getRFQs = (): RFQ[] => [
     rfqId: "RFQ-20240315-001",
     source: "Manual",
     customer: {
-      id: "CUST-456",
+      id: "CUST-789",
       name: "United Metals",
-      contactName: "Sarah Johnson",
-      contactEmail: "sarah.j@unitedmetals.com",
-      contactPhone: "+1-555-789-1234",
+      contact: {
+        name: "Sarah Johnson",
+        email: "sarah.j@unitedmetals.com",
+        phone: "+1-555-789-1234",
+      },
+      address: {
+        street: "123 Main St",
+        city: "Toronto",
+        province: "ON",
+        postalCode: "M5A 1A1",
+        country: "Canada",
+      },
     },
     receivedDate: "2024-03-15T14:20:00Z",
     materials: [
@@ -535,9 +545,18 @@ export const getRFQs = (): RFQ[] => [
     customer: {
       id: "CUST-456",
       name: "United Metals",
-      contactName: "Sarah Johnson",
-      contactEmail: "sarah.j@unitedmetals.com",
-      contactPhone: "+1-555-789-1234",
+      contact: {
+        name: "Sarah Johnson",
+        email: "sarah.j@unitedmetals.com",
+        phone: "+1-555-789-1234",
+      },
+      address: {
+        street: "123 Main St",
+        city: "Toronto",
+        province: "ON",
+        postalCode: "M5A 1A1",
+        country: "Canada",
+      },
     },
     receivedDate: "2024-03-15T14:20:00Z",
     materials: [
@@ -562,9 +581,18 @@ export const getRFQs = (): RFQ[] => [
     customer: {
       id: "CUST-456",
       name: "United Metals",
-      contactName: "Sarah Johnson",
-      contactEmail: "sarah.j@unitedmetals.com",
-      contactPhone: "+1-555-789-1234",
+      contact: {
+        name: "Sarah Johnson",
+        email: "sarah.j@unitedmetals.com",
+        phone: "+1-555-789-1234",
+      },
+      address: {
+        street: "123 Main St",
+        city: "Toronto",
+        province: "ON",
+        postalCode: "M5A 1A1",
+        country: "Canada",
+      },
     },
     materials: [],
     receivedDate: "2024-03-15T14:20:00Z",
@@ -593,14 +621,23 @@ export const getRFQs = (): RFQ[] => [
 
 export const getQuotes = (): Quote[] => [
   {
-    id: "QUOTE-20240315-001",
+    quoteId: "QUOTE-20240315-001",
     rfqId: "RFQ-20240315-002",
     customer: {
       id: "CUST-789",
       name: "Acme Metals Ltd.",
-      contactName: "John Doe",
-      contactEmail: "john.doe@acmemetals.com",
-      contactPhone: "+1-555-123-4567",
+      contact: {
+        name: "John Doe",
+        email: "john.doe@acmemetals.com",
+        phone: "+1-555-123-4567",
+      },
+      address: {
+        street: "123 Main St",
+        city: "Toronto",
+        province: "ON",
+        postalCode: "M5A 1A1",
+        country: "Canada",
+      },
     },
     quoteDate: "2024-03-15T14:20:00Z",
     expirationDate: "2024-03-30T23:59:59Z",
@@ -641,14 +678,23 @@ export const getQuotes = (): Quote[] => [
   },
 
   {
-    id: "QUOTE-20240315-002",
+    quoteId: "QUOTE-20240315-002",
     rfqId: "RFQ-20240315-002",
     customer: {
       id: "CUST-789",
       name: "Acme Metals Ltd.",
-      contactName: "John Doe",
-      contactEmail: "john.doe@acmemetals.com",
-      contactPhone: "+1-555-123-4567",
+      contact: {
+        name: "John Doe",
+        email: "john.doe@acmemetals.com",
+        phone: "+1-555-123-4567",
+      },
+      address: {
+        street: "123 Main St",
+        city: "Toronto",
+        province: "ON",
+        postalCode: "M5A 1A1",
+        country: "Canada",
+      },
     },
     quoteDate: "2024-03-15T14:20:00Z",
     expirationDate: "2024-03-30T23:59:59Z",
@@ -678,7 +724,7 @@ export const getQuotes = (): Quote[] => [
 ];
 
 export const getQuote = (id: string): Quote | undefined => {
-  return getQuotes().find((quote) => quote.id === id);
+  return getQuotes().find((quote) => quote.quoteId === id);
 };
 
 const basePrices: Record<string, number> = {
@@ -744,9 +790,18 @@ export const getSalesOrders = (): SalesOrder[] => [
     customer: {
       id: "CUST-789",
       name: "Acme Metals Ltd.",
-      contactName: "John Doe",
-      contactEmail: "john.doe@acmemetals.com",
-      contactPhone: "+1-555-123-4567",
+      contact: {
+        name: "John Doe",
+        email: "john.doe@acmemetals.com",
+        phone: "+1-555-123-4567",
+      },
+      address: {
+        street: "123 Main St",
+        city: "Toronto",
+        province: "ON",
+        postalCode: "M5A 1A1",
+        country: "Canada",
+      },
     },
     orderDate: "2024-03-15T14:20:00Z",
     status: "Pending",
@@ -787,9 +842,18 @@ export const getInvoices = (): Invoice[] => [
     customer: {
       id: "CUST-789",
       name: "Acme Metals Ltd.",
-      contactName: "John Doe",
-      contactEmail: "john.doe@acmemetals.com",
-      contactPhone: "+1-555-123-4567",
+      contact: {
+        name: "John Doe",
+        email: "john.doe@acmemetals.com",
+        phone: "+1-555-123-4567",
+      },
+      address: {
+        street: "123 Main St",
+        city: "Toronto",
+        province: "ON",
+        postalCode: "M5A 1A1",
+        country: "Canada",
+      },
     },
     invoiceDate: "2024-03-15T14:20:00Z",
     dueDate: "2024-03-30T23:59:59Z",
@@ -817,5 +881,28 @@ export const getInvoices = (): Invoice[] => [
     currency: "USD",
     payments: [],
     createdAt: "2024-03-15T14:20:00Z",
+  },
+];
+
+export const getCustomer = (id: string): Customer | undefined => {
+  return getCustomers().find((customer) => customer.id === id);
+};
+
+export const getCustomers = (): Customer[] => [
+  {
+    id: "CUST-789",
+    name: "Acme Metals Ltd.",
+    contact: {
+      name: "John Doe",
+      email: "john.doe@acmemetals.com",
+      phone: "+1-555-123-4567",
+    },
+    address: {
+      street: "123 Main St",
+      city: "Toronto",
+      province: "ON",
+      postalCode: "M5A 1A1",
+      country: "Canada",
+    },
   },
 ];

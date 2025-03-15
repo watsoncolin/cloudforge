@@ -3,7 +3,7 @@ import { MaterialType } from "./enums.ts/materialTypes.enum";
 import { Units } from "./enums.ts/units.enum";
 
 export interface Quote {
-  id: string;
+  quoteId: string;
   rfqId?: string;
   customer: Customer;
   quoteDate: string;

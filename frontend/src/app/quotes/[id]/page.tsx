@@ -48,17 +48,17 @@ export default async function Quote({ params }: { params: { id: string } }) {
 
           <DescriptionTerm>Email</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`mailto:${quote.customer.contactEmail}`} className="flex items-center gap-2">
+            <Link href={`mailto:${quote.customer.contact.email}`} className="flex items-center gap-2">
               <EnvelopeIcon className="size-4" />
-              {quote.customer.contactEmail}
+              {quote.customer.contact.email}
             </Link>
           </DescriptionDetails>
 
           <DescriptionTerm>Phone</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`tel:${quote.customer.contactPhone}`} className="flex items-center gap-2">
+            <Link href={`tel:${quote.customer.contact.phone}`} className="flex items-center gap-2">
               <PhoneIcon className="size-4" />
-              {quote.customer.contactPhone}
+              {quote.customer.contact.phone}
             </Link>
           </DescriptionDetails>
         </DescriptionList>

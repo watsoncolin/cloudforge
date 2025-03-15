@@ -11,13 +11,22 @@ import { Table, TableHead, TableHeader, TableRow, TableCell, TableBody } from "@
 import { Quote, QuoteItem } from "@/domain/quote";
 
 const defaultQuote: Quote = {
-  id: "QUOTE-123",
+  quoteId: "QUOTE-123",
   customer: {
     id: "CUSTOMER-123",
     name: "John Doe",
-    contactName: "John Doe",
-    contactEmail: "john.doe@example.com",
-    contactPhone: "123-456-7890",
+    contact: {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      phone: "123-456-7890",
+    },
+    address: {
+      street: "123 Main St",
+      city: "Toronto",
+      province: "ON",
+      postalCode: "M5A 1A1",
+      country: "Canada",
+    },
   },
   items: [],
   subtotal: 0,
