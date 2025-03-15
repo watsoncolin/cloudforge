@@ -1,48 +1,34 @@
-import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table, Button } from "@/components/catalyst-ui";
-import { getCustomers } from "@/data";
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { ListPageHeader } from "@/components/list-page-header";
+import { CustomersList } from "./customers-list";
+import { api } from "@/api/client";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/api-hooks";
 
 export const metadata: Metadata = {
   title: "Customers",
 };
 
-const AddCustomer = () => {
-  return <Button>Add Customer</Button>;
-};
+export default async function CustomersPage() {
+  const queryClient = new QueryClient();
 
-export default function Customers() {
-  const customers = getCustomers();
+  // Prefetch the customers query on the server
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.customers.all,
+    queryFn: () => api.customers.customersControllerGetAllCustomers().then((res) => res),
+  });
 
   return (
-    <>
-      <ListPageHeader title="Customers" searchPlaceholder="Search customers&hellip;" button={<AddCustomer />} />
-      <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
-        <TableHead>
-          <TableRow>
-            <TableHeader>Customer ID</TableHeader>
-            <TableHeader>Name</TableHeader>
-            <TableHeader>Location</TableHeader>
-            <TableHeader>Contact</TableHeader>
-            <TableHeader>Phone</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {customers.map((customer) => (
-            <TableRow key={customer.id} href={`/customers/${customer.id}`} title={customer.name}>
-              <TableCell>{customer.id}</TableCell>
-              <TableCell>{customer.name}</TableCell>
-              <TableCell>
-                {customer.address.city}, {customer.address.province}, {customer.address.country}
-              </TableCell>
-              <TableCell>
-                <span className="line-clamp-1">{customer.contact.name}</span>
-              </TableCell>
-              <TableCell className="text-right">{customer.contact.phone}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+          </div>
+        }
+      >
+        <CustomersList />
+      </Suspense>
+    </HydrationBoundary>
   );
 }

@@ -2,7 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type CreateCustomerDto = {
+export type CustomerDto = {
+  /**
+   * The unique identifier of the customer
+   */
+  id: string;
   /**
    * The name of the customer company
    */

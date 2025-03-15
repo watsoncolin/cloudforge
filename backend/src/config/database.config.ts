@@ -9,5 +9,5 @@ export const databaseConfig: TypeOrmModuleOptions = {
   database: process.env.DB_DATABASE || 'cloudforge',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: process.env.NODE_ENV !== 'production', // Auto-create database schema in development
-  logging: process.env.NODE_ENV !== 'production',
+  logging: false, // Disable query logging
 };

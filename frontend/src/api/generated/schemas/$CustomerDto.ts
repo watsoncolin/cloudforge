@@ -2,8 +2,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export const $CreateCustomerDto = {
+export const $CustomerDto = {
   properties: {
+    id: {
+      type: 'string',
+      description: `The unique identifier of the customer`,
+      isRequired: true,
+    },
     name: {
       type: 'string',
       description: `The name of the customer company`,

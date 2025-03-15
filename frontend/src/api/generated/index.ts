@@ -11,10 +11,12 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { CreateCustomerDto } from './models/CreateCustomerDto';
+export type { CustomerDto } from './models/CustomerDto';
 export type { LoginDto } from './models/LoginDto';
 export type { RegisterDto } from './models/RegisterDto';
 
 export { $CreateCustomerDto } from './schemas/$CreateCustomerDto';
+export { $CustomerDto } from './schemas/$CustomerDto';
 export { $LoginDto } from './schemas/$LoginDto';
 export { $RegisterDto } from './schemas/$RegisterDto';
 

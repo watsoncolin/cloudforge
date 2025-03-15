@@ -14,7 +14,7 @@ export class ApiClient {
   public readonly request: BaseHttpRequest;
   constructor(config?: Partial<OpenAPIConfig>, HttpRequest: HttpRequestConstructor = FetchHttpRequest) {
     this.request = new HttpRequest({
-      BASE: config?.BASE ?? '',
+      BASE: config?.BASE ?? 'http://localhost:3001',
       VERSION: config?.VERSION ?? '1.0',
       WITH_CREDENTIALS: config?.WITH_CREDENTIALS ?? false,
       CREDENTIALS: config?.CREDENTIALS ?? 'include',

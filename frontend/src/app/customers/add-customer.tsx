@@ -15,6 +15,9 @@ import {
 } from "@/components/catalyst-ui";
 import { getCountries } from "@/data";
 import { useState } from "react";
+import { queryKeys, useCreateCustomer } from "@/hooks/api-hooks";
+import type { CreateCustomerDto } from "@/api/generated";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CustomerFormData {
   name: string;
@@ -29,15 +32,15 @@ interface CustomerFormData {
 }
 
 const initialFormData: CustomerFormData = {
-  name: "",
-  contactName: "",
-  contactEmail: "",
-  contactPhone: "",
-  addressStreet: "",
-  addressCity: "",
-  addressProvince: "",
-  addressPostalCode: "",
-  addressCountry: "",
+  name: "Mock Customer",
+  contactName: "Mock Contact",
+  contactEmail: "mock@example.com",
+  contactPhone: "123-456-7890",
+  addressStreet: "123 Main St",
+  addressCity: "Anytown",
+  addressProvince: "CA",
+  addressPostalCode: "12345",
+  addressCountry: "United States",
 };
 
 export function AddCustomer() {
@@ -45,6 +48,22 @@ export function AddCustomer() {
   const [formData, setFormData] = useState<CustomerFormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<CustomerFormData>>({});
   const countries = getCountries();
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: createCustomer,
+    isPending,
+    error: mutationError,
+  } = useCreateCustomer({
+    onSuccess: () => {
+      setFormData(initialFormData);
+      setIsOpen(false);
+      queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
+    },
+    onError: (error) => {
+      console.error("Error creating customer:", error);
+    },
+  });
 
   const validateForm = () => {
     const newErrors: Partial<CustomerFormData> = {};
@@ -73,26 +92,21 @@ export function AddCustomer() {
       return;
     }
 
-    try {
-      const response = await fetch("/api/suppliers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    // Transform form data to match API DTO
+    const customerData: CreateCustomerDto = {
+      name: formData.name,
+      contactName: formData.contactName,
+      contactEmail: formData.contactEmail,
+      contactPhone: formData.contactPhone,
+      address: formData.addressStreet,
+      city: formData.addressCity,
+      stateProvince: formData.addressProvince,
+      zipCode: formData.addressPostalCode,
+      country: formData.addressCountry,
+      paymentTerms: "Net 30", // Default value, you might want to add this to the form
+    };
 
-      if (!response.ok) {
-        throw new Error("Failed to create supplier");
-      }
-
-      // Reset form and close modal on success
-      setFormData(initialFormData);
-      setIsOpen(false);
-    } catch (error) {
-      console.error("Error creating supplier:", error);
-      // Handle error (you might want to show an error message to the user)
-    }
+    createCustomer(customerData);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -118,12 +132,17 @@ export function AddCustomer() {
   return (
     <>
       <Button type="button" onClick={() => setIsOpen(true)}>
-        Add Supplier
+        Add Customer
       </Button>
       <Dialog open={isOpen} onClose={setIsOpen} size="2xl">
         <form onSubmit={handleSubmit}>
-          <DialogTitle>Add New Supplier</DialogTitle>
-          <DialogDescription>Enter the details of the new supplier.</DialogDescription>
+          <DialogTitle>Add New Customer</DialogTitle>
+          <DialogDescription>Enter the details of the new customer.</DialogDescription>
+          {mutationError && (
+            <div className="mb-4 p-4 text-sm text-red-500 bg-red-50 rounded-lg">
+              Error creating customer: {mutationError.message}
+            </div>
+          )}
           <DialogBody>
             <FieldGroup>
               <Field>
@@ -235,10 +254,12 @@ export function AddCustomer() {
             </FieldGroup>
           </DialogBody>
           <DialogActions>
-            <Button plain type="button" onClick={() => setIsOpen(false)}>
+            <Button plain type="button" onClick={() => setIsOpen(false)} disabled={isPending}>
               Cancel
             </Button>
-            <Button type="submit">Add Customer</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Adding..." : "Add Customer"}
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

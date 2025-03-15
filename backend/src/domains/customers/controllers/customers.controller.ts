@@ -18,7 +18,6 @@ import {
   GetAllCustomersQuery,
 } from '../queries/get-customer.query';
 import { CreateCustomerDto } from '../dtos/create-customer.dto';
-import { Customer } from '../entities/customer.entity';
 import {
   ApiTags,
   ApiOperation,
@@ -26,6 +25,9 @@ import {
   ApiParam,
   ApiBody,
 } from '@nestjs/swagger';
+import { CustomerDto } from '../dtos/customer.dto';
+import { Customer } from '../entities/customer.entity';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('Customers')
 @Controller('customers')
@@ -41,11 +43,11 @@ export class CustomersController {
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Customer created successfully',
-    type: Customer,
+    type: CustomerDto,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input' })
   @ApiBody({ type: CreateCustomerDto })
-  async createCustomer(@Body() dto: CreateCustomerDto): Promise<Customer> {
+  async createCustomer(@Body() dto: CreateCustomerDto): Promise<CustomerDto> {
     const command = new CreateCustomerCommand(
       dto.name,
       dto.contactName,
@@ -58,7 +60,8 @@ export class CustomersController {
       dto.zipCode,
       dto.paymentTerms,
     );
-    return this.commandBus.execute(command);
+    const customer = await this.commandBus.execute(command);
+    return plainToInstance(CustomerDto, customer);
   }
 
   @Get()
@@ -66,10 +69,11 @@ export class CustomersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'List of all customers',
-    type: [Customer],
+    type: [CustomerDto],
   })
-  async getAllCustomers(): Promise<Customer[]> {
-    return this.queryBus.execute(new GetAllCustomersQuery());
+  async getAllCustomers(): Promise<CustomerDto[]> {
+    const customers = await this.queryBus.execute(new GetAllCustomersQuery());
+    return customers.map((customer) => plainToInstance(CustomerDto, customer));
   }
 
   @Get(':id')
@@ -78,14 +82,15 @@ export class CustomersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Customer found',
-    type: Customer,
+    type: CustomerDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Customer not found',
   })
-  async getCustomerById(@Param('id') id: string): Promise<Customer> {
-    return this.queryBus.execute(new GetCustomerByIdQuery(id));
+  async getCustomerById(@Param('id') id: string): Promise<CustomerDto> {
+    const customer = await this.queryBus.execute(new GetCustomerByIdQuery(id));
+    return plainToInstance(CustomerDto, customer);
   }
 
   @Put(':id')
@@ -95,7 +100,7 @@ export class CustomersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Customer updated successfully',
-    type: Customer,
+    type: CustomerDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -105,9 +110,10 @@ export class CustomersController {
   async updateCustomer(
     @Param('id') id: string,
     @Body() data: Partial<Customer>,
-  ): Promise<Customer> {
+  ): Promise<CustomerDto> {
     const command = new UpdateCustomerCommand(id, data);
-    return this.commandBus.execute(command);
+    const customer = await this.commandBus.execute(command);
+    return plainToInstance(CustomerDto, customer);
   }
 
   @Delete(':id')
