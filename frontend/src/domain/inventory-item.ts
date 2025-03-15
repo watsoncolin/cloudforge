@@ -1,13 +1,16 @@
+import { MaterialType } from "./enums.ts/materialTypes.enum";
+import { Units } from "./enums.ts/units.enum";
+
 export interface InventoryItem {
   id: number;
-  materialType: string;
+  materialType: MaterialType;
   grade: string;
   dimensions: {
     thickness: string;
     width: string;
     length: string;
   };
-  unitOfMeasure: string;
+  unitOfMeasure: Units;
   totalStock: number;
   availableStock: number;
   allocatedStock: number;

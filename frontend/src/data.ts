@@ -1,727 +1,14 @@
+import { MaterialType } from "./domain/enums.ts/materialTypes.enum";
+import { Units } from "./domain/enums.ts/units.enum";
 import { InventoryItem } from "./domain/inventory-item";
+import { Invoice } from "./domain/invoice";
+import { Quote } from "./domain/quote";
+import { RFQ } from "./domain/rfq";
+import { SalesOrder } from "./domain/sales-order";
 import { Supplier } from "./domain/supplier";
 
-export async function getOrder(id: string) {
-  return (await getOrders()).find((order) => order.id.toString() === id)!;
-}
-
 export async function getRecentOrders() {
-  return (await getOrders()).slice(0, 10);
-}
-
-export async function getOrders() {
-  return [
-    {
-      id: 3000,
-      url: "/orders/3000",
-      date: "May 9, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_2HLf8DfYJ0Db7asfCC5T546TY",
-        card: {
-          number: "1254",
-          type: "American Express",
-          expiry: "01 / 2025",
-        },
-      },
-      customer: {
-        name: "Leslie Alexander",
-        email: "leslie.alexander@example.com",
-        address: "123 Main St. Toronto, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3001,
-      url: "/orders/3001",
-      date: "May 5, 2024",
-      amount: {
-        usd: "$299.00",
-        cad: "$409.13",
-        fee: "$12.27",
-        net: "$396.86",
-      },
-      payment: {
-        transactionId: "ch_1KLf7AsYJ0Dda7fs3CC5d46TY",
-        card: {
-          number: "3897",
-          type: "Visa",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Michael Foster",
-        email: "michael.foster@example.com",
-        address: "357 Bridge St. New York, NY",
-        country: "USA",
-        countryFlagUrl: "/flags/us.svg",
-      },
-      event: await getEvent("1001"),
-    },
-    {
-      id: 3002,
-      url: "/orders/3002",
-      date: "Apr 28, 2024",
-      amount: {
-        usd: "$150.00",
-        cad: "$205.25",
-        fee: "$6.15",
-        net: "$199.10",
-      },
-      payment: {
-        transactionId: "ch_2DLf5AsYJ0Ddb7fs3CC5d46TY",
-        card: {
-          number: "7421",
-          type: "Mastercard",
-          expiry: "12 / 2026",
-        },
-      },
-      customer: {
-        name: "Dries Vincent",
-        email: "dries.vincent@example.com",
-        address: "456 Elm St. Vancouver, BC",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1002"),
-    },
-    {
-      id: 3003,
-      url: "/orders/3003",
-      date: "Apr 23, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_3KLf6DfYJ0Db7fassCC546TY",
-        card: {
-          number: "5683",
-          type: "Visa",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Lindsay Walton",
-        email: "lindsay.walton@example.com",
-        address: "789 Oak St. Montreal, QC",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3004,
-      url: "/orders/3004",
-      date: "Apr 18, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_4HLf7DfYJ0Db78fas3C5d6TY",
-        card: {
-          number: "9576",
-          type: "Visa",
-          expiry: "01 / 2025",
-        },
-      },
-      customer: {
-        name: "Courtney Henry",
-        email: "courtney.henry@example.com",
-        address: "321 Pine St. Calgary, AB",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1003"),
-    },
-    {
-      id: 3005,
-      url: "/orders/3005",
-      date: "Apr 14, 2024",
-      amount: {
-        usd: "$299.00",
-        cad: "$409.13",
-        fee: "$12.27",
-        net: "$396.86",
-      },
-      payment: {
-        transactionId: "ch_5HLf8DfYJ0Ddb78fas3CC5TY",
-        card: {
-          number: "2310",
-          type: "Visa",
-          expiry: "08 / 2024",
-        },
-      },
-      customer: {
-        name: "Tom Cook",
-        email: "tom.cook@example.com",
-        address: "741 Lake St. Miami, FL",
-        country: "USA",
-        countryFlagUrl: "/flags/us.svg",
-      },
-      event: await getEvent("1001"),
-    },
-    {
-      id: 3006,
-      url: "/orders/3006",
-      date: "Apr 10, 2024",
-      amount: {
-        usd: "$150.00",
-        cad: "$205.25",
-        fee: "$6.15",
-        net: "$199.10",
-      },
-      payment: {
-        transactionId: "ch_6KLf9DfYJ0Db7asf3CC54dTY",
-        card: {
-          number: "6942",
-          type: "Mastercard",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Whitney Francis",
-        email: "whitney.francis@example.com",
-        address: "654 Maple St. Ottawa, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1002"),
-    },
-    {
-      id: 3007,
-      url: "/orders/3007",
-      date: "Apr 6, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_7KLf6DfYJ0Ddb78fs3C5d6TY",
-        card: {
-          number: "8473",
-          type: "Visa",
-          expiry: "08 / 2024",
-        },
-      },
-      customer: {
-        name: "Leonard Krasner",
-        email: "leonard.krasner@example.com",
-        address: "987 Birch St. Winnipeg, MB",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3008,
-      url: "/orders/3008",
-      date: "Apr 3, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_8HLf5AsYJ0Db78fassCC5d6TY",
-        card: {
-          number: "5061",
-          type: "Visa",
-          expiry: "11 / 2026",
-        },
-      },
-      customer: {
-        name: "Floyd Miles",
-        email: "floyd.miles@example.com",
-        address: "147 Cedar St. Quebec City, QC",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3009,
-      url: "/orders/3009",
-      date: "Mar 29, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_9KLf7DfYJ0Ddb78fas3C5dTY",
-        card: {
-          number: "3129",
-          type: "American Express",
-          expiry: "06 / 2025",
-        },
-      },
-      customer: {
-        name: "Emily Selman",
-        email: "emily.selman@example.com",
-        address: "258 Willow St. Halifax, NS",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1003"),
-    },
-    {
-      id: 3010,
-      url: "/orders/3010",
-      date: "Mar 25, 2024",
-      amount: {
-        usd: "$299.00",
-        cad: "$409.13",
-        fee: "$12.27",
-        net: "$396.86",
-      },
-      payment: {
-        transactionId: "ch_1KLf8DfYJ0Db78fas3CC54TY",
-        card: {
-          number: "6498",
-          type: "Visa",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Kristin Watson",
-        email: "kristin.watson@example.com",
-        address: "369 Spruce St. Edmonton, AB",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1001"),
-    },
-    {
-      id: 3011,
-      url: "/orders/3011",
-      date: "Mar 21, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_2KLf9DfYJ0Db78fas3CC546Y",
-        card: {
-          number: "1732",
-          type: "American Express",
-          expiry: "08 / 2024",
-        },
-      },
-      customer: {
-        name: "Emma Dorsey",
-        email: "emma.dorsey@example.com",
-        address: "159 Park St. Chicago, IL",
-        country: "USA",
-        countryFlagUrl: "/flags/us.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3012,
-      url: "/orders/3012",
-      date: "Mar 16, 2024",
-      amount: {
-        usd: "$150.00",
-        cad: "$205.25",
-        fee: "$6.15",
-        net: "$199.10",
-      },
-      payment: {
-        transactionId: "ch_3HLf6DfYJ0Db7afs3CC54dTY",
-        card: {
-          number: "8256",
-          type: "Visa",
-          expiry: "01 / 2024",
-        },
-      },
-      customer: {
-        name: "Alicia Bell",
-        email: "alicia.bell@example.com",
-        address: "741 Laurel St. Regina, SK",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1002"),
-    },
-    {
-      id: 3013,
-      url: "/orders/3013",
-      date: "Mar 12, 2024",
-      amount: {
-        usd: "$299.00",
-        cad: "$409.13",
-        fee: "$12.27",
-        net: "$396.86",
-      },
-      payment: {
-        transactionId: "ch_4DLf7DfYJ0Db78fs3CC5d46Y",
-        card: {
-          number: "4901",
-          type: "Mastercard",
-          expiry: "06 / 2025",
-        },
-      },
-      customer: {
-        name: "Jenny Wilson",
-        email: "jenny.wilson@example.com",
-        address: "852 Ash St. Saskatoon, SK",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1001"),
-    },
-    {
-      id: 3014,
-      url: "/orders/3014",
-      date: "Mar 8, 2024",
-      amount: {
-        usd: "$150.00",
-        cad: "$205.25",
-        fee: "$6.15",
-        net: "$199.10",
-      },
-      payment: {
-        transactionId: "ch_5KLf8DfYJ0Db78fssCC54TY",
-        card: {
-          number: "7365",
-          type: "Visa",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Anna Roberts",
-        email: "anna.roberts@example.com",
-        address: "852 Hill St. Houston, TX",
-        country: "USA",
-        countryFlagUrl: "/flags/us.svg",
-      },
-      event: await getEvent("1002"),
-    },
-    {
-      id: 3015,
-      url: "/orders/3015",
-      date: "Mar 4, 2024",
-      amount: {
-        usd: "$150.00",
-        cad: "$205.25",
-        fee: "$6.15",
-        net: "$199.10",
-      },
-      payment: {
-        transactionId: "ch_6HLf9DfYJ0Db78fas3CC546TY",
-        card: {
-          number: "2849",
-          type: "Visa",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Benjamin Russel",
-        email: "benjamin.russel@example.com",
-        address: "963 Cherry St. Victoria, BC",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1002"),
-    },
-    {
-      id: 3016,
-      url: "/orders/3016",
-      date: "Feb 28, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_7HLf6DfYJ0Db78fas3CC546Y",
-        card: {
-          number: "6132",
-          type: "Mastercard",
-          expiry: "01 / 2026",
-        },
-      },
-      customer: {
-        name: "Jeffrey Webb",
-        email: "jeffrey.webb@example.com",
-        address: "654 Ocean St. Hamilton, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3017,
-      url: "/orders/3017",
-      date: "Feb 23, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_8KLf5DfYJ0Db78fas3CC546TY",
-        card: {
-          number: "9054",
-          type: "Mastercard",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Kathryn Murphy",
-        email: "kathryn.murphy@example.com",
-        address: "357 River St. London, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3018,
-      url: "/orders/3018",
-      date: "Feb 19, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_9HLf8DfYJ0Db78fas3CC5dTY",
-        card: {
-          number: "4287",
-          type: "Mastercard",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Lawrence Hunter",
-        email: "lawrence.hunter@example.com",
-        address: "159 Lake St. Mississauga, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1003"),
-    },
-    {
-      id: 3019,
-      url: "/orders/3019",
-      date: "Feb 15, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_1HLf9DfYJ0Db78fas3CC54TY",
-        card: {
-          number: "1765",
-          type: "Visa",
-          expiry: "06 / 2025",
-        },
-      },
-      customer: {
-        name: "Yvette Armstrong",
-        email: "yvette.armstrong@example.com",
-        address: "852 Forest St. Markham, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1003"),
-    },
-    {
-      id: 3020,
-      url: "/orders/3020",
-      date: "Feb 10, 2024",
-      amount: {
-        usd: "$299.00",
-        cad: "$409.13",
-        fee: "$12.27",
-        net: "$396.86",
-      },
-      payment: {
-        transactionId: "ch_2DLf6DfYJ0Db78fas3CC546TY",
-        card: {
-          number: "5923",
-          type: "Visa",
-          expiry: "12 / 2024",
-        },
-      },
-      customer: {
-        name: "Angela Fisher",
-        email: "angela.fisher@example.com",
-        address: "741 Hill St. Brampton, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1001"),
-    },
-    {
-      id: 3021,
-      url: "/orders/3021",
-      date: "Feb 5, 2024",
-      amount: {
-        usd: "$80.00",
-        cad: "$109.47",
-        fee: "$3.28",
-        net: "$106.19",
-      },
-      payment: {
-        transactionId: "ch_3KLf5DfYJ0Db78fassCC546TY",
-        card: {
-          number: "3014",
-          type: "Visa",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Blake Reid",
-        email: "blake.reid@example.com",
-        address: "369 Valley St. Oshawa, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1000"),
-    },
-    {
-      id: 3022,
-      url: "/orders/3022",
-      date: "Feb 1, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_4HLf8DfYJ0Db78fas3CC546Y",
-        card: {
-          number: "8642",
-          type: "American Express",
-          expiry: "11 / 2026",
-        },
-      },
-      customer: {
-        name: "Hector Gibbons",
-        email: "hector.gibbons@example.com",
-        address: "258 Ridge St. Richmond Hill, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1003"),
-    },
-    {
-      id: 3023,
-      url: "/orders/3023",
-      date: "Jan 27, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_5KLf9DfYJ0Db78fs3CC546TY",
-        card: {
-          number: "5173",
-          type: "Visa",
-          expiry: "12 / 2025",
-        },
-      },
-      customer: {
-        name: "Fabricio Mendes",
-        email: "fabricio.mendes@example.com",
-        address: "147 Park St. Vaughan, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1003"),
-    },
-    {
-      id: 3024,
-      url: "/orders/3024",
-      date: "Jan 22, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_6HLf6DfYJ0Db78fas3CC5dTY",
-        card: {
-          number: "6298",
-          type: "Mastercard",
-          expiry: "06 / 2024",
-        },
-      },
-      customer: {
-        name: "Jillian Steward",
-        email: "jillian.steward@example.com",
-        address: "987 Grove St. Windsor, ON",
-        country: "Canada",
-        countryFlagUrl: "/flags/ca.svg",
-      },
-      event: await getEvent("1003"),
-    },
-    {
-      id: 3025,
-      url: "/orders/3025",
-      date: "Jan 18, 2024",
-      amount: {
-        usd: "$114.99",
-        cad: "$157.34",
-        fee: "$4.72",
-        net: "$152.62",
-      },
-      payment: {
-        transactionId: "ch_7HLf7DfYJ0Db78fas3CC546TY",
-        card: {
-          number: "9401",
-          type: "American Express",
-          expiry: "08 / 2025",
-        },
-      },
-      customer: {
-        name: "Chelsea Hagon",
-        email: "chelsea.hagon@example.com",
-        address: "654 Court St. Los Angeles, CA",
-        country: "USA",
-        countryFlagUrl: "/flags/us.svg",
-      },
-      event: await getEvent("1003"),
-    },
-  ];
-}
-
-export async function getEvent(id: string) {
-  return (await getEvents()).find((event) => event.id.toString() === id)!;
-}
-
-export async function getEventOrders(id: string) {
-  return (await getOrders()).filter((order) => order.event.id.toString() === id);
+  return (await getSalesOrders()).slice(0, 10);
 }
 
 export async function getEvents() {
@@ -1070,14 +357,14 @@ export const getInventoryItem = (id: number): InventoryItem | undefined => {
 export const getInventory = (): InventoryItem[] => [
   {
     id: 101,
-    materialType: "Steel",
+    materialType: MaterialType.Steel,
     grade: "ASTM A36",
     dimensions: {
       thickness: "0.5",
       width: "48",
       length: "96",
     },
-    unitOfMeasure: "lbs",
+    unitOfMeasure: Units.Pounds,
     totalStock: 5000,
     availableStock: 2000,
     allocatedStock: 3000,
@@ -1105,14 +392,14 @@ export const getInventory = (): InventoryItem[] => [
   },
   {
     id: 102,
-    materialType: "Aluminum",
+    materialType: MaterialType.Aluminum,
     grade: "6061-T6",
     dimensions: {
       thickness: "0.25",
       width: "48",
       length: "120",
     },
-    unitOfMeasure: "lbs",
+    unitOfMeasure: Units.Pounds,
     totalStock: 3000,
     availableStock: 1000,
     allocatedStock: 2000,
@@ -1140,14 +427,14 @@ export const getInventory = (): InventoryItem[] => [
   },
   {
     id: 103,
-    materialType: "Stainless Steel",
+    materialType: MaterialType.StainlessSteel,
     grade: "304",
     dimensions: {
       thickness: "0.125",
       width: "60",
       length: "144",
     },
-    unitOfMeasure: "lbs",
+    unitOfMeasure: Units.Pounds,
     totalStock: 7000,
     availableStock: 4000,
     allocatedStock: 3000,
@@ -1175,14 +462,14 @@ export const getInventory = (): InventoryItem[] => [
   },
   {
     id: 104,
-    materialType: "Copper",
+    materialType: MaterialType.Copper,
     grade: "C110",
     dimensions: {
       thickness: "0.375",
       width: "36",
       length: "96",
     },
-    unitOfMeasure: "lbs",
+    unitOfMeasure: Units.Pounds,
     totalStock: 2500,
     availableStock: 500,
     allocatedStock: 2000,
@@ -1207,5 +494,328 @@ export const getInventory = (): InventoryItem[] => [
         qualityIssues: false,
       },
     ],
+  },
+];
+
+export const getRFQ = (id: string): RFQ | undefined => {
+  return getRFQs().find((rfq) => rfq.rfqId === id);
+};
+
+export const getRFQs = (): RFQ[] => [
+  {
+    rfqId: "RFQ-20240315-001",
+    source: "Manual",
+    customer: {
+      id: "CUST-456",
+      name: "United Metals",
+      contactName: "Sarah Johnson",
+      contactEmail: "sarah.j@unitedmetals.com",
+      contactPhone: "+1-555-789-1234",
+    },
+    receivedDate: "2024-03-15T14:20:00Z",
+    materials: [
+      {
+        lineItemId: "L-003",
+        materialType: MaterialType.Steel,
+        grade: "ASTM A36",
+        dimensions: { thickness: 0.5, width: 48, length: 96 },
+        quantity: 15,
+        unitOfMeasure: Units.Sheets,
+        requiredDate: "2024-04-05",
+        status: "Available",
+      },
+    ],
+    itemsRequested: 1,
+    status: "In Progress",
+    createdAt: "2024-03-15T14:20:00Z",
+  },
+  {
+    rfqId: "RFQ-20240315-002",
+    source: "Manual",
+    customer: {
+      id: "CUST-456",
+      name: "United Metals",
+      contactName: "Sarah Johnson",
+      contactEmail: "sarah.j@unitedmetals.com",
+      contactPhone: "+1-555-789-1234",
+    },
+    receivedDate: "2024-03-15T14:20:00Z",
+    materials: [
+      {
+        lineItemId: "L-003",
+        materialType: MaterialType.Steel,
+        grade: "ASTM A36",
+        dimensions: { thickness: 0.5, width: 48, length: 96 },
+        quantity: 15,
+        unitOfMeasure: Units.Sheets,
+        requiredDate: "2024-04-05",
+        status: "Available",
+      },
+    ],
+    itemsRequested: 1,
+    status: "Rejected",
+    createdAt: "2024-03-15T14:20:00Z",
+  },
+  {
+    rfqId: "RFQ-20240315-003",
+    source: "Uploaded",
+    customer: {
+      id: "CUST-456",
+      name: "United Metals",
+      contactName: "Sarah Johnson",
+      contactEmail: "sarah.j@unitedmetals.com",
+      contactPhone: "+1-555-789-1234",
+    },
+    materials: [],
+    receivedDate: "2024-03-15T14:20:00Z",
+    extractedData: {
+      source: "Uploaded",
+      fileUrl: "s3://rfqs/uploaded/rfq-123.pdf",
+      extractionConfidence: 0.95,
+      materials: [
+        {
+          lineItemId: "L-003",
+          materialType: MaterialType.Steel,
+          grade: "ASTM A36",
+          dimensions: { thickness: 0.5, width: 48, length: 96 },
+          quantity: 15,
+          unitOfMeasure: Units.Sheets,
+          requiredDate: "2024-04-05",
+          status: "Pending",
+        },
+      ],
+    },
+    itemsRequested: 1,
+    status: "Pending",
+    createdAt: "2024-03-15T14:20:00Z",
+  },
+];
+
+export const getQuotes = (): Quote[] => [
+  {
+    id: "QUOTE-20240315-001",
+    rfqId: "RFQ-20240315-002",
+    customer: {
+      id: "CUST-789",
+      name: "Acme Metals Ltd.",
+      contactName: "John Doe",
+      contactEmail: "john.doe@acmemetals.com",
+      contactPhone: "+1-555-123-4567",
+    },
+    quoteDate: "2024-03-15T14:20:00Z",
+    expirationDate: "2024-03-30T23:59:59Z",
+    status: "Pending Approval",
+    items: [
+      {
+        lineItemId: "L-001",
+        materialType: MaterialType.Steel,
+        grade: "ASTM A36",
+        dimensions: { thickness: 0.5, width: 48, length: 96 },
+        quantity: 10,
+        unitOfMeasure: Units.Sheets,
+        basePrice: 120.0,
+        finalPrice: 120.0,
+        totalPrice: 1200.0,
+        stockAvailability: "Available",
+      },
+      {
+        lineItemId: "L-002",
+        materialType: MaterialType.Aluminum,
+        grade: "6061-T6",
+        dimensions: { thickness: 0.25, width: 48 },
+        quantity: 5000,
+        unitOfMeasure: Units.Pounds,
+        basePrice: 2.5,
+        finalPrice: 2.5,
+        totalPrice: 12500.0,
+        stockAvailability: "Needs Sourcing",
+      },
+    ],
+    subtotal: 13700.0,
+    taxRate: 5.0,
+    taxAmount: 685.0,
+    totalPrice: 14385.0,
+    currency: "USD",
+    notes: "Pricing valid for 15 days. Subject to availability.",
+    createdAt: "2024-03-15T14:20:00Z",
+  },
+
+  {
+    id: "QUOTE-20240315-002",
+    rfqId: "RFQ-20240315-002",
+    customer: {
+      id: "CUST-789",
+      name: "Acme Metals Ltd.",
+      contactName: "John Doe",
+      contactEmail: "john.doe@acmemetals.com",
+      contactPhone: "+1-555-123-4567",
+    },
+    quoteDate: "2024-03-15T14:20:00Z",
+    expirationDate: "2024-03-30T23:59:59Z",
+    status: "Approved",
+    items: [
+      {
+        lineItemId: "L-001",
+        materialType: MaterialType.Steel,
+        grade: "ASTM A36",
+        dimensions: { thickness: 0.5, width: 48, length: 96 },
+        quantity: 10,
+        unitOfMeasure: Units.Sheets,
+        stockAvailability: "Available",
+        basePrice: 120.0,
+        finalPrice: 120.0,
+        totalPrice: 1200.0,
+      },
+    ],
+    subtotal: 13700.0,
+    taxRate: 5.0,
+    taxAmount: 685.0,
+    totalPrice: 14385.0,
+    currency: "USD",
+    notes: "Pricing valid for 15 days. Subject to availability.",
+    createdAt: "2024-03-15T14:20:00Z",
+  },
+];
+
+export const getQuote = (id: string): Quote | undefined => {
+  return getQuotes().find((quote) => quote.id === id);
+};
+
+const basePrices: Record<string, number> = {
+  "Steel-ASTM A36": 55.0,
+  "Steel-1018 Cold Rolled": 60.0,
+  "Aluminum-6061-T6": 80.0,
+  "Aluminum-5052-H32": 85.0,
+  "Stainless Steel-304": 120.0,
+  "Stainless Steel-316L": 140.0,
+  "Copper-C110": 200.0,
+};
+
+// Density (lbs per cubic inch)
+const materialDensities: Record<string, number> = {
+  Steel: 0.283,
+  Aluminum: 0.098,
+  "Stainless Steel": 0.29,
+  Copper: 0.323,
+};
+
+// Calculate the price of a material based on the base price, density, and quantity
+export const calculateMaterialPrice = (
+  materialType: MaterialType,
+  grade: string,
+  thickness: number,
+  width: number,
+  quantity: number,
+  unit: Units,
+  length?: number // Optional for coils
+): number => {
+  const key = `${materialType}-${grade}`;
+  const basePricePerCWT = basePrices[key] || 50; // Default price if missing
+  const density = materialDensities[materialType] || 0.283; // Default density
+
+  // Calculate volume (cubic inches)
+  const volume = thickness * width * (length || 1); // Length is 1 for coils
+  const weightLbs = volume * density; // Convert volume to weight
+  const weightCWT = weightLbs / 100; // Convert to hundredweight
+
+  // Base Material Cost
+  let materialCost = weightCWT * basePricePerCWT;
+
+  // Processing Fee
+  const processingFee = 25.0;
+
+  // Bulk Discount (5% off for orders over 10 tons)
+  if (unit === Units.Tons && quantity >= 10) {
+    materialCost *= 0.95;
+  }
+
+  // Total Price
+  return (materialCost + processingFee) * quantity;
+};
+
+export const getSalesOrder = (id: string): SalesOrder | undefined => {
+  return getSalesOrders().find((order) => order.orderId === id);
+};
+
+export const getSalesOrders = (): SalesOrder[] => [
+  {
+    orderId: "SO-20240316-001",
+    quoteId: "QUOTE-20240315-001",
+    customer: {
+      id: "CUST-789",
+      name: "Acme Metals Ltd.",
+      contactName: "John Doe",
+      contactEmail: "john.doe@acmemetals.com",
+      contactPhone: "+1-555-123-4567",
+    },
+    orderDate: "2024-03-15T14:20:00Z",
+    status: "Pending",
+    items: [
+      {
+        lineItemId: "L-001",
+        materialType: MaterialType.Steel,
+        grade: "ASTM A36",
+        dimensions: { thickness: 0.5, width: 48, length: 96 },
+        quantity: 10,
+        unitOfMeasure: Units.Sheets,
+        stockAvailability: "Available",
+        basePrice: 120.0,
+        finalPrice: 120.0,
+        totalPrice: 1200.0,
+        allocatedBatches: [
+          {
+            batchId: "B-001",
+            allocatedQuantity: 10,
+          },
+        ],
+      },
+    ],
+    totalPrice: 1200.0,
+    currency: "USD",
+    createdAt: "2024-03-15T14:20:00Z",
+  },
+];
+
+export const getInvoice = (id: string): Invoice | undefined => {
+  return getInvoices().find((invoice) => invoice.invoiceId === id);
+};
+
+export const getInvoices = (): Invoice[] => [
+  {
+    invoiceId: "INV-20240316-001",
+    orderId: "SO-20240316-001",
+    customer: {
+      id: "CUST-789",
+      name: "Acme Metals Ltd.",
+      contactName: "John Doe",
+      contactEmail: "john.doe@acmemetals.com",
+      contactPhone: "+1-555-123-4567",
+    },
+    invoiceDate: "2024-03-15T14:20:00Z",
+    dueDate: "2024-03-30T23:59:59Z",
+    status: "Pending",
+    items: [
+      {
+        lineItemId: "L-001",
+        materialType: MaterialType.Steel,
+        grade: "ASTM A36",
+        dimensions: {
+          thickness: 0.5,
+          width: 48,
+          length: 96,
+        },
+        quantity: 10,
+        unitOfMeasure: Units.Sheets,
+        unitPrice: 120.0,
+        totalPrice: 1200.0,
+      },
+    ],
+    subtotal: 1200.0,
+    taxRate: 5.0,
+    taxAmount: 60.0,
+    totalPrice: 1260.0,
+    currency: "USD",
+    payments: [],
+    createdAt: "2024-03-15T14:20:00Z",
   },
 ];

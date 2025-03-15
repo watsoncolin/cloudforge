@@ -1,38 +1,14 @@
-"use client";
-
-import { TableCell } from "@/components/catalyst-ui/table";
-import { TableBody } from "@/components/catalyst-ui/table";
-import { TableRow } from "@/components/catalyst-ui/table";
-import { TableHead } from "@/components/catalyst-ui/table";
-import { Table } from "@/components/catalyst-ui/table";
-import { TableHeader } from "@/components/catalyst-ui/table";
-import { Input } from "@/components/catalyst-ui/input";
-import { Heading } from "@/components/catalyst-ui/heading";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { InputGroup } from "@/components/catalyst-ui/input";
+import { TableCell, TableBody, TableRow, TableHead, Table, TableHeader } from "@/components/catalyst-ui";
 import { getInventory } from "@/data";
-import { Button } from "@/components/catalyst-ui/button";
+import { AddInventory } from "./[id]/add-inventory";
+import { ListPageHeader } from "@/components/list-page-header";
 
 export default function InventoryPage() {
   const inventory = getInventory();
 
   return (
     <>
-      <div className="flex items-end justify-between gap-4">
-        <Heading>
-          Inventory
-          <div className="mt-4 flex max-w-xl gap-4">
-            <div className="flex-1">
-              <InputGroup>
-                <MagnifyingGlassIcon />
-                <Input name="search" placeholder="Search inventory&hellip;" />
-              </InputGroup>
-            </div>
-          </div>
-        </Heading>
-
-        <Button>Add Inventory</Button>
-      </div>
+      <ListPageHeader title="Inventory" button={<AddInventory />} />
       <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
         <TableHead>
           <TableRow>

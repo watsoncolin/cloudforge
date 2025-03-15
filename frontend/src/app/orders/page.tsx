@@ -1,47 +1,42 @@
-import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/catalyst-ui/table";
-import { Button } from "@/components/catalyst-ui/button";
-import { Heading } from "@/components/catalyst-ui/heading";
-import { Table } from "@/components/catalyst-ui/table";
-import { Avatar } from "@/components/catalyst-ui/avatar";
-import { getOrders } from "@/data";
+import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table, Badge, Button } from "@/components/catalyst-ui";
+import { getSalesOrders } from "@/data";
 import type { Metadata } from "next";
+import { ListPageHeader } from "@/components/list-page-header";
 
 export const metadata: Metadata = {
   title: "Orders",
 };
 
+const AddOrder = () => {
+  return <Button>Add Order</Button>;
+};
+
 export default async function Orders() {
-  const orders = await getOrders();
+  const orders = await getSalesOrders();
 
   return (
     <>
-      <div className="flex items-end justify-between gap-4">
-        <Heading>Orders</Heading>
-        <Button className="-my-0.5">Create order</Button>
-      </div>
+      <ListPageHeader title="Orders" button={<AddOrder />} />
       <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
         <TableHead>
           <TableRow>
             <TableHeader>Order number</TableHeader>
             <TableHeader>Purchase date</TableHeader>
             <TableHeader>Customer</TableHeader>
-            <TableHeader>Event</TableHeader>
-            <TableHeader className="text-right">Amount</TableHeader>
+            <TableHeader>Status</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
           {orders.map((order) => (
-            <TableRow key={order.id} href={order.url} title={`Order #${order.id}`}>
-              <TableCell>{order.id}</TableCell>
-              <TableCell className="text-zinc-500">{order.date}</TableCell>
+            <TableRow key={order.orderId} href={`/orders/${order.orderId}`} title={`Order #${order.orderId}`}>
+              <TableCell>{order.orderId}</TableCell>
+              <TableCell className="text-zinc-500">{order.orderDate}</TableCell>
               <TableCell>{order.customer.name}</TableCell>
               <TableCell>
-                <div className="flex items-center gap-2">
-                  <Avatar src={order.event.thumbUrl} className="size-6" />
-                  <span>{order.event.name}</span>
-                </div>
+                <Badge color={order.status == "Pending" ? "blue" : order.status == "Processing" ? "green" : undefined}>
+                  {order.status}
+                </Badge>
               </TableCell>
-              <TableCell className="text-right">US{order.amount.usd}</TableCell>
             </TableRow>
           ))}
         </TableBody>

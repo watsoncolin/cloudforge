@@ -48,17 +48,11 @@ export default async function Home() {
         </TableHead>
         <TableBody>
           {orders.map((order) => (
-            <TableRow key={order.id} href={order.url} title={`Order #${order.id}`}>
-              <TableCell>{order.id}</TableCell>
-              <TableCell className="text-zinc-500">{order.date}</TableCell>
+            <TableRow key={order.orderId} href={`/orders/${order.orderId}`} title={`Order #${order.orderId}`}>
+              <TableCell>{order.orderId}</TableCell>
+              <TableCell className="text-zinc-500">{order.orderDate}</TableCell>
               <TableCell>{order.customer.name}</TableCell>
-              {/* <TableCell>
-                <div className="flex items-center gap-2">
-                  <Avatar src={order.event.thumbUrl} className="size-6" />
-                  <span>{order.event.name}</span>
-                </div>
-              </TableCell> */}
-              <TableCell className="text-right">US{order.amount.usd}</TableCell>
+              <TableCell className="text-right">USD {order.totalPrice}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -144,7 +144,7 @@ export default function RootLayout({
                       <Square3Stack3DIcon />
                       <SidebarLabel>Inventory</SidebarLabel>
                     </SidebarItem>
-                    <SidebarItem href="/request-for-quotes">
+                    <SidebarItem href="/rfq">
                       <ClipboardDocumentIcon />
                       <SidebarLabel>RFQ</SidebarLabel>
                     </SidebarItem>

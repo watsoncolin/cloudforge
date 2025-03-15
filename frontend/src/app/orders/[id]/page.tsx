@@ -1,26 +1,25 @@
-import { getOrder } from "@/data";
-import { BanknotesIcon, CalendarIcon, ChevronLeftIcon, CreditCardIcon } from "@heroicons/react/16/solid";
+import { getSalesOrder } from "@/data";
+import { BanknotesIcon, CalendarIcon, ChevronLeftIcon } from "@heroicons/react/16/solid";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { RefundOrder } from "./refund";
 import { Badge } from "@/components/catalyst-ui/badge";
 import { Link } from "@/components/catalyst-ui/link";
 import { Heading, Subheading } from "@/components/catalyst-ui/heading";
 import { Divider } from "@/components/catalyst-ui/divider";
 import { DescriptionList, DescriptionTerm, DescriptionDetails } from "@/components/catalyst-ui/description-list";
-import { Avatar } from "@/components/catalyst-ui/avatar";
 import { Button } from "@/components/catalyst-ui/button";
+import { Table, TableHead, TableRow, TableCell, TableHeader, TableBody } from "@/components/catalyst-ui/table";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const order = await getOrder(params.id);
+  const order = await getSalesOrder(params.id);
 
   return {
-    title: order && `Order #${order.id}`,
+    title: order && `Order #${order.orderId}`,
   };
 }
 
 export default async function Order({ params }: { params: { id: string } }) {
-  const order = await getOrder(params.id);
+  const order = await getSalesOrder(params.id);
 
   if (!order) {
     notFound();
@@ -36,33 +35,21 @@ export default async function Order({ params }: { params: { id: string } }) {
       </div>
       <div className="mt-4 lg:mt-8">
         <div className="flex items-center gap-4">
-          <Heading>Order #{order.id}</Heading>
+          <Heading>Order #{order.orderId}</Heading>
           <Badge color="lime">Successful</Badge>
         </div>
         <div className="isolate mt-2.5 flex flex-wrap justify-between gap-x-6 gap-y-4">
           <div className="flex flex-wrap gap-x-10 gap-y-4 py-1.5">
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <BanknotesIcon className="size-4 shrink-0 fill-zinc-400 dark:fill-zinc-500" />
-              <span>US{order.amount.usd}</span>
-            </span>
-            <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
-              <CreditCardIcon className="size-4 shrink-0 fill-zinc-400 dark:fill-zinc-500" />
-              <span className="inline-flex gap-3">
-                {order.payment.card.type}{" "}
-                <span>
-                  <span aria-hidden="true">••••</span> {order.payment.card.number}
-                </span>
-              </span>
+              <span>{order.totalPrice}</span>
             </span>
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <CalendarIcon className="size-4 shrink-0 fill-zinc-400 dark:fill-zinc-500" />
-              <span>{order.date}</span>
+              <span>{order.orderDate}</span>
             </span>
           </div>
           <div className="flex gap-4">
-            <RefundOrder outline amount={order.amount.usd}>
-              Refund
-            </RefundOrder>
             <Button>Resend Invoice</Button>
           </div>
         </div>
@@ -72,56 +59,56 @@ export default async function Order({ params }: { params: { id: string } }) {
         <Divider className="mt-4" />
         <DescriptionList>
           <DescriptionTerm>Customer</DescriptionTerm>
-          <DescriptionDetails>{order.customer.name}</DescriptionDetails>
-          <DescriptionTerm>Event</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={order.event.url} className="flex items-center gap-2">
-              <Avatar src={order.event.thumbUrl} className="size-6" />
-              <span>{order.event.name}</span>
-            </Link>
+            {order.customer.name} {order.customer.contactName}
           </DescriptionDetails>
           <DescriptionTerm>Amount</DescriptionTerm>
-          <DescriptionDetails>US{order.amount.usd}</DescriptionDetails>
-          <DescriptionTerm>Amount after exchange rate</DescriptionTerm>
-          <DescriptionDetails>
-            US{order.amount.usd} &rarr; CA{order.amount.cad}
-          </DescriptionDetails>
-          <DescriptionTerm>Fee</DescriptionTerm>
-          <DescriptionDetails>CA{order.amount.fee}</DescriptionDetails>
-          <DescriptionTerm>Net</DescriptionTerm>
-          <DescriptionDetails>CA{order.amount.net}</DescriptionDetails>
+          <DescriptionDetails>{order.totalPrice}</DescriptionDetails>
+          <DescriptionTerm>Status</DescriptionTerm>
+          <DescriptionDetails>{order.status}</DescriptionDetails>
+          <DescriptionTerm>Order Date</DescriptionTerm>
+          <DescriptionDetails>{order.orderDate}</DescriptionDetails>
+          <DescriptionTerm>Tracking Number</DescriptionTerm>
+          <DescriptionDetails>{order.trackingNumber}</DescriptionDetails>
+          <DescriptionTerm>Shipping Date</DescriptionTerm>
+          <DescriptionDetails>{order.shippingDate}</DescriptionDetails>
+          <DescriptionTerm>Delivery Date</DescriptionTerm>
+          <DescriptionDetails>{order.deliveryDate}</DescriptionDetails>
         </DescriptionList>
       </div>
       <div className="mt-12">
-        <Subheading>Payment method</Subheading>
+        <Subheading>Materials</Subheading>
         <Divider className="mt-4" />
-        <DescriptionList>
-          <DescriptionTerm>Transaction ID</DescriptionTerm>
-          <DescriptionDetails>{order.payment.transactionId}</DescriptionDetails>
-          <DescriptionTerm>Card number</DescriptionTerm>
-          <DescriptionDetails>•••• {order.payment.card.number}</DescriptionDetails>
-          <DescriptionTerm>Card type</DescriptionTerm>
-          <DescriptionDetails>{order.payment.card.type}</DescriptionDetails>
-          <DescriptionTerm>Card expiry</DescriptionTerm>
-          <DescriptionDetails>{order.payment.card.expiry}</DescriptionDetails>
-          <DescriptionTerm>Owner</DescriptionTerm>
-          <DescriptionDetails>{order.customer.name}</DescriptionDetails>
-          <DescriptionTerm>Email address</DescriptionTerm>
-          <DescriptionDetails>{order.customer.email}</DescriptionDetails>
-          <DescriptionTerm>Address</DescriptionTerm>
-          <DescriptionDetails>{order.customer.address}</DescriptionDetails>
-          <DescriptionTerm>Country</DescriptionTerm>
-          <DescriptionDetails>
-            <span className="inline-flex gap-3">
-              <img src={order.customer.countryFlagUrl} alt={order.customer.country} />
-              {order.customer.country}
-            </span>
-          </DescriptionDetails>
-          <DescriptionTerm>CVC</DescriptionTerm>
-          <DescriptionDetails>
-            <Badge color="lime">Passed successfully</Badge>
-          </DescriptionDetails>
-        </DescriptionList>
+        <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
+          <TableHead>
+            <TableRow>
+              <TableHeader>Material</TableHeader>
+              <TableHeader>Quantity</TableHeader>
+              <TableHeader>Unit Price</TableHeader>
+              <TableHeader>Total Price</TableHeader>
+              <TableHeader>Batches</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {order.items.map((item) => (
+              <TableRow key={item.lineItemId}>
+                <TableCell>
+                  {item.materialType} {item.grade} {item.dimensions.thickness} x {item.dimensions.width}
+                </TableCell>
+                <TableCell>{item.quantity}</TableCell>
+                <TableCell>{item.basePrice}</TableCell>
+                <TableCell>{item.totalPrice}</TableCell>
+                <TableCell>
+                  {item.allocatedBatches.map((batch) => (
+                    <div key={batch.batchId}>
+                      {batch.batchId} - {batch.allocatedQuantity} qty
+                    </div>
+                  ))}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </>
   );

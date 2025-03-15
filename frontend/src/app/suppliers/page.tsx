@@ -1,12 +1,8 @@
-import { TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/catalyst-ui/table";
-import { Heading } from "@/components/catalyst-ui/heading";
-import { Table } from "@/components/catalyst-ui/table";
+import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table } from "@/components/catalyst-ui";
 import { getSuppliers } from "@/data";
 import type { Metadata } from "next";
-import { AddSupplier } from "./add";
-import { Input } from "@/components/catalyst-ui/input";
-import { InputGroup } from "@/components/catalyst-ui/input";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { AddSupplier } from "./add-supplier";
+import { ListPageHeader } from "@/components/list-page-header";
 
 export const metadata: Metadata = {
   title: "Suppliers",
@@ -17,21 +13,7 @@ export default function Suppliers() {
 
   return (
     <>
-      <div className="flex items-end justify-between gap-4">
-        <Heading>
-          Suppliers
-          <div className="mt-4 flex max-w-xl gap-4">
-            <div className="flex-1">
-              <InputGroup>
-                <MagnifyingGlassIcon />
-                <Input name="search" placeholder="Search suppliers&hellip;" />
-              </InputGroup>
-            </div>
-          </div>
-        </Heading>
-
-        <AddSupplier />
-      </div>
+      <ListPageHeader title="Suppliers" searchPlaceholder="Search suppliers&hellip;" button={<AddSupplier />} />
       <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
         <TableHead>
           <TableRow>
