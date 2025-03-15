@@ -136,11 +136,11 @@ export default function RootLayout({
                       <HomeIcon />
                       <SidebarLabel>Dashboard</SidebarLabel>
                     </SidebarItem>
-                    <SidebarItem href="/supplier-management">
+                    <SidebarItem href="/suppliers">
                       <TruckIcon />
                       <SidebarLabel>Suppliers</SidebarLabel>
                     </SidebarItem>
-                    <SidebarItem href="/inventory-management">
+                    <SidebarItem href="/inventory">
                       <Square3Stack3DIcon />
                       <SidebarLabel>Inventory</SidebarLabel>
                     </SidebarItem>
