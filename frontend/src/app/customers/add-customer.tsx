@@ -238,7 +238,7 @@ export function AddCustomer() {
             <Button plain type="button" onClick={() => setIsOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit">Add Supplier</Button>
+            <Button type="submit">Add Customer</Button>
           </DialogActions>
         </form>
       </Dialog>
