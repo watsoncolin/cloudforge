@@ -49,7 +49,7 @@ export const $UpdateSupplierDto = {
       description: `The country where the supplier is located`,
       isRequired: true,
     },
-    paymentTerms: {
+    paymentTerm: {
       type: 'Enum',
       isRequired: true,
     },

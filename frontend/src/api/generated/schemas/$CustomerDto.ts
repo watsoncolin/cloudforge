@@ -30,7 +30,7 @@ export const $CustomerDto = {
       }],
       isRequired: true,
     },
-    paymentTerms: {
+    paymentTerm: {
       type: 'string',
       description: `The payment terms for the customer`,
       isRequired: true,

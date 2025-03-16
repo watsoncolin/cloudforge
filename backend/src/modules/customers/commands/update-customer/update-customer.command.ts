@@ -1,4 +1,4 @@
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { PaymentTerm } from 'src/enums';
 
 export class UpdateCustomerCommand {
   constructor(
@@ -13,7 +13,7 @@ export class UpdateCustomerCommand {
       country?: string;
       stateProvince?: string;
       postalCode?: string;
-      paymentTerms?: PaymentTerms;
+      paymentTerm?: PaymentTerm;
     },
   ) {}
 }

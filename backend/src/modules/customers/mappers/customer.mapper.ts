@@ -18,7 +18,7 @@ export class CustomerMapper {
         postalCode: entity.postalCode,
         country: entity.country,
       },
-      paymentTerms: entity.paymentTerms,
+      paymentTerm: entity.paymentTerm,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     };
@@ -35,7 +35,7 @@ export class CustomerMapper {
       stateProvince: customer.address.stateProvince,
       postalCode: customer.address.postalCode,
       country: customer.address.country,
-      paymentTerms: customer.paymentTerms,
+      paymentTerm: customer.paymentTerm,
       createdAt: customer.createdAt,
       updatedAt: customer.updatedAt,
     };

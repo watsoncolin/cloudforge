@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { IsEnum, IsNotEmpty, IsString, IsArray } from 'class-validator';
+import { Material, PaymentTerm } from 'src/enums';
 import { ContactDto, AddressDto } from 'src/shared/dto';
 
 export class SupplierDto {
@@ -23,7 +23,12 @@ export class SupplierDto {
   address: AddressDto;
 
   @ApiProperty({ description: 'The payment terms for the supplier' })
-  @IsEnum(PaymentTerms)
+  @IsEnum(PaymentTerm)
   @IsNotEmpty()
-  paymentTerms: PaymentTerms;
+  paymentTerm: PaymentTerm;
+
+  @ApiProperty({ description: 'The materials the supplier can provide' })
+  @IsArray()
+  @IsEnum(Material, { each: true })
+  materials: Material[];
 }

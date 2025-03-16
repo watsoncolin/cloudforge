@@ -52,7 +52,8 @@ export class SuppliersController {
       name: supplier.name,
       contact: supplier.contact,
       address: supplier.address,
-      paymentTerms: supplier.paymentTerms,
+      paymentTerm: supplier.paymentTerm,
+      materials: supplier.materials,
     };
   }
 
@@ -74,7 +75,8 @@ export class SuppliersController {
       name: supplier.name,
       contact: supplier.contact,
       address: supplier.address,
-      paymentTerms: supplier.paymentTerms,
+      paymentTerm: supplier.paymentTerm,
+      materials: supplier.materials,
     };
   }
 

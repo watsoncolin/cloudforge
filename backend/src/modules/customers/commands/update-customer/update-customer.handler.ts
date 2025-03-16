@@ -5,7 +5,7 @@ import { CustomersRepository } from '../../repositories/customers.repository';
 import { Customer } from 'src/domain/customer/customer';
 import { Address } from 'src/domain/value-objects/address';
 import { Contact } from 'src/domain/value-objects/contact';
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { PaymentTerm } from 'src/enums';
 
 @CommandHandler(UpdateCustomerCommand)
 export class UpdateCustomerHandler
@@ -50,7 +50,7 @@ export class UpdateCustomerHandler
       name: customer.name,
       contact: updatedContact,
       address: updatedAddress,
-      paymentTerms: command.data.paymentTerms,
+      paymentTerm: command.data.paymentTerm,
       createdAt: customer.createdAt,
     };
 

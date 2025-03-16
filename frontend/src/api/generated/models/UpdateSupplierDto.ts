@@ -42,13 +42,13 @@ export type UpdateSupplierDto = {
   /**
    * The payment terms for the supplier
    */
-  paymentTerms: UpdateSupplierDto.paymentTerms;
+  paymentTerm: UpdateSupplierDto.paymentTerm;
 };
 export namespace UpdateSupplierDto {
   /**
    * The payment terms for the supplier
    */
-  export enum paymentTerms {
+  export enum paymentTerm {
     NET_30 = 'NET_30',
     NET_60 = 'NET_60',
     NET_90 = 'NET_90',

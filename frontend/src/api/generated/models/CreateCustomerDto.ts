@@ -42,13 +42,13 @@ export type CreateCustomerDto = {
   /**
    * The payment terms for the customer
    */
-  paymentTerms: CreateCustomerDto.paymentTerms;
+  paymentTerm: CreateCustomerDto.paymentTerm;
 };
 export namespace CreateCustomerDto {
   /**
    * The payment terms for the customer
    */
-  export enum paymentTerms {
+  export enum paymentTerm {
     NET_30 = 'NET_30',
     NET_60 = 'NET_60',
     NET_90 = 'NET_90',

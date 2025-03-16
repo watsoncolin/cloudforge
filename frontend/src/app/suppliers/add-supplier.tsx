@@ -2,6 +2,8 @@
 
 import {
   Button,
+  Checkbox,
+  CheckboxField,
   Dialog,
   DialogActions,
   DialogBody,
@@ -18,7 +20,7 @@ import { queryKeys } from "@/hooks/api-hooks";
 import { useCreateSupplier } from "@/hooks/api-hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { CreateSupplierDto } from "@/api/generated";
+import { CreateSupplierDto, Material } from "@/api/generated";
 
 interface SupplierFormData {
   companyName: string;
@@ -30,12 +32,12 @@ interface SupplierFormData {
   country: string;
   stateProvince: string;
   postalCode: string;
-  paymentTerms: CreateSupplierDto.paymentTerms;
+  paymentTerm: CreateSupplierDto.paymentTerm;
   currency: string;
   leadTime: string;
   moq: string;
   shippingMethod: string;
-  materials: string;
+  materials: Material[];
 }
 
 const initialFormData: SupplierFormData = {
@@ -48,12 +50,12 @@ const initialFormData: SupplierFormData = {
   country: "United States",
   stateProvince: "Mock State",
   postalCode: "12345",
-  paymentTerms: CreateSupplierDto.paymentTerms.NET_30,
+  paymentTerm: CreateSupplierDto.paymentTerm.NET_30,
   currency: "USD",
   leadTime: "10",
   moq: "100",
   shippingMethod: "Ocean Freight",
-  materials: "Steel, Aluminum, Copper",
+  materials: [Material.STEEL, Material.ALUMINUM, Material.COPPER],
 };
 
 export function AddSupplier() {
@@ -90,7 +92,7 @@ export function AddSupplier() {
       newErrors.contactEmail = "Invalid email format";
     }
     if (!formData.country) newErrors.country = "Country is required";
-    if (!formData.paymentTerms) newErrors.paymentTerms = undefined;
+    if (!formData.paymentTerm) newErrors.paymentTerm = undefined;
     if (!formData.currency) newErrors.currency = "Currency is required";
 
     setErrors(newErrors);
@@ -115,7 +117,8 @@ export function AddSupplier() {
       stateProvince: formData.stateProvince,
       postalCode: formData.postalCode,
       country: formData.country,
-      paymentTerms: formData.paymentTerms as CreateSupplierDto.paymentTerms,
+      paymentTerm: formData.paymentTerm as CreateSupplierDto.paymentTerm,
+      materials: formData.materials,
     };
 
     createSupplier(supplierData);
@@ -266,17 +269,17 @@ export function AddSupplier() {
 
               <Field>
                 <Label>Payment Terms</Label>
-                <Select name="paymentTerms" value={formData.paymentTerms} onChange={handleInputChange}>
+                <Select name="paymentTerm" value={formData.paymentTerm} onChange={handleInputChange}>
                   <option value="" disabled>
                     Select terms...
                   </option>
-                  {Object.values(CreateSupplierDto.paymentTerms).map((term) => (
+                  {Object.values(CreateSupplierDto.paymentTerm).map((term) => (
                     <option key={term} value={term}>
                       {term.replace("_", " ")}
                     </option>
                   ))}
                 </Select>
-                {renderError("paymentTerms")}
+                {renderError("paymentTerm")}
               </Field>
 
               <Field>
@@ -334,16 +337,14 @@ export function AddSupplier() {
 
               <Field>
                 <Label>Materials Supplied</Label>
-                <Input
-                  name="materials"
-                  type="text"
-                  placeholder="Enter materials (comma-separated)"
-                  value={formData.materials}
-                  onChange={handleInputChange}
-                />
-                <span className="mt-1 text-xs text-zinc-500">
-                  Enter materials separated by commas (e.g., Steel Plates, Hot Rolled Steel)
-                </span>
+                <div className="flex flex-col gap-2 mt-2">
+                  {Object.values(Material).map((material) => (
+                    <CheckboxField key={material}>
+                      <Checkbox name={material} defaultChecked={formData.materials.includes(material)} />
+                      <Label>{material.charAt(0).toUpperCase() + material.slice(1).toLowerCase()}</Label>
+                    </CheckboxField>
+                  ))}
+                </div>
               </Field>
             </FieldGroup>
           </DialogBody>

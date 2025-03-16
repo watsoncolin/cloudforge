@@ -24,7 +24,7 @@ export type CustomerDto = {
   /**
    * The payment terms for the customer
    */
-  paymentTerms: string;
+  paymentTerm: string;
   /**
    * The creation date of the customer
    */

@@ -37,8 +37,8 @@ export default async function Inventory({ params }: { params: { id: string } }) 
       <div className="mt-4 lg:mt-8">
         <div className="flex items-center gap-4">
           <Heading>
-            {inventory.materialType} {inventory.grade} {inventory.dimensions.thickness} x {inventory.dimensions.width} x{" "}
-            {inventory.dimensions.length}
+            {inventory.materialType.charAt(0).toUpperCase() + inventory.materialType.slice(1)} {inventory.grade}{" "}
+            {inventory.dimensions.thickness} x {inventory.dimensions.width} x {inventory.dimensions.length}
           </Heading>
           <Badge
             color={
@@ -98,7 +98,9 @@ export default async function Inventory({ params }: { params: { id: string } }) 
         <Divider className="mt-4" />
         <DescriptionList>
           <DescriptionTerm>Material Type</DescriptionTerm>
-          <DescriptionDetails>{inventory.materialType}</DescriptionDetails>
+          <DescriptionDetails>
+            {inventory.materialType.charAt(0).toUpperCase() + inventory.materialType.slice(1)}
+          </DescriptionDetails>
           <DescriptionTerm>Grade</DescriptionTerm>
           <DescriptionDetails>{inventory.grade}</DescriptionDetails>
           <DescriptionTerm>Dimensions</DescriptionTerm>

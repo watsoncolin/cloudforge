@@ -24,6 +24,10 @@ export type SupplierDto = {
   /**
    * The payment terms for the supplier
    */
-  paymentTerms: string;
+  paymentTerm: string;
+  /**
+   * The materials the supplier can provide
+   */
+  materials: Array<string>;
 };
 

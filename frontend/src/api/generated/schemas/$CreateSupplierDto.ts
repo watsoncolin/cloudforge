@@ -49,8 +49,15 @@ export const $CreateSupplierDto = {
       description: `The country where the supplier is located`,
       isRequired: true,
     },
-    paymentTerms: {
+    paymentTerm: {
       type: 'Enum',
+      isRequired: true,
+    },
+    materials: {
+      type: 'array',
+      contains: {
+        type: 'Material',
+      },
       isRequired: true,
     },
   },

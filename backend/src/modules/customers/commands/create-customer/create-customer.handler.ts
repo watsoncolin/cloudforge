@@ -35,7 +35,7 @@ export class CreateCustomerHandler
       name: command.createCustomerDto.name,
       address,
       contact,
-      paymentTerms: command.createCustomerDto.paymentTerms,
+      paymentTerm: command.createCustomerDto.paymentTerm,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

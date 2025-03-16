@@ -29,7 +29,7 @@ interface CustomerFormData {
   addressProvince: string;
   addressPostalCode: string;
   addressCountry: string;
-  paymentTerms: CreateCustomerDto.paymentTerms;
+  paymentTerm: CreateCustomerDto.paymentTerm;
 }
 
 const initialFormData: CustomerFormData = {
@@ -42,7 +42,7 @@ const initialFormData: CustomerFormData = {
   addressProvince: "CA",
   addressPostalCode: "12345",
   addressCountry: "United States",
-  paymentTerms: CreateCustomerDto.paymentTerms.NET_30,
+  paymentTerm: CreateCustomerDto.paymentTerm.NET_30,
 };
 
 export function AddCustomer() {
@@ -105,7 +105,7 @@ export function AddCustomer() {
       stateProvince: formData.addressProvince,
       postalCode: formData.addressPostalCode,
       country: formData.addressCountry,
-      paymentTerms: formData.paymentTerms,
+      paymentTerm: formData.paymentTerm,
     };
 
     createCustomer(customerData);
@@ -256,11 +256,11 @@ export function AddCustomer() {
 
               <Field>
                 <Label>Payment Terms</Label>
-                <Select name="paymentTerms" value={formData.paymentTerms} onChange={handleInputChange}>
+                <Select name="paymentTerm" value={formData.paymentTerm} onChange={handleInputChange}>
                   <option value="" disabled>
                     Select payment terms...
                   </option>
-                  {Object.values(CreateCustomerDto.paymentTerms).map((term) => (
+                  {Object.values(CreateCustomerDto.paymentTerm).map((term) => (
                     <option key={term} value={term}>
                       {term.replace("_", " ")}
                     </option>

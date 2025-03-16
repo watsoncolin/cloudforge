@@ -30,7 +30,6 @@ export function CustomersList() {
       <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
         <TableHead>
           <TableRow>
-            <TableHeader>Customer ID</TableHeader>
             <TableHeader>Name</TableHeader>
             <TableHeader>Location</TableHeader>
             <TableHeader>Contact</TableHeader>
@@ -40,7 +39,6 @@ export function CustomersList() {
         <TableBody>
           {customers.map((customer: CustomerDto) => (
             <TableRow key={customer.id} href={`/customers/${customer.id}`} title={customer.name}>
-              <TableCell>{customer.id}</TableCell>
               <TableCell>{customer.name}</TableCell>
               <TableCell>
                 {customer.address.city}, {customer.address.stateProvince}, {customer.address.country}

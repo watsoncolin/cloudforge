@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { PaymentTerm } from 'src/enums';
 
 @Entity('customers')
 export class CustomerEntity {
@@ -41,9 +41,9 @@ export class CustomerEntity {
 
   @Column({
     type: 'enum',
-    enum: PaymentTerms,
+    enum: PaymentTerm,
   })
-  paymentTerms: PaymentTerms;
+  paymentTerm: PaymentTerm;
 
   @CreateDateColumn()
   createdAt: Date;

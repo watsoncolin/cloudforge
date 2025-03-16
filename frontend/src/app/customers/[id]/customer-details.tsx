@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  BuildingOfficeIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-  CurrencyDollarIcon,
-  TruckIcon,
-} from "@heroicons/react/24/outline";
+import { BuildingOfficeIcon, PhoneIcon, EnvelopeIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { Link } from "@/components/catalyst-ui/link";
 import { Heading, Subheading } from "@/components/catalyst-ui/heading";
@@ -58,15 +52,15 @@ export function CustomerDetails({ id }: { id: string }) {
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <BuildingOfficeIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
               <span>
-                {customer.address.city}, {customer.address.country}
+                {customer.address.city}, {customer.address.country} {customer.address.postalCode}
               </span>
             </span>
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <CurrencyDollarIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
-              <span>{customer.address.postalCode}</span>
+              <span>{customer.paymentTerm}</span>
             </span>
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
-              <TruckIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
+              <PhoneIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
               <span>{customer.contact.phone}</span>
             </span>
           </div>

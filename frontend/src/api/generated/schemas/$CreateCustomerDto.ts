@@ -48,7 +48,7 @@ export const $CreateCustomerDto = {
       description: `The postal/ZIP code of the customer`,
       isRequired: true,
     },
-    paymentTerms: {
+    paymentTerm: {
       type: 'Enum',
       isRequired: true,
     },

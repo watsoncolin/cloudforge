@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsEmail,
   IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
 } from 'class-validator';
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { Material, PaymentTerm } from 'src/enums';
 
 export class CreateSupplierDto {
   @ApiProperty({ description: 'The name of the supplier company' })
@@ -58,9 +59,19 @@ export class CreateSupplierDto {
 
   @ApiProperty({
     description: 'The payment terms for the supplier',
-    enum: PaymentTerms,
+    enum: PaymentTerm,
   })
-  @IsEnum(PaymentTerms)
+  @IsEnum(PaymentTerm)
   @IsOptional()
-  paymentTerms?: PaymentTerms;
+  paymentTerm?: PaymentTerm;
+
+  @ApiProperty({
+    description: 'The materials the supplier can provide',
+    enum: Material,
+    enumName: 'Material',
+    isArray: true,
+  })
+  @IsArray()
+  @IsEnum(Material, { each: true })
+  materials: Material[];
 }

@@ -30,9 +30,16 @@ export const $SupplierDto = {
       }],
       isRequired: true,
     },
-    paymentTerms: {
+    paymentTerm: {
       type: 'string',
       description: `The payment terms for the supplier`,
+      isRequired: true,
+    },
+    materials: {
+      type: 'array',
+      contains: {
+        type: 'string',
+      },
       isRequired: true,
     },
   },

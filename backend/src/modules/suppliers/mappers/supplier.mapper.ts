@@ -19,10 +19,11 @@ export class SupplierMapper {
         postalCode: entity.postalCode,
         country: entity.country,
       },
-      paymentTerms: entity.paymentTerms,
+      paymentTerm: entity.paymentTerm,
       isActive: entity.isActive,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
+      materials: entity.materials,
     };
   }
   toEntity(supplier: Supplier): SupplierEntity {
@@ -37,10 +38,11 @@ export class SupplierMapper {
       stateProvince: supplier.address.stateProvince,
       postalCode: supplier.address.postalCode,
       country: supplier.address.country,
-      paymentTerms: supplier.paymentTerms,
+      paymentTerm: supplier.paymentTerm,
       isActive: supplier.isActive,
       createdAt: supplier.createdAt,
       updatedAt: supplier.updatedAt,
+      materials: supplier.materials,
     };
   }
 }

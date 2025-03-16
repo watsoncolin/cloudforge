@@ -1,5 +1,5 @@
 import { Contact, Address } from '../value-objects';
-import { PaymentTerms } from '../../enums/payment-terms.enum';
+import { PaymentTerm } from 'src/enums';
 
 export class Customer {
   id: string;
@@ -10,7 +10,7 @@ export class Customer {
 
   address: Address;
 
-  paymentTerms: PaymentTerms;
+  paymentTerm: PaymentTerm;
 
   createdAt: Date;
 

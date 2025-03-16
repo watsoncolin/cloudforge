@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsEnum, IsDate } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ContactDto, AddressDto } from 'src/shared/dto';
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { PaymentTerm } from 'src/enums';
 export class CustomerDto {
   @ApiProperty({ description: 'The unique identifier of the customer' })
   @IsString()
@@ -22,9 +22,9 @@ export class CustomerDto {
   address: AddressDto;
 
   @ApiProperty({ description: 'The payment terms for the customer' })
-  @IsEnum(PaymentTerms)
+  @IsEnum(PaymentTerm)
   @IsNotEmpty()
-  paymentTerms: PaymentTerms;
+  paymentTerm: PaymentTerm;
 
   @ApiProperty({ description: 'The creation date of the customer' })
   @IsDate()

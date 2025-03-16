@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Material } from './Material';
 export type CreateSupplierDto = {
   /**
    * The name of the supplier company
@@ -42,13 +43,17 @@ export type CreateSupplierDto = {
   /**
    * The payment terms for the supplier
    */
-  paymentTerms: CreateSupplierDto.paymentTerms;
+  paymentTerm: CreateSupplierDto.paymentTerm;
+  /**
+   * The materials the supplier can provide
+   */
+  materials: Array<Material>;
 };
 export namespace CreateSupplierDto {
   /**
    * The payment terms for the supplier
    */
-  export enum paymentTerms {
+  export enum paymentTerm {
     NET_30 = 'NET_30',
     NET_60 = 'NET_60',
     NET_90 = 'NET_90',

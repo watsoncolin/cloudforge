@@ -6,7 +6,7 @@ import {
   IsEnum,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { PaymentTerm } from 'src/enums';
 
 export class CreateCustomerDto {
   @ApiProperty({ description: 'The name of the customer company' })
@@ -60,10 +60,10 @@ export class CreateCustomerDto {
 
   @ApiProperty({
     description: 'The payment terms for the customer',
-    example: 'Net 30',
-    enum: PaymentTerms,
+    example: 'NET_30',
+    enum: PaymentTerm,
   })
-  @IsEnum(PaymentTerms)
+  @IsEnum(PaymentTerm)
   @IsNotEmpty()
-  paymentTerms: PaymentTerms;
+  paymentTerm: PaymentTerm;
 }

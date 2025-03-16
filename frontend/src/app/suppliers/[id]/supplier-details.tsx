@@ -58,16 +58,18 @@ export function SupplierDetails({ id }: { id: string }) {
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <BuildingOfficeIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
               <span>
-                {supplier.city}, {supplier.country}
+                {supplier.address.city}, {supplier.address.country}
               </span>
             </span>
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <CurrencyDollarIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
-              <span>{supplier.paymentTerms}</span>
+              <span>{supplier.paymentTerm}</span>
             </span>
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <TruckIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
-              <span>{supplier.contactPhone}</span>
+              <span>
+                {supplier.materials.map((material) => material.charAt(0).toUpperCase() + material.slice(1)).join(", ")}
+              </span>
             </span>
           </div>
         </div>
@@ -77,31 +79,31 @@ export function SupplierDetails({ id }: { id: string }) {
         <Divider className="mt-4" />
         <DescriptionList>
           <DescriptionTerm>Contact Name</DescriptionTerm>
-          <DescriptionDetails>{supplier.contactName}</DescriptionDetails>
+          <DescriptionDetails>{supplier.contact.name}</DescriptionDetails>
 
           <DescriptionTerm>Email</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`mailto:${supplier.contactEmail}`} className="flex items-center gap-2">
+            <Link href={`mailto:${supplier.contact.email}`} className="flex items-center gap-2">
               <EnvelopeIcon className="size-4" />
-              {supplier.contactEmail}
+              {supplier.contact.email}
             </Link>
           </DescriptionDetails>
 
           <DescriptionTerm>Phone</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`tel:${supplier.contactPhone}`} className="flex items-center gap-2">
+            <Link href={`tel:${supplier.contact.phone}`} className="flex items-center gap-2">
               <PhoneIcon className="size-4" />
-              {supplier.contactPhone}
+              {supplier.contact.phone}
             </Link>
           </DescriptionDetails>
 
           <DescriptionTerm>Address</DescriptionTerm>
           <DescriptionDetails>
-            {supplier.address}
+            {supplier.address.street}
             <br />
-            {supplier.city}, {supplier.stateProvince} {supplier.zipCode}
+            {supplier.address.city}, {supplier.address.stateProvince} {supplier.address.postalCode}
             <br />
-            {supplier.country}
+            {supplier.address.country}
           </DescriptionDetails>
         </DescriptionList>
       </div>

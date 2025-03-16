@@ -1,4 +1,4 @@
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { Material, PaymentTerm } from 'src/enums';
 import {
   Column,
   CreateDateColumn,
@@ -39,8 +39,8 @@ export class SupplierEntity {
   @Column()
   country: string;
 
-  @Column({ type: 'enum', enum: PaymentTerms })
-  paymentTerms: PaymentTerms;
+  @Column({ type: 'enum', enum: PaymentTerm })
+  paymentTerm: PaymentTerm;
 
   @Column({ default: true })
   isActive: boolean;
@@ -50,4 +50,7 @@ export class SupplierEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ type: 'enum', enum: Material, array: true })
+  materials: Material[];
 }

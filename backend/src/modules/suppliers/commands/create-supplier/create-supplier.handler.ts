@@ -26,10 +26,11 @@ export class CreateSupplierHandler
         postalCode: command.createSupplierDto.postalCode,
         country: command.createSupplierDto.country,
       },
-      paymentTerms: command.createSupplierDto.paymentTerms,
+      paymentTerm: command.createSupplierDto.paymentTerm,
       isActive: true,
       createdAt: new Date(),
       updatedAt: new Date(),
+      materials: command.createSupplierDto.materials,
     };
     return this.supplierRepository.create(supplier);
   }

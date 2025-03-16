@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { PaymentTerms } from 'src/enums/payment-terms.enum';
+import { PaymentTerm } from 'src/enums';
 
 export class UpdateSupplierDto {
   @ApiProperty({ description: 'The name of the supplier company' })
@@ -58,9 +58,9 @@ export class UpdateSupplierDto {
 
   @ApiProperty({
     description: 'The payment terms for the supplier',
-    enum: PaymentTerms,
+    enum: PaymentTerm,
   })
-  @IsEnum(PaymentTerms)
+  @IsEnum(PaymentTerm)
   @IsOptional()
-  paymentTerms?: PaymentTerms;
+  paymentTerm?: PaymentTerm;
 }
