@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CreateCustomerDto } from "../models/CreateCustomerDto";
-import type { CustomerDto } from "../models/CustomerDto";
-import type { CancelablePromise } from "../core/CancelablePromise";
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
+import type { CreateCustomerDto } from '../models/CreateCustomerDto';
+import type { CustomerDto } from '../models/CustomerDto';
+import type { CancelablePromise } from '../core/CancelablePromise';
+import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class CustomersService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
@@ -14,12 +14,14 @@ export class CustomersService {
    * @returns CustomerDto Customer created successfully
    * @throws ApiError
    */
-  public customersControllerCreateCustomer(requestBody: CreateCustomerDto): CancelablePromise<CustomerDto> {
+  public customersControllerCreateCustomer(
+    requestBody: CreateCustomerDto,
+  ): CancelablePromise<CustomerDto> {
     return this.httpRequest.request({
-      method: "POST",
-      url: "/customers",
+      method: 'POST',
+      url: '/customers',
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         400: `Invalid input`,
       },
@@ -32,8 +34,8 @@ export class CustomersService {
    */
   public customersControllerGetAllCustomers(): CancelablePromise<Array<CustomerDto>> {
     return this.httpRequest.request({
-      method: "GET",
-      url: "/customers",
+      method: 'GET',
+      url: '/customers',
     });
   }
   /**
@@ -42,12 +44,14 @@ export class CustomersService {
    * @returns CustomerDto Customer found
    * @throws ApiError
    */
-  public customersControllerGetCustomerById(id: string): CancelablePromise<CustomerDto> {
+  public customersControllerGetCustomerById(
+    id: string,
+  ): CancelablePromise<CustomerDto> {
     return this.httpRequest.request({
-      method: "GET",
-      url: "/customers/{id}",
+      method: 'GET',
+      url: '/customers/{id}',
       path: {
-        id: id,
+        'id': id,
       },
       errors: {
         404: `Customer not found`,
@@ -61,15 +65,18 @@ export class CustomersService {
    * @returns CustomerDto Customer updated successfully
    * @throws ApiError
    */
-  public customersControllerUpdateCustomer(id: string, requestBody: CreateCustomerDto): CancelablePromise<CustomerDto> {
+  public customersControllerUpdateCustomer(
+    id: string,
+    requestBody: CreateCustomerDto,
+  ): CancelablePromise<CustomerDto> {
     return this.httpRequest.request({
-      method: "PUT",
-      url: "/customers/{id}",
+      method: 'PUT',
+      url: '/customers/{id}',
       path: {
-        id: id,
+        'id': id,
       },
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         400: `Invalid input`,
         404: `Customer not found`,
@@ -82,12 +89,14 @@ export class CustomersService {
    * @returns void
    * @throws ApiError
    */
-  public customersControllerDeleteCustomer(id: string): CancelablePromise<void> {
+  public customersControllerDeleteCustomer(
+    id: string,
+  ): CancelablePromise<void> {
     return this.httpRequest.request({
-      method: "DELETE",
-      url: "/customers/{id}",
+      method: 'DELETE',
+      url: '/customers/{id}',
       path: {
-        id: id,
+        'id': id,
       },
       errors: {
         404: `Customer not found`,

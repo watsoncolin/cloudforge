@@ -1,13 +1,24 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { UseQueryOptions, UseMutationOptions } from "@tanstack/react-query";
 import { api } from "@/api/client";
-import type { CustomerDto, CreateCustomerDto, CancelablePromise } from "@/api/generated";
+import type {
+  CustomerDto,
+  CreateCustomerDto,
+  SupplierDto,
+  CreateSupplierDto,
+  CancelablePromise,
+  UpdateSupplierDto,
+} from "@/api/generated";
 
 // Query keys for caching and invalidation
 export const queryKeys = {
   customers: {
     all: ["customers"] as const,
     detail: (id: string) => ["customers", id] as const,
+  },
+  suppliers: {
+    all: ["suppliers"] as const,
+    detail: (id: string) => ["suppliers", id] as const,
   },
   inventory: {
     all: ["inventory"] as const,
@@ -20,13 +31,21 @@ export const queryKeys = {
 } as const;
 
 // Re-export types
-export type { CustomerDto, CreateCustomerDto };
+export type { CustomerDto, CreateCustomerDto, SupplierDto, CreateSupplierDto };
 
 // Error type
 export interface ApiError {
   message: string;
   statusCode: number;
 }
+
+// Error handling helper
+const handleApiError = (error: unknown) => {
+  if (error instanceof Error) {
+    throw error;
+  }
+  throw new Error("An unexpected error occurred");
+};
 
 // Helper to convert CancelablePromise to Promise
 const toPromise = <T>(cancelablePromise: CancelablePromise<T>): Promise<T> => {
@@ -92,6 +111,62 @@ export function useDeleteCustomer(options?: Omit<UseMutationOptions<void, ApiErr
     onSuccess: (_, id) => {
       queryClient.removeQueries({ queryKey: queryKeys.customers.detail(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
+    },
+    ...options,
+  });
+}
+
+// Supplier hooks
+export function useSuppliers(options?: Omit<UseQueryOptions<SupplierDto[], Error>, "queryKey" | "queryFn">) {
+  return useQuery({
+    queryKey: queryKeys.suppliers.all,
+    queryFn: () => api.suppliers.suppliersControllerFindAll().catch(handleApiError),
+    ...options,
+  });
+}
+
+export function useSupplier(id: string, options?: Omit<UseQueryOptions<SupplierDto, Error>, "queryKey" | "queryFn">) {
+  return useQuery({
+    queryKey: queryKeys.suppliers.detail(id),
+    queryFn: () => api.suppliers.suppliersControllerFindOne(id).catch(handleApiError),
+    ...options,
+  });
+}
+
+export function useCreateSupplier(
+  options?: Omit<UseMutationOptions<SupplierDto, Error, CreateSupplierDto>, "mutationFn">
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateSupplierDto) => api.suppliers.suppliersControllerCreate(data).catch(handleApiError),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.all });
+    },
+    ...options,
+  });
+}
+
+export function useUpdateSupplier(
+  options?: Omit<UseMutationOptions<SupplierDto, ApiError, { id: string; data: UpdateSupplierDto }>, "mutationFn">
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation<SupplierDto, ApiError, { id: string; data: UpdateSupplierDto }>({
+    mutationFn: ({ id, data }) => toPromise(api.suppliers.suppliersControllerUpdate(id, data)),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.detail(id) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.all });
+    },
+    ...options,
+  });
+}
+
+export function useDeleteSupplier(options?: Omit<UseMutationOptions<void, Error, string>, "mutationFn">) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.suppliers.suppliersControllerRemove(id).catch(handleApiError),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.all });
     },
     ...options,
   });

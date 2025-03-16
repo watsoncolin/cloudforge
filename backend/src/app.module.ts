@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CustomersModule } from './domains/customers/customers.module';
+import { SuppliersModule } from './domains/suppliers/suppliers.module';
 // import { InventoryModule } from './domains/inventory/inventory.module';
 // import { QuotesModule } from './domains/quotes/quotes.module';
 // import { OrdersModule } from './domains/orders/orders.module';
@@ -19,6 +20,7 @@ import { databaseConfig } from './config/database.config';
     // SharedModule,
     AuthModule,
     CustomersModule,
+    SuppliersModule,
     // InventoryModule,
     // QuotesModule,
     // OrdersModule,

@@ -4,14 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Customer } from './entities/customer.entity';
 import { CustomersController } from './controllers/customers.controller';
 import { CustomersRepository } from './repositories/customers.repository';
-import { CreateCustomerHandler } from './commands/handlers/create-customer.handler';
-import { UpdateCustomerHandler } from './commands/handlers/update-customer.handler';
-import { DeleteCustomerHandler } from './commands/handlers/delete-customer.handler';
-import {
-  GetCustomerByIdHandler,
-  GetAllCustomersHandler,
-} from './queries/handlers/get-customer.handler';
-
+import { GetCustomerByIdHandler } from './queries/get-customer-by-id/get-customer-by-id.handler';
+import { CreateCustomerHandler } from './commands/create-customer/create-customer.handler';
+import { UpdateCustomerHandler } from './commands/update-customer/update-customer.handler';
+import { DeleteCustomerHandler } from './commands/delete-customer/delete-customer.handler';
+import { GetAllCustomersHandler } from './queries/get-all-customers/get-all-customers.handler';
+import { CustomersService } from './customers.service';
 const CommandHandlers = [
   CreateCustomerHandler,
   UpdateCustomerHandler,
@@ -23,7 +21,12 @@ const QueryHandlers = [GetCustomerByIdHandler, GetAllCustomersHandler];
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([Customer])],
   controllers: [CustomersController],
-  providers: [CustomersRepository, ...CommandHandlers, ...QueryHandlers],
-  exports: [],
+  providers: [
+    CustomersRepository,
+    CustomersService,
+    ...CommandHandlers,
+    ...QueryHandlers,
+  ],
+  exports: [CustomersService],
 })
 export class CustomersModule {}

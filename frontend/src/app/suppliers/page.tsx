@@ -1,45 +1,34 @@
-import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table } from "@/components/catalyst-ui";
-import { getSuppliers } from "@/data";
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { AddSupplier } from "./add-supplier";
-import { ListPageHeader } from "@/components/list-page-header";
+import { api } from "@/api/client";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/api-hooks";
+import { SuppliersList } from "./suppliers-list";
 
 export const metadata: Metadata = {
   title: "Suppliers",
 };
 
-export default function Suppliers() {
-  const suppliers = getSuppliers();
+export default async function SuppliersPage() {
+  const queryClient = new QueryClient();
+
+  // Prefetch the suppliers query on the server
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.suppliers.all,
+    queryFn: () => api.suppliers.suppliersControllerFindAll().then((res) => res),
+  });
 
   return (
-    <>
-      <ListPageHeader title="Suppliers" searchPlaceholder="Search suppliers&hellip;" button={<AddSupplier />} />
-      <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
-        <TableHead>
-          <TableRow>
-            <TableHeader>Supplier ID</TableHeader>
-            <TableHeader>Name</TableHeader>
-            <TableHeader>Location</TableHeader>
-            <TableHeader>Materials</TableHeader>
-            <TableHeader className="text-right">Rating</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {suppliers.map((supplier) => (
-            <TableRow key={supplier.id} href={`/suppliers/${supplier.id}`} title={supplier.name}>
-              <TableCell>{supplier.id}</TableCell>
-              <TableCell>{supplier.name}</TableCell>
-              <TableCell>
-                {supplier.city}, {supplier.country}
-              </TableCell>
-              <TableCell>
-                <span className="line-clamp-1">{supplier.materials_supplied.join(", ")}</span>
-              </TableCell>
-              <TableCell className="text-right">{supplier.rating} / 5</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+          </div>
+        }
+      >
+        <SuppliersList />
+      </Suspense>
+    </HydrationBoundary>
   );
 }

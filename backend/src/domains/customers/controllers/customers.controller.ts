@@ -9,14 +9,6 @@ import {
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateCustomerCommand } from '../commands/create-customer.command';
-import { UpdateCustomerCommand } from '../commands/update-customer.command';
-import { DeleteCustomerCommand } from '../commands/delete-customer.command';
-import {
-  GetCustomerByIdQuery,
-  GetAllCustomersQuery,
-} from '../queries/get-customer.query';
 import { CreateCustomerDto } from '../dtos/create-customer.dto';
 import {
   ApiTags,
@@ -26,16 +18,12 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { CustomerDto } from '../dtos/customer.dto';
-import { Customer } from '../entities/customer.entity';
-import { plainToInstance } from 'class-transformer';
+import { CustomersService } from '../customers.service';
 
 @ApiTags('Customers')
 @Controller('customers')
 export class CustomersController {
-  constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
-  ) {}
+  constructor(private readonly customersService: CustomersService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
@@ -48,20 +36,7 @@ export class CustomersController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input' })
   @ApiBody({ type: CreateCustomerDto })
   async createCustomer(@Body() dto: CreateCustomerDto): Promise<CustomerDto> {
-    const command = new CreateCustomerCommand(
-      dto.name,
-      dto.contactName,
-      dto.contactEmail,
-      dto.contactPhone,
-      dto.address,
-      dto.city,
-      dto.country,
-      dto.stateProvince,
-      dto.zipCode,
-      dto.paymentTerms,
-    );
-    const customer = await this.commandBus.execute(command);
-    return plainToInstance(CustomerDto, customer);
+    return this.customersService.create(dto);
   }
 
   @Get()
@@ -72,8 +47,7 @@ export class CustomersController {
     type: [CustomerDto],
   })
   async getAllCustomers(): Promise<CustomerDto[]> {
-    const customers = await this.queryBus.execute(new GetAllCustomersQuery());
-    return customers.map((customer) => plainToInstance(CustomerDto, customer));
+    return this.customersService.findAll();
   }
 
   @Get(':id')
@@ -89,8 +63,7 @@ export class CustomersController {
     description: 'Customer not found',
   })
   async getCustomerById(@Param('id') id: string): Promise<CustomerDto> {
-    const customer = await this.queryBus.execute(new GetCustomerByIdQuery(id));
-    return plainToInstance(CustomerDto, customer);
+    return this.customersService.findOne(id);
   }
 
   @Put(':id')
@@ -109,11 +82,9 @@ export class CustomersController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input' })
   async updateCustomer(
     @Param('id') id: string,
-    @Body() data: Partial<Customer>,
+    @Body() data: Partial<CreateCustomerDto>,
   ): Promise<CustomerDto> {
-    const command = new UpdateCustomerCommand(id, data);
-    const customer = await this.commandBus.execute(command);
-    return plainToInstance(CustomerDto, customer);
+    return this.customersService.update(id, data);
   }
 
   @Delete(':id')
@@ -129,7 +100,6 @@ export class CustomersController {
     description: 'Customer not found',
   })
   async deleteCustomer(@Param('id') id: string): Promise<void> {
-    const command = new DeleteCustomerCommand(id);
-    await this.commandBus.execute(command);
+    return this.customersService.remove(id);
   }
 }

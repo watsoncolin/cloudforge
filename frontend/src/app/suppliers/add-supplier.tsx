@@ -14,6 +14,9 @@ import {
   Select,
 } from "@/components/catalyst-ui";
 import { getCountries } from "@/data";
+import { CreateSupplierDto, queryKeys } from "@/hooks/api-hooks";
+import { useCreateSupplier } from "@/hooks/api-hooks";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface SupplierFormData {
@@ -35,21 +38,21 @@ interface SupplierFormData {
 }
 
 const initialFormData: SupplierFormData = {
-  companyName: "",
-  contactName: "",
-  contactEmail: "",
-  contactPhone: "",
-  address: "",
-  city: "",
-  country: "",
-  stateProvince: "",
-  zipCode: "",
-  paymentTerms: "",
-  currency: "",
-  leadTime: "",
-  moq: "",
-  shippingMethod: "",
-  materials: "",
+  companyName: "Mock Company",
+  contactName: "Mock Contact",
+  contactEmail: "mock@example.com",
+  contactPhone: "1234567890",
+  address: "123 Mock Street",
+  city: "Mock City",
+  country: "United States",
+  stateProvince: "Mock State",
+  zipCode: "12345",
+  paymentTerms: "Net 30",
+  currency: "USD",
+  leadTime: "10",
+  moq: "100",
+  shippingMethod: "Ocean Freight",
+  materials: "Steel, Aluminum, Copper",
 };
 
 export function AddSupplier() {
@@ -57,6 +60,22 @@ export function AddSupplier() {
   const [formData, setFormData] = useState<SupplierFormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<SupplierFormData>>({});
   const countries = getCountries();
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: createSupplier,
+    isPending,
+    error: mutationError,
+  } = useCreateSupplier({
+    onSuccess: () => {
+      setFormData(initialFormData);
+      setIsOpen(false);
+      queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.all });
+    },
+    onError: (error) => {
+      console.error("Error creating supplier:", error);
+    },
+  });
 
   const validateForm = () => {
     const newErrors: Partial<SupplierFormData> = {};
@@ -84,26 +103,21 @@ export function AddSupplier() {
       return;
     }
 
-    try {
-      const response = await fetch("/api/suppliers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    // Transform form data to match API DTO
+    const supplierData: CreateSupplierDto = {
+      name: formData.companyName,
+      contactName: formData.contactName,
+      contactEmail: formData.contactEmail,
+      contactPhone: formData.contactPhone,
+      address: formData.address,
+      city: formData.city,
+      stateProvince: formData.stateProvince,
+      zipCode: formData.zipCode,
+      country: formData.country,
+      paymentTerms: formData.paymentTerms as "Net 15" | "Net 30" | "Net 45" | "Net 60",
+    };
 
-      if (!response.ok) {
-        throw new Error("Failed to create supplier");
-      }
-
-      // Reset form and close modal on success
-      setFormData(initialFormData);
-      setIsOpen(false);
-    } catch (error) {
-      console.error("Error creating supplier:", error);
-      // Handle error (you might want to show an error message to the user)
-    }
+    createSupplier(supplierData);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -135,6 +149,11 @@ export function AddSupplier() {
         <form onSubmit={handleSubmit}>
           <DialogTitle>Add New Supplier</DialogTitle>
           <DialogDescription>Enter the details of the new supplier.</DialogDescription>
+          {mutationError && (
+            <div className="mb-4 p-4 text-sm text-red-500 bg-red-50 rounded-lg">
+              Error creating supplier: {mutationError.message}
+            </div>
+          )}
           <DialogBody>
             <FieldGroup>
               <Field>
@@ -327,10 +346,12 @@ export function AddSupplier() {
             </FieldGroup>
           </DialogBody>
           <DialogActions>
-            <Button plain type="button" onClick={() => setIsOpen(false)}>
+            <Button plain type="button" onClick={() => setIsOpen(false)} disabled={isPending}>
               Cancel
             </Button>
-            <Button type="submit">Add Supplier</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Adding..." : "Add Supplier"}
+            </Button>
           </DialogActions>
         </form>
       </Dialog>
