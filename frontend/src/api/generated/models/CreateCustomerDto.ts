@@ -38,10 +38,21 @@ export type CreateCustomerDto = {
   /**
    * The postal/ZIP code of the customer
    */
-  zipCode: string;
+  postalCode: string;
   /**
    * The payment terms for the customer
    */
-  paymentTerms: 'Net 15' | 'Net 30' | 'Net 45' | 'Net 60';
+  paymentTerms: CreateCustomerDto.paymentTerms;
 };
+export namespace CreateCustomerDto {
+  /**
+   * The payment terms for the customer
+   */
+  export enum paymentTerms {
+    NET_30 = 'NET_30',
+    NET_60 = 'NET_60',
+    NET_90 = 'NET_90',
+    IMMEDIATE = 'IMMEDIATE',
+  }
+}
 

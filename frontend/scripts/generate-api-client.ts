@@ -5,7 +5,7 @@ async function generateApiClient() {
     await generate({
       input: "http://localhost:3001/api-json",
       output: "./src/api/generated",
-      useUnionTypes: true,
+      useUnionTypes: false,
       exportSchemas: true,
       indent: "2",
       clientName: "ApiClient",

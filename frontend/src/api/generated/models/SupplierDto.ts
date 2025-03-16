@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AddressDto } from './AddressDto';
+import type { ContactDto } from './ContactDto';
 export type SupplierDto = {
   /**
    * The unique identifier of the supplier
@@ -12,40 +14,16 @@ export type SupplierDto = {
    */
   name: string;
   /**
-   * The name of the primary contact person
+   * The contact information of the supplier
    */
-  contactName: string;
+  contact: ContactDto;
   /**
-   * The email address of the primary contact
+   * The address of the supplier
    */
-  contactEmail: string;
-  /**
-   * The phone number of the primary contact
-   */
-  contactPhone: string;
-  /**
-   * The street address of the supplier
-   */
-  address: string;
-  /**
-   * The city where the supplier is located
-   */
-  city: string;
-  /**
-   * The state or province where the supplier is located
-   */
-  stateProvince: string;
-  /**
-   * The postal/ZIP code of the supplier
-   */
-  zipCode: string;
-  /**
-   * The country where the supplier is located
-   */
-  country: string;
+  address: AddressDto;
   /**
    * The payment terms for the supplier
    */
-  paymentTerms: 'Net 15' | 'Net 30' | 'Net 45' | 'Net 60';
+  paymentTerms: string;
 };
 

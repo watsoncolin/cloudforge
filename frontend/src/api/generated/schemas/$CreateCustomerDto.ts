@@ -43,7 +43,7 @@ export const $CreateCustomerDto = {
       description: `The state or province where the customer is located`,
       isRequired: true,
     },
-    zipCode: {
+    postalCode: {
       type: 'string',
       description: `The postal/ZIP code of the customer`,
       isRequired: true,

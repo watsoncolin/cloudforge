@@ -34,7 +34,7 @@ export type UpdateSupplierDto = {
   /**
    * The postal/ZIP code of the supplier
    */
-  zipCode: string;
+  postalCode: string;
   /**
    * The country where the supplier is located
    */
@@ -42,6 +42,17 @@ export type UpdateSupplierDto = {
   /**
    * The payment terms for the supplier
    */
-  paymentTerms: 'Net 15' | 'Net 30' | 'Net 45' | 'Net 60';
+  paymentTerms: UpdateSupplierDto.paymentTerms;
 };
+export namespace UpdateSupplierDto {
+  /**
+   * The payment terms for the supplier
+   */
+  export enum paymentTerms {
+    NET_30 = 'NET_30',
+    NET_60 = 'NET_60',
+    NET_90 = 'NET_90',
+    IMMEDIATE = 'IMMEDIATE',
+  }
+}
 

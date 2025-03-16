@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AddressDto } from './AddressDto';
+import type { ContactDto } from './ContactDto';
 export type CustomerDto = {
   /**
    * The unique identifier of the customer
@@ -12,40 +14,24 @@ export type CustomerDto = {
    */
   name: string;
   /**
-   * The name of the primary contact person
+   * The contact information of the customer
    */
-  contactName: string;
+  contact: ContactDto;
   /**
-   * The email address of the primary contact
+   * The address of the customer
    */
-  contactEmail: string;
-  /**
-   * The phone number of the primary contact
-   */
-  contactPhone?: string;
-  /**
-   * The street address of the customer
-   */
-  address: string;
-  /**
-   * The city where the customer is located
-   */
-  city: string;
-  /**
-   * The country where the customer is located
-   */
-  country: string;
-  /**
-   * The state or province where the customer is located
-   */
-  stateProvince: string;
-  /**
-   * The postal/ZIP code of the customer
-   */
-  zipCode: string;
+  address: AddressDto;
   /**
    * The payment terms for the customer
    */
-  paymentTerms: 'Net 15' | 'Net 30' | 'Net 45' | 'Net 60';
+  paymentTerms: string;
+  /**
+   * The creation date of the customer
+   */
+  createdAt: string;
+  /**
+   * The update date of the customer
+   */
+  updatedAt: string;
 };
 

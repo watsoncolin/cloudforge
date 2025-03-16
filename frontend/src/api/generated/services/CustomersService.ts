@@ -24,6 +24,7 @@ export class CustomersService {
       mediaType: 'application/json',
       errors: {
         400: `Invalid input`,
+        409: `Customer already exists`,
       },
     });
   }

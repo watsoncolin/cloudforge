@@ -39,7 +39,7 @@ export const $UpdateSupplierDto = {
       description: `The state or province where the supplier is located`,
       isRequired: true,
     },
-    zipCode: {
+    postalCode: {
       type: 'string',
       description: `The postal/ZIP code of the supplier`,
       isRequired: true,

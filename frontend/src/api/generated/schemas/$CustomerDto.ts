@@ -14,48 +14,38 @@ export const $CustomerDto = {
       description: `The name of the customer company`,
       isRequired: true,
     },
-    contactName: {
-      type: 'string',
-      description: `The name of the primary contact person`,
+    contact: {
+      type: 'all-of',
+      description: `The contact information of the customer`,
+      contains: [{
+        type: 'ContactDto',
+      }],
       isRequired: true,
-    },
-    contactEmail: {
-      type: 'string',
-      description: `The email address of the primary contact`,
-      isRequired: true,
-    },
-    contactPhone: {
-      type: 'string',
-      description: `The phone number of the primary contact`,
     },
     address: {
-      type: 'string',
-      description: `The street address of the customer`,
-      isRequired: true,
-    },
-    city: {
-      type: 'string',
-      description: `The city where the customer is located`,
-      isRequired: true,
-    },
-    country: {
-      type: 'string',
-      description: `The country where the customer is located`,
-      isRequired: true,
-    },
-    stateProvince: {
-      type: 'string',
-      description: `The state or province where the customer is located`,
-      isRequired: true,
-    },
-    zipCode: {
-      type: 'string',
-      description: `The postal/ZIP code of the customer`,
+      type: 'all-of',
+      description: `The address of the customer`,
+      contains: [{
+        type: 'AddressDto',
+      }],
       isRequired: true,
     },
     paymentTerms: {
-      type: 'Enum',
+      type: 'string',
+      description: `The payment terms for the customer`,
       isRequired: true,
+    },
+    createdAt: {
+      type: 'string',
+      description: `The creation date of the customer`,
+      isRequired: true,
+      format: 'date-time',
+    },
+    updatedAt: {
+      type: 'string',
+      description: `The update date of the customer`,
+      isRequired: true,
+      format: 'date-time',
     },
   },
 } as const;

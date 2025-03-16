@@ -43,12 +43,12 @@ export function CustomersList() {
               <TableCell>{customer.id}</TableCell>
               <TableCell>{customer.name}</TableCell>
               <TableCell>
-                {customer.city}, {customer.stateProvince}, {customer.country}
+                {customer.address.city}, {customer.address.stateProvince}, {customer.address.country}
               </TableCell>
               <TableCell>
-                <span className="line-clamp-1">{customer.contactName}</span>
+                <span className="line-clamp-1">{customer.contact.name}</span>
               </TableCell>
-              <TableCell className="text-right">{customer.contactPhone}</TableCell>
+              <TableCell className="text-right">{customer.contact.phone}</TableCell>
             </TableRow>
           ))}
         </TableBody>

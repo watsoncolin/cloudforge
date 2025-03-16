@@ -16,7 +16,7 @@ import {
 import { getCountries } from "@/data";
 import { useState } from "react";
 import { queryKeys, useCreateCustomer } from "@/hooks/api-hooks";
-import type { CreateCustomerDto } from "@/api/generated";
+import { CreateCustomerDto } from "@/api/generated";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface CustomerFormData {
@@ -29,6 +29,7 @@ interface CustomerFormData {
   addressProvince: string;
   addressPostalCode: string;
   addressCountry: string;
+  paymentTerms: CreateCustomerDto.paymentTerms;
 }
 
 const initialFormData: CustomerFormData = {
@@ -41,6 +42,7 @@ const initialFormData: CustomerFormData = {
   addressProvince: "CA",
   addressPostalCode: "12345",
   addressCountry: "United States",
+  paymentTerms: CreateCustomerDto.paymentTerms.NET_30,
 };
 
 export function AddCustomer() {
@@ -101,9 +103,9 @@ export function AddCustomer() {
       address: formData.addressStreet,
       city: formData.addressCity,
       stateProvince: formData.addressProvince,
-      zipCode: formData.addressPostalCode,
+      postalCode: formData.addressPostalCode,
       country: formData.addressCountry,
-      paymentTerms: "Net 30", // Default value, you might want to add this to the form
+      paymentTerms: formData.paymentTerms,
     };
 
     createCustomer(customerData);
@@ -250,6 +252,20 @@ export function AddCustomer() {
                   value={formData.addressPostalCode}
                   onChange={handleInputChange}
                 />
+              </Field>
+
+              <Field>
+                <Label>Payment Terms</Label>
+                <Select name="paymentTerms" value={formData.paymentTerms} onChange={handleInputChange}>
+                  <option value="" disabled>
+                    Select payment terms...
+                  </option>
+                  {Object.values(CreateCustomerDto.paymentTerms).map((term) => (
+                    <option key={term} value={term}>
+                      {term.replace("_", " ")}
+                    </option>
+                  ))}
+                </Select>
               </Field>
             </FieldGroup>
           </DialogBody>

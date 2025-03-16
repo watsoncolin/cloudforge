@@ -36,6 +36,7 @@ export type { CustomerDto, CreateCustomerDto, SupplierDto, CreateSupplierDto };
 // Error type
 export interface ApiError {
   message: string;
+  error: string;
   statusCode: number;
 }
 
@@ -80,10 +81,11 @@ export function useCreateCustomer(
   const queryClient = useQueryClient();
 
   return useMutation<CustomerDto, ApiError, CreateCustomerDto>({
-    mutationFn: (data) => toPromise(api.customers.customersControllerCreateCustomer(data)),
+    mutationFn: (data) => toPromise(api.customers.customersControllerCreateCustomer(data)).catch(handleApiError),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
     },
+    retry: false,
     ...options,
   });
 }
@@ -99,6 +101,7 @@ export function useUpdateCustomer(
       queryClient.invalidateQueries({ queryKey: queryKeys.customers.detail(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.customers.all });
     },
+    retry: false,
     ...options,
   });
 }
@@ -142,6 +145,7 @@ export function useCreateSupplier(
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.all });
     },
+    retry: false,
     ...options,
   });
 }
@@ -157,6 +161,7 @@ export function useUpdateSupplier(
       queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.detail(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.all });
     },
+    retry: false,
     ...options,
   });
 }

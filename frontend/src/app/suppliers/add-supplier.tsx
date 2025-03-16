@@ -14,10 +14,11 @@ import {
   Select,
 } from "@/components/catalyst-ui";
 import { getCountries } from "@/data";
-import { CreateSupplierDto, queryKeys } from "@/hooks/api-hooks";
+import { queryKeys } from "@/hooks/api-hooks";
 import { useCreateSupplier } from "@/hooks/api-hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { CreateSupplierDto } from "@/api/generated";
 
 interface SupplierFormData {
   companyName: string;
@@ -28,8 +29,8 @@ interface SupplierFormData {
   city: string;
   country: string;
   stateProvince: string;
-  zipCode: string;
-  paymentTerms: string;
+  postalCode: string;
+  paymentTerms: CreateSupplierDto.paymentTerms;
   currency: string;
   leadTime: string;
   moq: string;
@@ -46,8 +47,8 @@ const initialFormData: SupplierFormData = {
   city: "Mock City",
   country: "United States",
   stateProvince: "Mock State",
-  zipCode: "12345",
-  paymentTerms: "Net 30",
+  postalCode: "12345",
+  paymentTerms: CreateSupplierDto.paymentTerms.NET_30,
   currency: "USD",
   leadTime: "10",
   moq: "100",
@@ -89,7 +90,7 @@ export function AddSupplier() {
       newErrors.contactEmail = "Invalid email format";
     }
     if (!formData.country) newErrors.country = "Country is required";
-    if (!formData.paymentTerms) newErrors.paymentTerms = "Payment terms are required";
+    if (!formData.paymentTerms) newErrors.paymentTerms = undefined;
     if (!formData.currency) newErrors.currency = "Currency is required";
 
     setErrors(newErrors);
@@ -112,9 +113,9 @@ export function AddSupplier() {
       address: formData.address,
       city: formData.city,
       stateProvince: formData.stateProvince,
-      zipCode: formData.zipCode,
+      postalCode: formData.postalCode,
       country: formData.country,
-      paymentTerms: formData.paymentTerms as "Net 15" | "Net 30" | "Net 45" | "Net 60",
+      paymentTerms: formData.paymentTerms as CreateSupplierDto.paymentTerms,
     };
 
     createSupplier(supplierData);
@@ -255,10 +256,10 @@ export function AddSupplier() {
               <Field>
                 <Label>ZIP/Postal Code</Label>
                 <Input
-                  name="zipCode"
+                  name="postalCode"
                   type="text"
                   placeholder="Enter ZIP/postal code"
-                  value={formData.zipCode}
+                  value={formData.postalCode}
                   onChange={handleInputChange}
                 />
               </Field>
@@ -269,10 +270,11 @@ export function AddSupplier() {
                   <option value="" disabled>
                     Select terms...
                   </option>
-                  <option value="Net 15">Net 15</option>
-                  <option value="Net 30">Net 30</option>
-                  <option value="Net 45">Net 45</option>
-                  <option value="Net 60">Net 60</option>
+                  {Object.values(CreateSupplierDto.paymentTerms).map((term) => (
+                    <option key={term} value={term}>
+                      {term.replace("_", " ")}
+                    </option>
+                  ))}
                 </Select>
                 {renderError("paymentTerms")}
               </Field>

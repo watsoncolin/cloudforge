@@ -58,16 +58,16 @@ export function CustomerDetails({ id }: { id: string }) {
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <BuildingOfficeIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
               <span>
-                {customer.city}, {customer.country}
+                {customer.address.city}, {customer.address.country}
               </span>
             </span>
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <CurrencyDollarIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
-              <span>{customer.zipCode}</span>
+              <span>{customer.address.postalCode}</span>
             </span>
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <TruckIcon className="size-4 shrink-0 text-zinc-400 dark:text-zinc-500" />
-              <span>{customer.contactPhone}</span>
+              <span>{customer.contact.phone}</span>
             </span>
           </div>
         </div>
@@ -77,31 +77,31 @@ export function CustomerDetails({ id }: { id: string }) {
         <Divider className="mt-4" />
         <DescriptionList>
           <DescriptionTerm>Contact Name</DescriptionTerm>
-          <DescriptionDetails>{customer.contactName}</DescriptionDetails>
+          <DescriptionDetails>{customer.contact.name}</DescriptionDetails>
 
           <DescriptionTerm>Email</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`mailto:${customer.contactEmail}`} className="flex items-center gap-2">
+            <Link href={`mailto:${customer.contact.email}`} className="flex items-center gap-2">
               <EnvelopeIcon className="size-4" />
-              {customer.contactEmail}
+              {customer.contact.email}
             </Link>
           </DescriptionDetails>
 
           <DescriptionTerm>Phone</DescriptionTerm>
           <DescriptionDetails>
-            <Link href={`tel:${customer.contactPhone}`} className="flex items-center gap-2">
+            <Link href={`tel:${customer.contact.phone}`} className="flex items-center gap-2">
               <PhoneIcon className="size-4" />
-              {customer.contactPhone}
+              {customer.contact.phone}
             </Link>
           </DescriptionDetails>
 
           <DescriptionTerm>Address</DescriptionTerm>
           <DescriptionDetails>
-            {customer.address}
+            {customer.address.street}
             <br />
-            {customer.city}, {customer.stateProvince} {customer.zipCode}
+            {customer.address.city}, {customer.address.stateProvince} {customer.address.postalCode}
             <br />
-            {customer.country}
+            {customer.address.country}
           </DescriptionDetails>
         </DescriptionList>
       </div>
