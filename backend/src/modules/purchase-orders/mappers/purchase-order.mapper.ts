@@ -1,8 +1,9 @@
 import { PurchaseOrder } from 'src/domain/purchase-order/purchase-order';
 import { PurchaseOrderEntity } from '../entities/purchase-order.entity';
 import { PurchaseOrderItemMapper } from './purchase-order-item.mapper';
+import { Injectable } from '@nestjs/common';
 
-// maps from domain to entity
+@Injectable()
 export class PurchaseOrderMapper {
   constructor(
     private readonly purchaseOrderItemMapper: PurchaseOrderItemMapper,
@@ -36,9 +37,9 @@ export class PurchaseOrderMapper {
       createdAt: purchaseOrder.createdAt,
       updatedAt: purchaseOrder.updatedAt,
     };
-    purchaseOrder.items.forEach((item) => {
+    for (const item of purchaseOrder.items) {
       entity.items.push(this.purchaseOrderItemMapper.toEntity(item, entity));
-    });
+    }
     return entity;
   }
 }

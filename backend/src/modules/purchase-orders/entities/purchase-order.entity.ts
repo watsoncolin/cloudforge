@@ -38,6 +38,9 @@ export class PurchaseOrderEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => PurchaseOrderItemEntity, (item) => item.purchaseOrder)
+  @OneToMany(() => PurchaseOrderItemEntity, (item) => item.purchaseOrder, {
+    cascade: true,
+    eager: true,
+  })
   items: PurchaseOrderItemEntity[];
 }

@@ -44,6 +44,7 @@ export namespace PurchaseOrderItemDto {
     STEEL = 'steel',
     ALUMINUM = 'aluminum',
     COPPER = 'copper',
+    STAINLESS_STEEL = 'stainless_steel',
   }
   /**
    * The unit of measure

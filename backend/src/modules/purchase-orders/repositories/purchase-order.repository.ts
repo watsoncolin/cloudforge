@@ -13,9 +13,12 @@ export class PurchaseOrdersRepository {
   ) {}
 
   async create(data: PurchaseOrder): Promise<PurchaseOrder> {
+    console.log('saving purchase order');
     const purchaseOrder = this.repository.create(this.mapper.toEntity(data));
-    const entity = await this.repository.save(purchaseOrder);
-    return this.mapper.toDomain(entity);
+    console.log('purchase order created');
+    await this.repository.save(purchaseOrder);
+    console.log('purchase order saved');
+    return this.mapper.toDomain(purchaseOrder);
   }
 
   async findAll(): Promise<PurchaseOrder[]> {
@@ -25,6 +28,7 @@ export class PurchaseOrdersRepository {
 
   async findById(id: string): Promise<PurchaseOrder | null> {
     const entity = await this.repository.findOneBy({ id });
+    console.log('entity', entity);
     return entity ? this.mapper.toDomain(entity) : null;
   }
 

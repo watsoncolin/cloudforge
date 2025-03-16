@@ -1,8 +1,10 @@
 import { PurchaseOrderItem } from 'src/domain/purchase-order/purchase-order-item';
 import { PurchaseOrderItemEntity } from '../entities/purchase-order-items.entity';
 import { PurchaseOrderEntity } from '../entities/purchase-order.entity';
+import { Injectable } from '@nestjs/common';
 
 // maps from domain to entity
+@Injectable()
 export class PurchaseOrderItemMapper {
   toDomain(entity: PurchaseOrderItemEntity): PurchaseOrderItem {
     return {

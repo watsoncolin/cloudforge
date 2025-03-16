@@ -14,20 +14,28 @@ export class CreatePurchaseOrderDto {
   @IsNotEmpty()
   orderDate: string;
 
-  @ApiProperty({ description: 'The status of the purchase order' })
+  @ApiProperty({
+    description: 'The status of the purchase order',
+    enum: PurchaseOrderStatus,
+  })
   @IsEnum(PurchaseOrderStatus)
   @IsNotEmpty()
   status: PurchaseOrderStatus;
 
-  @ApiProperty({ description: 'The items in the purchase order' })
+  @ApiProperty({
+    description: 'The items in the purchase order',
+    type: [PurchaseOrderItemDto],
+  })
   @IsArray()
   @IsNotEmpty()
   items: PurchaseOrderItemDto[];
 
-  @ApiProperty({ description: 'The expected delivery date' })
-  @IsDate()
+  @ApiProperty({
+    description: 'The expected delivery date. Format: YYYY-MM-DD',
+  })
   @IsNotEmpty()
-  expectedDeliveryDate: Date;
+  @IsString()
+  expectedDeliveryDate: string;
 
   @ApiProperty({ description: 'The currency of the purchase order' })
   @IsString()

@@ -9,4 +9,5 @@ export enum Material {
   STEEL = 'steel',
   ALUMINUM = 'aluminum',
   COPPER = 'copper',
+  STAINLESS_STEEL = 'stainless_steel',
 }

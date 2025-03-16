@@ -8,6 +8,9 @@ import type {
   CreateSupplierDto,
   CancelablePromise,
   UpdateSupplierDto,
+  PurchaseOrderDto,
+  CreatePurchaseOrderDto,
+  UpdatePurchaseOrderDto,
 } from "@/api/generated";
 
 // Query keys for caching and invalidation
@@ -27,6 +30,10 @@ export const queryKeys = {
   quotes: {
     all: ["quotes"] as const,
     detail: (id: string) => ["quotes", id] as const,
+  },
+  purchaseOrders: {
+    all: ["purchaseOrders"] as const,
+    detail: (id: string) => ["purchaseOrders", id] as const,
   },
 } as const;
 
@@ -154,7 +161,6 @@ export function useUpdateSupplier(
   options?: Omit<UseMutationOptions<SupplierDto, ApiError, { id: string; data: UpdateSupplierDto }>, "mutationFn">
 ) {
   const queryClient = useQueryClient();
-
   return useMutation<SupplierDto, ApiError, { id: string; data: UpdateSupplierDto }>({
     mutationFn: ({ id, data }) => toPromise(api.suppliers.suppliersControllerUpdate(id, data)),
     onSuccess: (_, { id }) => {
@@ -173,6 +179,58 @@ export function useDeleteSupplier(options?: Omit<UseMutationOptions<void, Error,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.suppliers.all });
     },
+    ...options,
+  });
+}
+
+// Purchase order hooks
+export function usePurchaseOrders(options?: Omit<UseQueryOptions<PurchaseOrderDto[], Error>, "queryKey" | "queryFn">) {
+  return useQuery({
+    queryKey: queryKeys.purchaseOrders.all,
+    queryFn: () => api.purchaseOrders.purchaseOrdersControllerFindAll().catch(handleApiError),
+    ...options,
+  });
+}
+
+export function usePurchaseOrder(
+  id: string,
+  options?: Omit<UseQueryOptions<PurchaseOrderDto, Error>, "queryKey" | "queryFn">
+) {
+  return useQuery({
+    queryKey: queryKeys.purchaseOrders.detail(id),
+    queryFn: () => api.purchaseOrders.purchaseOrdersControllerFindOne(id).catch(handleApiError),
+    ...options,
+  });
+}
+
+export function useCreatePurchaseOrder(
+  options?: Omit<UseMutationOptions<PurchaseOrderDto, Error, CreatePurchaseOrderDto>, "mutationFn">
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreatePurchaseOrderDto) =>
+      api.purchaseOrders.purchaseOrdersControllerCreate(data).catch(handleApiError),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.all });
+    },
+    retry: false,
+    ...options,
+  });
+}
+
+export function useUpdatePurchaseOrder(
+  options?: Omit<
+    UseMutationOptions<PurchaseOrderDto, Error, { id: string; data: UpdatePurchaseOrderDto }>,
+    "mutationFn"
+  >
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => api.purchaseOrders.purchaseOrdersControllerUpdate(id, data).catch(handleApiError),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.all });
+    },
+    retry: false,
     ...options,
   });
 }

@@ -13,7 +13,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 export type { AddressDto } from './models/AddressDto';
 export type { ContactDto } from './models/ContactDto';
 export { CreateCustomerDto } from './models/CreateCustomerDto';
-export type { CreatePurchaseOrderDto } from './models/CreatePurchaseOrderDto';
+export { CreatePurchaseOrderDto } from './models/CreatePurchaseOrderDto';
 export { CreateSupplierDto } from './models/CreateSupplierDto';
 export type { CustomerDto } from './models/CustomerDto';
 export type { LoginDto } from './models/LoginDto';

@@ -22,7 +22,7 @@ export class CreatePurchaseOrderHandler
       command.createPurchaseOrderDto.currency,
       new Date(),
       new Date(),
-      command.createPurchaseOrderDto.expectedDeliveryDate,
+      new Date(command.createPurchaseOrderDto.expectedDeliveryDate),
     );
     return this.purchaseOrderRepository.create(purchaseOrder);
   }

@@ -15,22 +15,20 @@ export const $CreatePurchaseOrderDto = {
       isRequired: true,
     },
     status: {
-      type: 'string',
-      description: `The status of the purchase order`,
+      type: 'Enum',
       isRequired: true,
     },
     items: {
       type: 'array',
       contains: {
-        type: 'string',
+        type: 'PurchaseOrderItemDto',
       },
       isRequired: true,
     },
     expectedDeliveryDate: {
       type: 'string',
-      description: `The expected delivery date`,
+      description: `The expected delivery date. Format: YYYY-MM-DD`,
       isRequired: true,
-      format: 'date-time',
     },
     currency: {
       type: 'string',
