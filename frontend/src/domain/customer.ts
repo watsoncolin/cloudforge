@@ -1,3 +1,5 @@
+// TEMP until we have a real customer domain
+
 export interface Customer {
   id: string;
   name: string;

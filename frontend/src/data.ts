@@ -1,13 +1,11 @@
-import { Customer } from "./domain/customer";
-import { MaterialType } from "./domain/enums.ts/materialTypes.enum";
-import { Units } from "./domain/enums.ts/units.enum";
 import { InventoryItem } from "./domain/inventory-item";
 import { Invoice } from "./domain/invoice";
 import { Quote } from "./domain/quote";
 import { RFQ } from "./domain/rfq";
 import { SalesOrder } from "./domain/sales-order";
 import { Supplier } from "./domain/supplier";
-
+import { Material, PurchaseOrderItemDto } from "./api/generated";
+import { Customer } from "./domain/customer";
 export async function getRecentOrders() {
   return (await getSalesOrders()).slice(0, 10);
 }
@@ -358,14 +356,14 @@ export const getInventoryItem = (id: number): InventoryItem | undefined => {
 export const getInventory = (): InventoryItem[] => [
   {
     id: 101,
-    materialType: MaterialType.Steel,
+    materialType: Material.STEEL,
     grade: "ASTM A36",
     dimensions: {
       thickness: "0.5",
       width: "48",
       length: "96",
     },
-    unitOfMeasure: Units.Pounds,
+    unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.PIECES,
     totalStock: 5000,
     availableStock: 2000,
     allocatedStock: 3000,
@@ -393,14 +391,14 @@ export const getInventory = (): InventoryItem[] => [
   },
   {
     id: 102,
-    materialType: MaterialType.Aluminum,
+    materialType: Material.ALUMINUM,
     grade: "6061-T6",
     dimensions: {
       thickness: "0.25",
       width: "48",
       length: "120",
     },
-    unitOfMeasure: Units.Pounds,
+    unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.PIECES,
     totalStock: 3000,
     availableStock: 1000,
     allocatedStock: 2000,
@@ -428,14 +426,14 @@ export const getInventory = (): InventoryItem[] => [
   },
   {
     id: 103,
-    materialType: MaterialType.StainlessSteel,
+    materialType: Material.ALUMINUM,
     grade: "304",
     dimensions: {
       thickness: "0.125",
       width: "60",
       length: "144",
     },
-    unitOfMeasure: Units.Pounds,
+    unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.PIECES,
     totalStock: 7000,
     availableStock: 4000,
     allocatedStock: 3000,
@@ -463,14 +461,14 @@ export const getInventory = (): InventoryItem[] => [
   },
   {
     id: 104,
-    materialType: MaterialType.Copper,
+    materialType: Material.COPPER,
     grade: "C110",
     dimensions: {
       thickness: "0.375",
       width: "36",
       length: "96",
     },
-    unitOfMeasure: Units.Pounds,
+    unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.PIECES,
     totalStock: 2500,
     availableStock: 500,
     allocatedStock: 2000,
@@ -526,11 +524,11 @@ export const getRFQs = (): RFQ[] => [
     materials: [
       {
         lineItemId: "L-003",
-        materialType: MaterialType.Steel,
+        materialType: Material.STEEL,
         grade: "ASTM A36",
         dimensions: { thickness: 0.5, width: 48, length: 96 },
         quantity: 15,
-        unitOfMeasure: Units.Sheets,
+        unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.SHEETS,
         requiredDate: "2024-04-05",
         status: "Available",
       },
@@ -562,11 +560,11 @@ export const getRFQs = (): RFQ[] => [
     materials: [
       {
         lineItemId: "L-003",
-        materialType: MaterialType.Steel,
+        materialType: Material.STEEL,
         grade: "ASTM A36",
         dimensions: { thickness: 0.5, width: 48, length: 96 },
         quantity: 15,
-        unitOfMeasure: Units.Sheets,
+        unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.SHEETS,
         requiredDate: "2024-04-05",
         status: "Available",
       },
@@ -603,11 +601,11 @@ export const getRFQs = (): RFQ[] => [
       materials: [
         {
           lineItemId: "L-003",
-          materialType: MaterialType.Steel,
+          materialType: Material.STEEL,
           grade: "ASTM A36",
           dimensions: { thickness: 0.5, width: 48, length: 96 },
           quantity: 15,
-          unitOfMeasure: Units.Sheets,
+          unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.SHEETS,
           requiredDate: "2024-04-05",
           status: "Pending",
         },
@@ -645,11 +643,11 @@ export const getQuotes = (): Quote[] => [
     items: [
       {
         lineItemId: "L-001",
-        materialType: MaterialType.Steel,
+        materialType: Material.STEEL,
         grade: "ASTM A36",
         dimensions: { thickness: 0.5, width: 48, length: 96 },
         quantity: 10,
-        unitOfMeasure: Units.Sheets,
+        unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.SHEETS,
         basePrice: 120.0,
         finalPrice: 120.0,
         totalPrice: 1200.0,
@@ -657,11 +655,11 @@ export const getQuotes = (): Quote[] => [
       },
       {
         lineItemId: "L-002",
-        materialType: MaterialType.Aluminum,
+        materialType: Material.ALUMINUM,
         grade: "6061-T6",
         dimensions: { thickness: 0.25, width: 48 },
         quantity: 5000,
-        unitOfMeasure: Units.Pounds,
+        unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.PIECES,
         basePrice: 2.5,
         finalPrice: 2.5,
         totalPrice: 12500.0,
@@ -702,11 +700,11 @@ export const getQuotes = (): Quote[] => [
     items: [
       {
         lineItemId: "L-001",
-        materialType: MaterialType.Steel,
+        materialType: Material.STEEL,
         grade: "ASTM A36",
         dimensions: { thickness: 0.5, width: 48, length: 96 },
         quantity: 10,
-        unitOfMeasure: Units.Sheets,
+        unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.SHEETS,
         stockAvailability: "Available",
         basePrice: 120.0,
         finalPrice: 120.0,
@@ -747,12 +745,12 @@ const materialDensities: Record<string, number> = {
 
 // Calculate the price of a material based on the base price, density, and quantity
 export const calculateMaterialPrice = (
-  materialType: MaterialType,
+  materialType: Material,
   grade: string,
   thickness: number,
   width: number,
   quantity: number,
-  unit: Units,
+  unit: PurchaseOrderItemDto.unitOfMeasure,
   length?: number // Optional for coils
 ): number => {
   const key = `${materialType}-${grade}`;
@@ -771,7 +769,7 @@ export const calculateMaterialPrice = (
   const processingFee = 25.0;
 
   // Bulk Discount (5% off for orders over 10 tons)
-  if (unit === Units.Tons && quantity >= 10) {
+  if (unit === PurchaseOrderItemDto.unitOfMeasure.TONS && quantity >= 10) {
     materialCost *= 0.95;
   }
 
@@ -808,11 +806,11 @@ export const getSalesOrders = (): SalesOrder[] => [
     items: [
       {
         lineItemId: "L-001",
-        materialType: MaterialType.Steel,
+        materialType: Material.STEEL,
         grade: "ASTM A36",
         dimensions: { thickness: 0.5, width: 48, length: 96 },
         quantity: 10,
-        unitOfMeasure: Units.Sheets,
+        unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.SHEETS,
         stockAvailability: "Available",
         basePrice: 120.0,
         finalPrice: 120.0,
@@ -861,7 +859,7 @@ export const getInvoices = (): Invoice[] => [
     items: [
       {
         lineItemId: "L-001",
-        materialType: MaterialType.Steel,
+        materialType: Material.STEEL,
         grade: "ASTM A36",
         dimensions: {
           thickness: 0.5,
@@ -869,7 +867,7 @@ export const getInvoices = (): Invoice[] => [
           length: 96,
         },
         quantity: 10,
-        unitOfMeasure: Units.Sheets,
+        unitOfMeasure: PurchaseOrderItemDto.unitOfMeasure.SHEETS,
         unitPrice: 120.0,
         totalPrice: 1200.0,
       },

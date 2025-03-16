@@ -1,8 +1,8 @@
-import { UnitOfMeasure } from 'src/enums';
+import { Material, UnitOfMeasure } from 'src/enums';
 
 export class PurchaseOrderItem {
   id: string;
-  materialType: string;
+  materialType: Material;
   grade: string;
   dimensions: {
     thickness: number;

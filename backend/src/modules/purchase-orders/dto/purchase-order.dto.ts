@@ -30,7 +30,10 @@ export class PurchaseOrderDto {
   @IsNotEmpty()
   status: PurchaseOrderStatus;
 
-  @ApiProperty({ description: 'The items in the purchase order' })
+  @ApiProperty({
+    description: 'The items in the purchase order',
+    type: [PurchaseOrderItemDto],
+  })
   @IsArray()
   @IsNotEmpty()
   items: PurchaseOrderItemDto[];

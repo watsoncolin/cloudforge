@@ -1,13 +1,13 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PurchaseOrderEntity } from './purchase-order.entity';
-import { UnitOfMeasure } from 'src/enums';
+import { Material, UnitOfMeasure } from 'src/enums';
 @Entity('purchase_order_items')
 export class PurchaseOrderItemEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  materialType: string;
+  materialType: Material;
 
   @Column()
   grade: string;

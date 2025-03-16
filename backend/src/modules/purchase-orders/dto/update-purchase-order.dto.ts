@@ -9,11 +9,6 @@ export class UpdatePurchaseOrderDto {
   @IsNotEmpty()
   id: string;
 
-  @ApiProperty({ description: 'The supplier name' })
-  @IsString()
-  @IsNotEmpty()
-  supplierName: string;
-
   @ApiProperty({ description: 'The supplier id' })
   @IsString()
   @IsNotEmpty()

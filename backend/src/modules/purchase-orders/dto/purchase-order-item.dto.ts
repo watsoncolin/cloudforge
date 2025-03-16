@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsNumber, IsEnum } from 'class-validator';
-import { UnitOfMeasure } from 'src/enums';
+import { Material, UnitOfMeasure } from 'src/enums';
 
 export class PurchaseOrderItemDto {
   @ApiProperty({
@@ -10,10 +10,10 @@ export class PurchaseOrderItemDto {
   @IsNotEmpty()
   id: string;
 
-  @ApiProperty({ description: 'The material type' })
-  @IsString()
+  @ApiProperty({ description: 'The material type', enum: Material })
+  @IsEnum(Material)
   @IsNotEmpty()
-  materialType: string;
+  materialType: Material;
 
   @ApiProperty({ description: 'The grade of the material' })
   @IsString()
@@ -33,7 +33,7 @@ export class PurchaseOrderItemDto {
   @IsNotEmpty()
   quantity: number;
 
-  @ApiProperty({ description: 'The unit of measure' })
+  @ApiProperty({ description: 'The unit of measure', enum: UnitOfMeasure })
   @IsEnum(UnitOfMeasure)
   @IsNotEmpty()
   unitOfMeasure: UnitOfMeasure;

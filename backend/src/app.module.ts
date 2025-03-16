@@ -10,7 +10,7 @@ import { SuppliersModule } from './modules/suppliers/suppliers.module';
 // import { InvoicesModule } from './domains/invoices/invoices.module';
 // import { SharedModule } from './shared/shared.module';
 import { databaseConfig } from './config/database.config';
-
+import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,6 +21,7 @@ import { databaseConfig } from './config/database.config';
     AuthModule,
     CustomersModule,
     SuppliersModule,
+    PurchaseOrdersModule,
     // InventoryModule,
     // QuotesModule,
     // OrdersModule,
