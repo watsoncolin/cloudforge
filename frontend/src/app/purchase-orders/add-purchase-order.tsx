@@ -131,8 +131,6 @@ export function AddPurchaseOrder() {
       expectedDeliveryDate: formData.expectedDeliveryDate,
     };
 
-    console.log(purchaseOrderData);
-
     createPurchaseOrder(purchaseOrderData);
   };
 
@@ -178,7 +176,7 @@ export function AddPurchaseOrder() {
                   <option value="">Select supplier...</option>
                   {suppliers?.map((supplier) => (
                     <option key={supplier.id} value={supplier.id}>
-                      {supplier.name}
+                      {supplier.readableId} - {supplier.name}
                     </option>
                   ))}
                 </Select>
@@ -273,6 +271,7 @@ export function AddPurchaseOrder() {
                                 <Input
                                   type="number"
                                   min="0"
+                                  step="0.01"
                                   placeholder="T"
                                   value={item.dimensions.thickness}
                                   onChange={(e) => {
@@ -295,6 +294,7 @@ export function AddPurchaseOrder() {
                                 <Input
                                   type="number"
                                   min="0"
+                                  step="0.01"
                                   placeholder="W"
                                   value={item.dimensions.width}
                                   onChange={(e) => {
@@ -317,6 +317,7 @@ export function AddPurchaseOrder() {
                                 <Input
                                   type="number"
                                   min="0"
+                                  step="0.01"
                                   placeholder="L"
                                   value={item.dimensions.length}
                                   onChange={(e) => {
@@ -341,6 +342,7 @@ export function AddPurchaseOrder() {
                             <Input
                               type="number"
                               min="0"
+                              step="0.01"
                               value={item.quantity}
                               onChange={(e) => {
                                 const newItems = [...formData.items];

@@ -1,0 +1,7 @@
+export enum RFQStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  QUOTE = 'QUOTE',
+  REJECTED = 'REJECTED',
+  COMPLETED = 'COMPLETED',
+}

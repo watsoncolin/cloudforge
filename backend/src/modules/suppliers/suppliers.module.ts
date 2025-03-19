@@ -15,6 +15,7 @@ import { GetSupplierByIdHandler } from './queries/get-supplier-by-id/get-supplie
 import { SuppliersRepository } from './repositories/suppliers.repository';
 import { SupplierEntity } from './entities/supplier.entity';
 import { SupplierMapper } from './mappers/supplier.mapper';
+import { CoreModule } from '../core/core.module';
 
 const CommandHandlers = [
   CreateSupplierHandler,
@@ -24,7 +25,7 @@ const CommandHandlers = [
 const QueryHandlers = [GetAllSuppliersHandler, GetSupplierByIdHandler];
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([SupplierEntity])],
+  imports: [CqrsModule, TypeOrmModule.forFeature([SupplierEntity]), CoreModule],
   controllers: [SuppliersController],
   providers: [
     SuppliersRepository,

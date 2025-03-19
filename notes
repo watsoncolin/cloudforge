@@ -1,0 +1,7 @@
+notes
+
+add db types and constraints
+
+add event emitter for purchase order received event
+
+add pagination

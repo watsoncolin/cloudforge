@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
@@ -13,6 +12,7 @@ import { SuppliersService } from './suppliers.service';
 import { CreateSupplierDto } from './dto/create-supplier.dto';
 import { SupplierDto } from './dto/supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
+import { Supplier } from 'src/domain/supplier/supplier';
 
 @ApiTags('suppliers')
 @Controller('suppliers')
@@ -47,14 +47,7 @@ export class SuppliersController {
   @ApiResponse({ status: 404, description: 'Supplier not found.' })
   async findOne(@Param('id') id: string): Promise<SupplierDto> {
     const supplier = await this.suppliersService.findOne(id);
-    return {
-      id: supplier.id,
-      name: supplier.name,
-      contact: supplier.contact,
-      address: supplier.address,
-      paymentTerm: supplier.paymentTerm,
-      materials: supplier.materials,
-    };
+    return this.mapSupplierToDto(supplier);
   }
 
   @Put(':id')
@@ -70,14 +63,7 @@ export class SuppliersController {
     @Body() updateSupplierDto: UpdateSupplierDto,
   ): Promise<SupplierDto> {
     const supplier = await this.suppliersService.update(id, updateSupplierDto);
-    return {
-      id: supplier.id,
-      name: supplier.name,
-      contact: supplier.contact,
-      address: supplier.address,
-      paymentTerm: supplier.paymentTerm,
-      materials: supplier.materials,
-    };
+    return this.mapSupplierToDto(supplier);
   }
 
   @Delete(':id')
@@ -89,5 +75,19 @@ export class SuppliersController {
   @ApiResponse({ status: 404, description: 'Supplier not found.' })
   remove(@Param('id') id: string): Promise<void> {
     return this.suppliersService.remove(id);
+  }
+
+  private mapSupplierToDto(supplier: Supplier): SupplierDto {
+    return {
+      id: supplier.id,
+      readableId: supplier.readableId,
+      name: supplier.name,
+      contact: supplier.contact,
+      address: supplier.address,
+      paymentTerm: supplier.paymentTerm,
+      materials: supplier.materials,
+      createdAt: supplier.createdAt,
+      updatedAt: supplier.updatedAt,
+    };
   }
 }

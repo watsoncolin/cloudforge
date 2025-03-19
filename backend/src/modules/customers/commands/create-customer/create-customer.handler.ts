@@ -4,12 +4,15 @@ import { CreateCustomerCommand } from './create-customer.command';
 import { CustomersRepository } from '../../repositories/customers.repository';
 import { Customer } from 'src/domain/customer/customer';
 import { v4 as uuidv4 } from 'uuid';
-
+import { SequenceService } from '../../../core/sequence/services/sequence.service';
 @CommandHandler(CreateCustomerCommand)
 export class CreateCustomerHandler
   implements ICommandHandler<CreateCustomerCommand>
 {
-  constructor(private readonly customersRepository: CustomersRepository) {}
+  constructor(
+    private readonly customersRepository: CustomersRepository,
+    private readonly sequenceService: SequenceService,
+  ) {}
 
   async execute(command: CreateCustomerCommand): Promise<Customer> {
     const existingCustomer = await this.customersRepository.findByEmail(
@@ -32,6 +35,7 @@ export class CreateCustomerHandler
     };
     const customer: Customer = {
       id: uuidv4(),
+      readableId: await this.sequenceService.getNextSequenceNumber('C'),
       name: command.createCustomerDto.name,
       address,
       contact,

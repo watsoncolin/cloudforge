@@ -1,49 +1,34 @@
-"use client";
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import { api } from "@/api/client";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/api-hooks";
+import { RFQList } from "./rfq-list";
 
-import { TableCell, TableBody, TableRow, TableHead, Table, TableHeader } from "@/components/catalyst-ui";
-import { getRFQs } from "@/data";
-import { AddRFQ } from "./add-rfq";
-import { ListPageHeader } from "@/components/list-page-header";
+export const metadata: Metadata = {
+  title: "Request for Quotes",
+};
 
-export default function RFQPage() {
-  const rfqs = getRFQs();
+export default async function RFQPage() {
+  const queryClient = new QueryClient();
+
+  // Prefetch the customers query on the server
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.rfqs.all,
+    queryFn: () => api.rfQs.rfqControllerGetAllRfqs().then((res) => res),
+  });
 
   return (
-    <>
-      <ListPageHeader title="Request for Quotes" searchPlaceholder="Search RFQs&hellip;" button={<AddRFQ />} />
-      <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
-        <TableHead>
-          <TableRow>
-            <TableHeader>ID</TableHeader>
-            <TableHeader>Customer</TableHeader>
-            <TableHeader>Items Requested</TableHeader>
-            <TableHeader>Total Weight</TableHeader>
-            <TableHeader>Status</TableHeader>
-            <TableHeader>Source</TableHeader>
-            <TableHeader>Created At</TableHeader>
-            <TableHeader>Updated At</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rfqs.map((rfq) => (
-            <TableRow
-              key={rfq.rfqId}
-              href={`/rfq/${rfq.rfqId}`}
-              title={rfq.customer.name}
-              className={rfq.status === "Pending" ? "bg-amber-50" : rfq.status === "In Progress" ? "bg-blue-50" : ""}
-            >
-              <TableCell>{rfq.rfqId}</TableCell>
-              <TableCell>{rfq.customer.name}</TableCell>
-              <TableCell>{rfq.itemsRequested}</TableCell>
-              <TableCell>{rfq.materials.reduce((acc, material) => acc + material.quantity, 0)}</TableCell>
-              <TableCell>{rfq.status}</TableCell>
-              <TableCell>{rfq.source}</TableCell>
-              <TableCell>{rfq.createdAt}</TableCell>
-              <TableCell>{rfq.updatedAt}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+          </div>
+        }
+      >
+        <RFQList />
+      </Suspense>
+    </HydrationBoundary>
   );
 }

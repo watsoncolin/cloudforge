@@ -19,11 +19,11 @@ export const $PurchaseOrderItemDto = {
       isRequired: true,
     },
     dimensions: {
-      type: 'dictionary',
-      contains: {
-        properties: {
-        },
-      },
+      type: 'all-of',
+      description: `The dimensions of the material`,
+      contains: [{
+        type: 'DimensionsDto',
+      }],
       isRequired: true,
     },
     quantity: {

@@ -1,0 +1,7 @@
+export enum QuoteStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  QUOTE = 'QUOTE',
+  REJECTED = 'REJECTED',
+  COMPLETED = 'COMPLETED',
+}

@@ -1,11 +1,23 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { PurchaseOrderEntity } from './purchase-order.entity';
 import { Material, UnitOfMeasure } from 'src/enums';
+import { PurchaseOrderItemStatus } from 'src/domain/purchase-order/purchase-order-item-status.enum';
 
 @Entity('purchase_order_items')
 export class PurchaseOrderItemEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({
+    default: PurchaseOrderItemStatus.PENDING,
+  })
+  status: PurchaseOrderItemStatus;
 
   @Column()
   materialType: Material;
@@ -13,8 +25,38 @@ export class PurchaseOrderItemEntity {
   @Column()
   grade: string;
 
-  @Column()
-  dimensions: string;
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number): number => value,
+      from: (value: string): number => parseFloat(value),
+    },
+  })
+  thickness: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number): number => value,
+      from: (value: string): number => parseFloat(value),
+    },
+  })
+  length: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number): number => value,
+      from: (value: string): number => parseFloat(value),
+    },
+  })
+  width: number;
 
   @Column()
   quantity: number;
@@ -22,18 +64,32 @@ export class PurchaseOrderItemEntity {
   @Column()
   unitOfMeasure: UnitOfMeasure;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number): number => value,
+      from: (value: string): number => parseFloat(value),
+    },
+  })
   unitPrice: number;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number): number => value,
+      from: (value: string): number => parseFloat(value),
+    },
+  })
   totalPrice: number;
 
-  @ManyToOne(
-    () => PurchaseOrderEntity,
-    (purchaseOrder) => purchaseOrder.items,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
+  @Column()
+  purchaseOrderId: string;
+
+  @ManyToOne(() => PurchaseOrderEntity, (purchaseOrder) => purchaseOrder.items)
+  @JoinColumn({ name: 'purchaseOrderId' })
   purchaseOrder: PurchaseOrderEntity;
 }

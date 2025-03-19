@@ -9,24 +9,26 @@ export class PurchaseOrderMapper {
     private readonly purchaseOrderItemMapper: PurchaseOrderItemMapper,
   ) {}
   toDomain(entity: PurchaseOrderEntity): PurchaseOrder {
-    return {
-      id: entity.id,
-      supplierId: entity.supplierId,
-      orderDate: entity.orderDate,
-      status: entity.status,
-      expectedDeliveryDate: entity.expectedDeliveryDate,
-      currency: entity.currency,
-      totalPrice: entity.totalPrice,
-      items: entity.items.map((item) =>
-        this.purchaseOrderItemMapper.toDomain(item),
-      ),
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-    };
+    const items = entity.items.map((item) =>
+      this.purchaseOrderItemMapper.toDomain(item),
+    );
+    return new PurchaseOrder(
+      entity.id,
+      entity.readableId,
+      entity.supplierId,
+      entity.orderDate,
+      entity.status,
+      items,
+      entity.currency,
+      entity.createdAt,
+      entity.updatedAt,
+      entity.expectedDeliveryDate,
+    );
   }
   toEntity(purchaseOrder: PurchaseOrder): PurchaseOrderEntity {
     const entity = {
       id: purchaseOrder.id,
+      readableId: purchaseOrder.readableId,
       supplierId: purchaseOrder.supplierId,
       orderDate: purchaseOrder.orderDate,
       status: purchaseOrder.status,

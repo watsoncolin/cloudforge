@@ -4,13 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CustomersModule } from './modules/customers/customers.module';
 import { SuppliersModule } from './modules/suppliers/suppliers.module';
-// import { InventoryModule } from './domains/inventory/inventory.module';
-// import { QuotesModule } from './domains/quotes/quotes.module';
+import { QuotesModule } from './modules/quotes/quotes.module';
 // import { OrdersModule } from './domains/orders/orders.module';
 // import { InvoicesModule } from './domains/invoices/invoices.module';
 // import { SharedModule } from './shared/shared.module';
 import { databaseConfig } from './config/database.config';
 import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,8 +23,8 @@ import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.
     CustomersModule,
     SuppliersModule,
     PurchaseOrdersModule,
-    // InventoryModule,
-    // QuotesModule,
+    InventoryModule,
+    QuotesModule,
     // OrdersModule,
     // InvoicesModule,
   ],

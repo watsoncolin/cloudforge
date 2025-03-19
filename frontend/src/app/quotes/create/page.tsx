@@ -51,15 +51,12 @@ export default function CreateQuote() {
   useEffect(() => {
     async function loadRFQ() {
       if (!rfqId) {
-        console.log("No RFQ ID provided");
         return;
       }
 
-      console.log("Loading RFQ with ID:", rfqId);
       setLoading(true);
       try {
         const rfqData = await getRFQ(rfqId);
-        console.log("Loaded RFQ data:", rfqData);
         if (rfqData) {
           setRfq(rfqData);
           const newItems: QuoteItem[] = rfqData.materials.map((material) => {

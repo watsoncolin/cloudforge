@@ -8,6 +8,10 @@ import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
 import { GetAllPurchaseOrdersQuery } from './queries/get-all-purchase-orders/get-all-purchase-orders.query';
 import { GetPurchaseOrderByIdQuery } from './queries/get-purchase-order-by-id/get-purchase-order-by-id.query';
 import { CreatePurchaseOrderCommand } from './commands/create-purchase-order/create-purchase-order.command';
+import { ApprovePurchaseOrderCommand } from './commands/approve-purchase-order/approve-purchase-order.command';
+import { MarkShippedPurchaseOrderCommand } from './commands/mark-shipped-purchase-order/mark-shipped-purchase-order.command';
+import { ReceivedPurchaseOrderCommand } from './commands/received-purchase-order/received-purchase-order.command';
+import { ReceivePurchaseOrderDto } from './dto/receive-purchase-order.dto';
 @Injectable()
 export class PurchaseOrdersService {
   constructor(
@@ -42,5 +46,22 @@ export class PurchaseOrdersService {
 
   remove(id: string): Promise<void> {
     return this.commandBus.execute(new DeletePurchaseOrderCommand(id));
+  }
+
+  approve(id: string): Promise<PurchaseOrder> {
+    return this.commandBus.execute(new ApprovePurchaseOrderCommand(id));
+  }
+
+  markShipped(id: string): Promise<PurchaseOrder> {
+    return this.commandBus.execute(new MarkShippedPurchaseOrderCommand(id));
+  }
+
+  markReceived(
+    id: string,
+    receivePurchaseOrderDto: ReceivePurchaseOrderDto,
+  ): Promise<PurchaseOrder> {
+    return this.commandBus.execute(
+      new ReceivedPurchaseOrderCommand(id, receivePurchaseOrderDto),
+    );
   }
 }

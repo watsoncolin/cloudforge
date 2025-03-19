@@ -1,5 +1,6 @@
 "use client";
 
+import { InventoryDto } from "@/api/generated";
 import {
   DialogBody,
   FieldGroup,
@@ -13,13 +14,12 @@ import {
   Label,
   Select,
 } from "@/components/catalyst-ui";
-import { InventoryItem } from "@/domain/inventory-item";
 import { useState } from "react";
 
 export function AdjustInventory({
   inventory,
   ...props
-}: React.ComponentPropsWithoutRef<typeof Button> & { inventory: InventoryItem }) {
+}: React.ComponentPropsWithoutRef<typeof Button> & { inventory: InventoryDto }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

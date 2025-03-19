@@ -6,6 +6,7 @@ export class SupplierMapper {
   toDomain(entity: SupplierEntity): Supplier {
     return {
       id: entity.id,
+      readableId: entity.readableId,
       name: entity.name,
       contact: {
         name: entity.contactName,
@@ -24,11 +25,13 @@ export class SupplierMapper {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       materials: entity.materials,
+      batches: [],
     };
   }
   toEntity(supplier: Supplier): SupplierEntity {
     return {
       id: supplier.id,
+      readableId: supplier.readableId,
       name: supplier.name,
       contactName: supplier.contact.name,
       contactEmail: supplier.contact.email,
@@ -43,6 +46,7 @@ export class SupplierMapper {
       createdAt: supplier.createdAt,
       updatedAt: supplier.updatedAt,
       materials: supplier.materials,
+      batches: [],
     };
   }
 }

@@ -30,6 +30,7 @@ export function SuppliersList() {
       <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
         <TableHead>
           <TableRow>
+            <TableHeader>ID</TableHeader>
             <TableHeader>Name</TableHeader>
             <TableHeader>Location</TableHeader>
             <TableHeader>Contact</TableHeader>
@@ -39,6 +40,7 @@ export function SuppliersList() {
         <TableBody>
           {suppliers.map((supplier: SupplierDto) => (
             <TableRow key={supplier.id} href={`/suppliers/${supplier.id}`} title={supplier.name}>
+              <TableCell>{supplier.readableId}</TableCell>
               <TableCell>{supplier.name}</TableCell>
               <TableCell>
                 {supplier.address.city}, {supplier.address.stateProvince}, {supplier.address.country}

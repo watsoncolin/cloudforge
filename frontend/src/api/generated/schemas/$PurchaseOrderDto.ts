@@ -9,6 +9,11 @@ export const $PurchaseOrderDto = {
       description: `The unique identifier of the purchase order`,
       isRequired: true,
     },
+    readableId: {
+      type: 'string',
+      description: `The readable identifier of the purchase order`,
+      isRequired: true,
+    },
     supplierId: {
       type: 'string',
       description: `The supplier id`,
@@ -20,8 +25,7 @@ export const $PurchaseOrderDto = {
       isRequired: true,
     },
     status: {
-      type: 'string',
-      description: `The status of the purchase order`,
+      type: 'Enum',
       isRequired: true,
     },
     items: {

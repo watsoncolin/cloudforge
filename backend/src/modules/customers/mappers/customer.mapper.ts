@@ -5,6 +5,7 @@ export class CustomerMapper {
   toDomain(entity: CustomerEntity): Customer {
     return {
       id: entity.id,
+      readableId: entity.readableId,
       name: entity.name,
       contact: {
         name: entity.contactName,
@@ -26,6 +27,7 @@ export class CustomerMapper {
   toEntity(customer: Customer): CustomerEntity {
     return {
       id: customer.id,
+      readableId: customer.readableId,
       name: customer.name,
       contactName: customer.contact.name,
       contactEmail: customer.contact.email,
@@ -38,6 +40,8 @@ export class CustomerMapper {
       paymentTerm: customer.paymentTerm,
       createdAt: customer.createdAt,
       updatedAt: customer.updatedAt,
+      rfqs: [],
+      quotes: [],
     };
   }
 }

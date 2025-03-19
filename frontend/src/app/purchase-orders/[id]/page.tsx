@@ -7,24 +7,24 @@ import { PurchaseOrderDetails } from "./purchase-order-details";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   try {
-    const supplier = await api.suppliers.suppliersControllerFindOne(params.id);
+    const purchaseOrder = await api.purchaseOrders.purchaseOrdersControllerFindOne(params.id);
     return {
-      title: `Supplier: ${supplier.name}`,
+      title: `Purchase Order: ${purchaseOrder.id}`,
     };
   } catch {
     return {
-      title: "Supplier Not Found",
+      title: "Purchase Order Not Found",
     };
   }
 }
 
-export default async function SupplierPage({ params }: { params: { id: string } }) {
+export default async function PurchaseOrderPage({ params }: { params: { id: string } }) {
   const queryClient = new QueryClient();
 
   // Prefetch the supplier data on the server
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.suppliers.detail(params.id),
-    queryFn: () => api.suppliers.suppliersControllerFindOne(params.id),
+    queryKey: queryKeys.purchaseOrders.detail(params.id),
+    queryFn: () => api.purchaseOrders.purchaseOrdersControllerFindOne(params.id),
   });
 
   return (

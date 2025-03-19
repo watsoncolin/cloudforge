@@ -13,10 +13,18 @@ import { PurchaseOrderMapper } from './mappers/purchase-order.mapper';
 import { PurchaseOrdersService } from './purchase-orders.service';
 import { PurchaseOrderItemMapper } from './mappers/purchase-order-item.mapper';
 import { GetPurchaseOrderByIdHandler } from './queries/get-purchase-order-by-id/get-purchase-order-by-id.handler';
+import { ApprovePurchaseOrderHandler } from './commands/approve-purchase-order/approve-purchase-order.handler';
+import { MarkShippedPurchaseOrderHandler } from './commands/mark-shipped-purchase-order/mark-shipped-purchase-order.handler';
+import { ReceivedPurchaseOrderHandler } from './commands/received-purchase-order/received-purchase-order.handler';
+import { CoreModule } from '../core/core.module';
+
 const CommandHandlers = [
   CreatePurchaseOrderHandler,
   UpdatePurchaseOrderHandler,
   DeletePurchaseOrderHandler,
+  ApprovePurchaseOrderHandler,
+  MarkShippedPurchaseOrderHandler,
+  ReceivedPurchaseOrderHandler,
 ];
 const QueryHandlers = [
   GetAllPurchaseOrdersHandler,
@@ -26,6 +34,7 @@ const QueryHandlers = [
 @Module({
   imports: [
     CqrsModule,
+    CoreModule,
     TypeOrmModule.forFeature([PurchaseOrderEntity, PurchaseOrderItemEntity]),
   ],
   controllers: [PurchaseOrdersController],

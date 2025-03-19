@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
@@ -13,7 +12,8 @@ import { PurchaseOrdersService } from './purchase-orders.service';
 import { CreatePurchaseOrderDto } from './dto/create-purchase-order.dto';
 import { PurchaseOrderDto } from './dto/purchase-order.dto';
 import { UpdatePurchaseOrderDto } from './dto/update-purchase-order.dto';
-
+import { PurchaseOrder } from 'src/domain/purchase-order/purchase-order';
+import { ReceivePurchaseOrderDto } from './dto/receive-purchase-order.dto';
 @ApiTags('purchase-orders')
 @Controller('purchase-orders')
 export class PurchaseOrdersController {
@@ -32,31 +32,7 @@ export class PurchaseOrdersController {
     const purchaseOrder = await this.purchaseOrdersService.create(
       createPurchaseOrderDto,
     );
-    return {
-      id: purchaseOrder.id,
-      supplierId: purchaseOrder.supplierId,
-      orderDate: purchaseOrder.orderDate,
-      status: purchaseOrder.status,
-      totalPrice: purchaseOrder.totalPrice,
-      items: purchaseOrder.items.map((item) => ({
-        id: item.id,
-        materialType: item.materialType,
-        grade: item.grade,
-        dimensions: {
-          length: item.dimensions.length,
-          width: item.dimensions.width,
-          thickness: item.dimensions.thickness,
-        },
-        quantity: item.quantity,
-        unitOfMeasure: item.unitOfMeasure,
-        unitPrice: item.unitPrice,
-        totalPrice: item.totalPrice,
-      })),
-      currency: purchaseOrder.currency,
-      createdAt: purchaseOrder.createdAt.toISOString(),
-      updatedAt: purchaseOrder.updatedAt.toISOString(),
-      expectedDeliveryDate: purchaseOrder.expectedDeliveryDate.toISOString(),
-    };
+    return this.mapPurchaseOrderToDto(purchaseOrder);
   }
 
   @Get()
@@ -68,31 +44,9 @@ export class PurchaseOrdersController {
   })
   async findAll(): Promise<PurchaseOrderDto[]> {
     const purchaseOrders = await this.purchaseOrdersService.findAll();
-    return purchaseOrders.map((purchaseOrder) => ({
-      id: purchaseOrder.id,
-      supplierId: purchaseOrder.supplierId,
-      orderDate: purchaseOrder.orderDate,
-      status: purchaseOrder.status,
-      totalPrice: purchaseOrder.totalPrice,
-      items: purchaseOrder.items.map((item) => ({
-        id: item.id,
-        materialType: item.materialType,
-        grade: item.grade,
-        dimensions: {
-          length: item.dimensions.length,
-          width: item.dimensions.width,
-          thickness: item.dimensions.thickness,
-        },
-        quantity: item.quantity,
-        unitOfMeasure: item.unitOfMeasure,
-        unitPrice: item.unitPrice,
-        totalPrice: item.totalPrice,
-      })),
-      currency: purchaseOrder.currency,
-      createdAt: purchaseOrder.createdAt.toISOString(),
-      updatedAt: purchaseOrder.updatedAt.toISOString(),
-      expectedDeliveryDate: purchaseOrder.expectedDeliveryDate.toISOString(),
-    }));
+    return purchaseOrders.map((purchaseOrder) =>
+      this.mapPurchaseOrderToDto(purchaseOrder),
+    );
   }
 
   @Get(':id')
@@ -105,31 +59,7 @@ export class PurchaseOrdersController {
   @ApiResponse({ status: 404, description: 'Purchase order not found.' })
   async findOne(@Param('id') id: string): Promise<PurchaseOrderDto> {
     const purchaseOrder = await this.purchaseOrdersService.findOne(id);
-    return {
-      id: purchaseOrder.id,
-      supplierId: purchaseOrder.supplierId,
-      orderDate: purchaseOrder.orderDate,
-      status: purchaseOrder.status,
-      totalPrice: purchaseOrder.totalPrice,
-      items: purchaseOrder.items.map((item) => ({
-        id: item.id,
-        materialType: item.materialType,
-        grade: item.grade,
-        dimensions: {
-          length: item.dimensions.length,
-          width: item.dimensions.width,
-          thickness: item.dimensions.thickness,
-        },
-        quantity: item.quantity,
-        unitOfMeasure: item.unitOfMeasure,
-        unitPrice: item.unitPrice,
-        totalPrice: item.totalPrice,
-      })),
-      currency: purchaseOrder.currency,
-      createdAt: purchaseOrder.createdAt.toISOString(),
-      updatedAt: purchaseOrder.updatedAt.toISOString(),
-      expectedDeliveryDate: purchaseOrder.expectedDeliveryDate.toISOString(),
-    };
+    return this.mapPurchaseOrderToDto(purchaseOrder);
   }
 
   @Put(':id')
@@ -148,8 +78,82 @@ export class PurchaseOrdersController {
       id,
       updatePurchaseOrderDto,
     );
+    return this.mapPurchaseOrderToDto(purchaseOrder);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Soft delete a purchase order' })
+  @ApiResponse({
+    status: 200,
+    description: 'The purchase order has been successfully deactivated.',
+  })
+  @ApiResponse({ status: 404, description: 'Purchase order not found.' })
+  remove(@Param('id') id: string): Promise<void> {
+    return this.purchaseOrdersService.remove(id);
+  }
+
+  @Post(':id/approve')
+  @ApiOperation({ summary: 'Approve a purchase order' })
+  @ApiResponse({
+    status: 200,
+    description: 'The purchase order has been successfully approved.',
+  })
+  @ApiResponse({ status: 404, description: 'Purchase order not found.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Purchase order is not pending approval.',
+  })
+  async approve(@Param('id') id: string): Promise<PurchaseOrderDto> {
+    // TODO add authorization check using a role guard
+
+    const purchaseOrder = await this.purchaseOrdersService.approve(id);
+    return this.mapPurchaseOrderToDto(purchaseOrder);
+  }
+
+  @Post(':id/mark-shipped')
+  @ApiOperation({ summary: 'Mark a purchase order as shipped' })
+  @ApiResponse({
+    status: 200,
+    description: 'The purchase order has been successfully marked as shipped.',
+  })
+  @ApiResponse({ status: 404, description: 'Purchase order not found.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Purchase order is not approved.',
+  })
+  async markShipped(@Param('id') id: string): Promise<PurchaseOrderDto> {
+    const purchaseOrder = await this.purchaseOrdersService.markShipped(id);
+    return this.mapPurchaseOrderToDto(purchaseOrder);
+  }
+
+  @Post(':id/mark-received')
+  @ApiOperation({ summary: 'Mark a purchase order as received' })
+  @ApiResponse({
+    status: 200,
+    description: 'The purchase order has been successfully marked as received.',
+  })
+  @ApiResponse({ status: 404, description: 'Purchase order not found.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Purchase order is not shipped.',
+  })
+  async markReceived(
+    @Param('id') id: string,
+    @Body() receivePurchaseOrderDto: ReceivePurchaseOrderDto,
+  ): Promise<PurchaseOrderDto> {
+    const purchaseOrder = await this.purchaseOrdersService.markReceived(
+      id,
+      receivePurchaseOrderDto,
+    );
+    return this.mapPurchaseOrderToDto(purchaseOrder);
+  }
+
+  private mapPurchaseOrderToDto(
+    purchaseOrder: PurchaseOrder,
+  ): PurchaseOrderDto {
     return {
       id: purchaseOrder.id,
+      readableId: purchaseOrder.readableId,
       supplierId: purchaseOrder.supplierId,
       orderDate: purchaseOrder.orderDate,
       status: purchaseOrder.status,
@@ -173,16 +177,5 @@ export class PurchaseOrdersController {
       updatedAt: purchaseOrder.updatedAt.toISOString(),
       expectedDeliveryDate: purchaseOrder.expectedDeliveryDate.toISOString(),
     };
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: 'Soft delete a purchase order' })
-  @ApiResponse({
-    status: 200,
-    description: 'The purchase order has been successfully deactivated.',
-  })
-  @ApiResponse({ status: 404, description: 'Purchase order not found.' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.purchaseOrdersService.remove(id);
   }
 }

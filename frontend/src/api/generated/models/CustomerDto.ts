@@ -10,6 +10,10 @@ export type CustomerDto = {
    */
   id: string;
   /**
+   * The readable identifier of the customer
+   */
+  readableId: string;
+  /**
    * The name of the customer company
    */
   name: string;

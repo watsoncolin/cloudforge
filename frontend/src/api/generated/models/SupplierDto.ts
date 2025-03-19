@@ -10,6 +10,10 @@ export type SupplierDto = {
    */
   id: string;
   /**
+   * The readable identifier of the supplier
+   */
+  readableId: string;
+  /**
    * The name of the supplier company
    */
   name: string;
@@ -29,5 +33,13 @@ export type SupplierDto = {
    * The materials the supplier can provide
    */
   materials: Array<string>;
+  /**
+   * The creation date of the supplier
+   */
+  createdAt: string;
+  /**
+   * The update date of the supplier
+   */
+  updatedAt: string;
 };
 

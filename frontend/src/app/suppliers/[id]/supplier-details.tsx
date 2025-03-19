@@ -51,7 +51,9 @@ export function SupplierDetails({ id }: { id: string }) {
       </div>
       <div className="mt-4 lg:mt-8">
         <div className="flex items-center gap-4">
-          <Heading>{supplier.name}</Heading>
+          <Heading>
+            {supplier.readableId} - {supplier.name}
+          </Heading>
         </div>
         <div className="isolate mt-2.5 flex flex-wrap justify-between gap-x-6 gap-y-4">
           <div className="flex flex-wrap gap-x-10 gap-y-4 py-1.5">

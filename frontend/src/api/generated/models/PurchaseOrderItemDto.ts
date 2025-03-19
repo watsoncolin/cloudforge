@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DimensionsDto } from './DimensionsDto';
 export type PurchaseOrderItemDto = {
   /**
    * The unique identifier of the purchase order item
@@ -18,7 +19,7 @@ export type PurchaseOrderItemDto = {
   /**
    * The dimensions of the material
    */
-  dimensions: Record<string, any>;
+  dimensions: DimensionsDto;
   /**
    * The quantity of the material
    */

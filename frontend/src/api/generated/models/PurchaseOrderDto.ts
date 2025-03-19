@@ -9,6 +9,10 @@ export type PurchaseOrderDto = {
    */
   id: string;
   /**
+   * The readable identifier of the purchase order
+   */
+  readableId: string;
+  /**
    * The supplier id
    */
   supplierId: string;
@@ -19,7 +23,7 @@ export type PurchaseOrderDto = {
   /**
    * The status of the purchase order
    */
-  status: string;
+  status: PurchaseOrderDto.status;
   /**
    * The items in the purchase order
    */
@@ -45,4 +49,16 @@ export type PurchaseOrderDto = {
    */
   updatedAt: string;
 };
+export namespace PurchaseOrderDto {
+  /**
+   * The status of the purchase order
+   */
+  export enum status {
+    PENDING_APPROVAL = 'Pending Approval',
+    APPROVED = 'Approved',
+    SHIPPED = 'Shipped',
+    RECEIVED = 'Received',
+    CANCELLED = 'Cancelled',
+  }
+}
 

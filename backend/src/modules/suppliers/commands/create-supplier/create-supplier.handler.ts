@@ -3,16 +3,20 @@ import { SuppliersRepository } from '../../repositories/suppliers.repository';
 import { CreateSupplierCommand } from './create-supplier.command';
 import { Supplier } from 'src/domain/supplier/supplier';
 import { v4 as uuidv4 } from 'uuid';
-
+import { SequenceService } from '../../../core/sequence/services/sequence.service';
 @CommandHandler(CreateSupplierCommand)
 export class CreateSupplierHandler
   implements ICommandHandler<CreateSupplierCommand>
 {
-  constructor(private readonly supplierRepository: SuppliersRepository) {}
+  constructor(
+    private readonly supplierRepository: SuppliersRepository,
+    private readonly sequenceService: SequenceService,
+  ) {}
 
   async execute(command: CreateSupplierCommand): Promise<Supplier> {
     const supplier: Supplier = {
       id: uuidv4(),
+      readableId: await this.sequenceService.getNextSequenceNumber('S'),
       name: command.createSupplierDto.name,
       contact: {
         name: command.createSupplierDto.contactName,
@@ -31,6 +35,7 @@ export class CreateSupplierHandler
       createdAt: new Date(),
       updatedAt: new Date(),
       materials: command.createSupplierDto.materials,
+      batches: [],
     };
     return this.supplierRepository.create(supplier);
   }

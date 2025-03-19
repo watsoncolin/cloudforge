@@ -11,6 +11,7 @@ import { GetAllCustomersHandler } from './queries/get-all-customers/get-all-cust
 import { CustomersService } from './customers.service';
 import { CustomerMapper } from './mappers/customer.mapper';
 import { CustomerEntity } from './entities/customer.entity';
+import { CoreModule } from '../core/core.module';
 
 const CommandHandlers = [
   CreateCustomerHandler,
@@ -21,7 +22,7 @@ const CommandHandlers = [
 const QueryHandlers = [GetCustomerByIdHandler, GetAllCustomersHandler];
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([CustomerEntity])],
+  imports: [CqrsModule, TypeOrmModule.forFeature([CustomerEntity]), CoreModule],
   controllers: [CustomersController],
   providers: [
     CustomersRepository,

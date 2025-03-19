@@ -14,6 +14,9 @@ export class PurchaseOrderEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ unique: true })
+  readableId: string;
+
   @Column()
   supplierId: string;
 
@@ -29,7 +32,15 @@ export class PurchaseOrderEntity {
   @Column()
   currency: string;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: {
+      to: (value: number): number => value,
+      from: (value: string): number => parseFloat(value),
+    },
+  })
   totalPrice: number;
 
   @CreateDateColumn()
@@ -39,8 +50,7 @@ export class PurchaseOrderEntity {
   updatedAt: Date;
 
   @OneToMany(() => PurchaseOrderItemEntity, (item) => item.purchaseOrder, {
-    cascade: true,
-    eager: true,
+    cascade: ['insert', 'update'],
   })
   items: PurchaseOrderItemEntity[];
 }

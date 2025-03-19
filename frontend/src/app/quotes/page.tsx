@@ -1,42 +1,34 @@
-import { TableBody, TableCell, TableHead, TableHeader, TableRow, Table, Button } from "@/components/catalyst-ui";
-import { getQuotes } from "@/data";
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { ListPageHeader } from "@/components/list-page-header";
+import { api } from "@/api/client";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/api-hooks";
+import { QuoteList } from "./quote-list";
 
 export const metadata: Metadata = {
   title: "Quotes",
 };
 
-const AddQuote = () => {
-  return <Button>Add Quote</Button>;
-};
+export default async function QuotePage() {
+  const queryClient = new QueryClient();
 
-export default function Quotes() {
-  const quotes = getQuotes();
+  // Prefetch the customers query on the server
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.quotes.all,
+    queryFn: () => api.quotes.quoteControllerGetAllQuotes().then((res) => res),
+  });
 
   return (
-    <>
-      <ListPageHeader title="Quotes" button={<AddQuote />} />
-      <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
-        <TableHead>
-          <TableRow>
-            <TableHeader>Quote ID</TableHeader>
-            <TableHeader>Customer</TableHeader>
-            <TableHeader>Source</TableHeader>
-            <TableHeader>Status</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {quotes.map((quote) => (
-            <TableRow key={quote.quoteId} href={`/quotes/${quote.quoteId}`} title={quote.customer.name}>
-              <TableCell>{quote.quoteId}</TableCell>
-              <TableCell>{quote.customer.name}</TableCell>
-              <TableCell>{quote.rfqId ? "RFQ" : "Manual"}</TableCell>
-              <TableCell>{quote.status}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+          </div>
+        }
+      >
+        <QuoteList />
+      </Suspense>
+    </HydrationBoundary>
   );
 }

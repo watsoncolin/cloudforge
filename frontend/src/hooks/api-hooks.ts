@@ -11,6 +11,14 @@ import type {
   PurchaseOrderDto,
   CreatePurchaseOrderDto,
   UpdatePurchaseOrderDto,
+  ReceivePurchaseOrderDto,
+  InventoryDto,
+  BatchDetailsResponseDto,
+  UpdateBatchLocationDto,
+  RFQDto,
+  CreateRFQDto,
+  UpdateRFQDto,
+  QuoteDto,
 } from "@/api/generated";
 
 // Query keys for caching and invalidation
@@ -26,6 +34,9 @@ export const queryKeys = {
   inventory: {
     all: ["inventory"] as const,
     detail: (id: string) => ["inventory", id] as const,
+    batch: {
+      detail: (id: string, batchId: string) => ["inventory", id, "batch", batchId] as const,
+    },
   },
   quotes: {
     all: ["quotes"] as const,
@@ -35,10 +46,15 @@ export const queryKeys = {
     all: ["purchaseOrders"] as const,
     detail: (id: string) => ["purchaseOrders", id] as const,
   },
+  rfqs: {
+    all: ["rfqs"] as const,
+    detail: (id: string) => ["rfqs", id] as const,
+    customer: (customerId: string) => ["rfqs", "customer", customerId] as const,
+  },
 } as const;
 
 // Re-export types
-export type { CustomerDto, CreateCustomerDto, SupplierDto, CreateSupplierDto };
+export type { CustomerDto, CreateCustomerDto, SupplierDto, CreateSupplierDto, InventoryDto };
 
 // Error type
 export interface ApiError {
@@ -231,6 +247,167 @@ export function useUpdatePurchaseOrder(
       queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.all });
     },
     retry: false,
+    ...options,
+  });
+}
+
+export function useApprovePurchaseOrder(options?: Omit<UseMutationOptions<void, Error, string>, "mutationFn">) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.purchaseOrders.purchaseOrdersControllerApprove(id).catch(handleApiError),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.detail(id) });
+    },
+    ...options,
+  });
+}
+
+export function useMarkShippedPurchaseOrder(options?: Omit<UseMutationOptions<void, Error, string>, "mutationFn">) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.purchaseOrders.purchaseOrdersControllerMarkShipped(id).catch(handleApiError),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.detail(id) });
+    },
+    ...options,
+  });
+}
+
+export function useReceivePurchaseOrder(
+  options?: Omit<UseMutationOptions<void, Error, { id: string; data: ReceivePurchaseOrderDto }>, "mutationFn">
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) =>
+      api.purchaseOrders.purchaseOrdersControllerMarkReceived(id, data).catch(handleApiError),
+    onSuccess: (_, { id }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.purchaseOrders.detail(id) });
+    },
+    ...options,
+  });
+}
+
+export function useInventory(options?: Omit<UseQueryOptions<InventoryDto[], ApiError>, "queryKey" | "queryFn">) {
+  return useQuery({
+    queryKey: queryKeys.inventory.all,
+    queryFn: () => toPromise(api.inventory.inventoryControllerGetAllInventory()),
+    ...options,
+  });
+}
+
+export function useInventoryById(
+  id: string,
+  options?: Omit<UseQueryOptions<InventoryDto, ApiError>, "queryKey" | "queryFn">
+) {
+  return useQuery<InventoryDto, ApiError>({
+    queryKey: queryKeys.inventory.detail(id),
+    queryFn: () => toPromise(api.inventory.inventoryControllerGetInventoryById(id)),
+    ...options,
+  });
+}
+
+export function useInventoryBatchById(
+  id: string,
+  batchId: string,
+  options?: Omit<UseQueryOptions<BatchDetailsResponseDto, ApiError>, "queryKey" | "queryFn">
+) {
+  return useQuery<BatchDetailsResponseDto, ApiError>({
+    queryKey: queryKeys.inventory.batch.detail(id, batchId),
+    queryFn: () => toPromise(api.inventory.inventoryBatchControllerGetBatchById(id, batchId)),
+    ...options,
+  });
+}
+
+export function useUpdateBatchLocation(
+  options?: Omit<
+    UseMutationOptions<BatchDetailsResponseDto, Error, { id: string; batchId: string; data: UpdateBatchLocationDto }>,
+    "mutationFn"
+  >
+) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, batchId, data }) =>
+      api.inventory.inventoryBatchControllerUpdateBatchLocation(id, batchId, data).catch(handleApiError),
+    onSuccess: (_, { id, batchId }) => {
+      console.log("id", id);
+      console.log("batchId", batchId);
+      queryClient.invalidateQueries({ queryKey: queryKeys.inventory.batch.detail(id, batchId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.inventory.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.inventory.detail(id) });
+    },
+    ...options,
+  });
+}
+
+// RFQ hooks
+export function useRFQs(options?: Omit<UseQueryOptions<RFQDto[], ApiError>, "queryKey" | "queryFn">) {
+  return useQuery({
+    queryKey: queryKeys.rfqs.all,
+    queryFn: () => toPromise(api.rfQs.rfqControllerGetAllRfqs()),
+    ...options,
+  });
+}
+
+export function useRFQById(id: string, options?: Omit<UseQueryOptions<RFQDto, ApiError>, "queryKey" | "queryFn">) {
+  return useQuery<RFQDto, ApiError>({
+    queryKey: queryKeys.rfqs.detail(id),
+    queryFn: () => toPromise(api.rfQs.rfqControllerGetRfqById(id)),
+    ...options,
+  });
+}
+
+export function useCreateRFQ(options?: Omit<UseMutationOptions<RFQDto, ApiError, CreateRFQDto>, "mutationFn">) {
+  return useMutation({
+    mutationFn: (data: CreateRFQDto) => toPromise(api.rfQs.rfqControllerCreateRfq(data)),
+    ...options,
+  });
+}
+
+export function useUpdateRFQ(
+  options?: Omit<UseMutationOptions<RFQDto, ApiError, { id: string; data: UpdateRFQDto }>, "mutationFn">
+) {
+  return useMutation({
+    mutationFn: ({ id, data }) => toPromise(api.rfQs.rfqControllerUpdateRfq(id, data)),
+    ...options,
+  });
+}
+
+export function useDeleteRFQ(options?: Omit<UseMutationOptions<void, ApiError, string>, "mutationFn">) {
+  return useMutation({
+    mutationFn: (id: string) => toPromise(api.rfQs.rfqControllerDeleteRfq(id)),
+    ...options,
+  });
+}
+
+export function useConvertToQuote(options?: Omit<UseMutationOptions<QuoteDto, ApiError, string>, "mutationFn">) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => toPromise(api.rfQs.rfqControllerConvertToQuote(id)),
+    ...options,
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.rfqs.detail(id) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.rfqs.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.quotes.all });
+    },
+  });
+}
+
+// Quote hooks
+export function useQuotes(options?: Omit<UseQueryOptions<QuoteDto[], ApiError>, "queryKey" | "queryFn">) {
+  return useQuery({
+    queryKey: queryKeys.quotes.all,
+    queryFn: () => toPromise(api.quotes.quoteControllerGetAllQuotes()),
+    ...options,
+  });
+}
+
+export function useQuoteById(id: string, options?: Omit<UseQueryOptions<QuoteDto, ApiError>, "queryKey" | "queryFn">) {
+  return useQuery<QuoteDto, ApiError>({
+    queryKey: queryKeys.quotes.detail(id),
+    queryFn: () => toPromise(api.quotes.quoteControllerGetQuoteById(id)),
     ...options,
   });
 }

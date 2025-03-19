@@ -9,6 +9,11 @@ export const $SupplierDto = {
       description: `The unique identifier of the supplier`,
       isRequired: true,
     },
+    readableId: {
+      type: 'string',
+      description: `The readable identifier of the supplier`,
+      isRequired: true,
+    },
     name: {
       type: 'string',
       description: `The name of the supplier company`,
@@ -41,6 +46,18 @@ export const $SupplierDto = {
         type: 'string',
       },
       isRequired: true,
+    },
+    createdAt: {
+      type: 'string',
+      description: `The creation date of the supplier`,
+      isRequired: true,
+      format: 'date-time',
+    },
+    updatedAt: {
+      type: 'string',
+      description: `The update date of the supplier`,
+      isRequired: true,
+      format: 'date-time',
     },
   },
 } as const;

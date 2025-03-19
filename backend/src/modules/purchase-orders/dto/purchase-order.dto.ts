@@ -15,6 +15,11 @@ export class PurchaseOrderDto {
   @IsNotEmpty()
   id: string;
 
+  @ApiProperty({ description: 'The readable identifier of the purchase order' })
+  @IsString()
+  @IsNotEmpty()
+  readableId: string;
+
   @ApiProperty({ description: 'The supplier id' })
   @IsString()
   @IsNotEmpty()
@@ -25,7 +30,10 @@ export class PurchaseOrderDto {
   @IsNotEmpty()
   orderDate: string;
 
-  @ApiProperty({ description: 'The status of the purchase order' })
+  @ApiProperty({
+    description: 'The status of the purchase order',
+    enum: PurchaseOrderStatus,
+  })
   @IsEnum(PurchaseOrderStatus)
   @IsNotEmpty()
   status: PurchaseOrderStatus;

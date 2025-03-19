@@ -7,16 +7,22 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class PurchaseOrderItemMapper {
   toDomain(entity: PurchaseOrderItemEntity): PurchaseOrderItem {
-    return {
-      id: entity.id,
-      materialType: entity.materialType,
-      grade: entity.grade,
-      dimensions: JSON.parse(entity.dimensions),
-      quantity: entity.quantity,
-      unitOfMeasure: entity.unitOfMeasure,
-      unitPrice: entity.unitPrice,
-      totalPrice: entity.totalPrice,
-    };
+    return new PurchaseOrderItem(
+      entity.id,
+      entity.purchaseOrderId,
+      entity.materialType,
+      entity.grade,
+      {
+        length: entity.length,
+        width: entity.width,
+        thickness: entity.thickness,
+      },
+      entity.quantity,
+      entity.unitOfMeasure,
+      entity.unitPrice,
+      entity.totalPrice,
+      entity.status,
+    );
   }
   toEntity(
     purchaseOrderItem: PurchaseOrderItem,
@@ -24,14 +30,18 @@ export class PurchaseOrderItemMapper {
   ): PurchaseOrderItemEntity {
     return {
       id: purchaseOrderItem.id,
+      status: purchaseOrderItem.status,
       materialType: purchaseOrderItem.materialType,
       grade: purchaseOrderItem.grade,
-      dimensions: JSON.stringify(purchaseOrderItem.dimensions),
+      length: purchaseOrderItem.dimensions.length,
+      width: purchaseOrderItem.dimensions.width,
+      thickness: purchaseOrderItem.dimensions.thickness,
       quantity: purchaseOrderItem.quantity,
       unitOfMeasure: purchaseOrderItem.unitOfMeasure,
       unitPrice: purchaseOrderItem.unitPrice,
       totalPrice: purchaseOrderItem.totalPrice,
       purchaseOrder: purchaseOrder,
+      purchaseOrderId: purchaseOrder.id,
     };
   }
 }

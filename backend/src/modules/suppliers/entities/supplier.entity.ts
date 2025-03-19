@@ -3,14 +3,19 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { InventoryBatchEntity } from 'src/modules/inventory/entities/inventory-batch.entity';
 
 @Entity('suppliers')
 export class SupplierEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ unique: true })
+  readableId: string;
 
   @Column()
   name: string;
@@ -53,4 +58,7 @@ export class SupplierEntity {
 
   @Column({ type: 'enum', enum: Material, array: true })
   materials: Material[];
+
+  @OneToMany(() => InventoryBatchEntity, (batch) => batch.supplier)
+  batches: InventoryBatchEntity[];
 }

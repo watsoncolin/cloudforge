@@ -36,10 +36,11 @@ export function PurchaseOrdersList() {
       <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
         <TableHead>
           <TableRow>
-            <TableHeader>Name</TableHeader>
-            <TableHeader>Location</TableHeader>
-            <TableHeader>Contact</TableHeader>
-            <TableHeader>Phone</TableHeader>
+            <TableHeader>Supplier</TableHeader>
+            <TableHeader>Status</TableHeader>
+            <TableHeader>Total Price</TableHeader>
+            <TableHeader>Created At</TableHeader>
+            <TableHeader>Updated At</TableHeader>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -47,12 +48,15 @@ export function PurchaseOrdersList() {
             const supplier = suppliers.find((supplier) => supplier.id === purchaseOrder.supplierId);
             return (
               <TableRow key={purchaseOrder.id} href={`/purchase-orders/${purchaseOrder.id}`} title={purchaseOrder.id}>
-                <TableCell>{purchaseOrder.id}</TableCell>
-                <TableCell>{purchaseOrder.supplierId}</TableCell>
                 <TableCell>
-                  <span className="line-clamp-1">{supplier?.name}</span>
+                  <span className="line-clamp-1">
+                    {supplier?.readableId} - {supplier?.name}
+                  </span>
                 </TableCell>
-                <TableCell className="text-right">{supplier?.address.street}</TableCell>
+                <TableCell className="text-right">{purchaseOrder.status}</TableCell>
+                <TableCell className="text-right">${purchaseOrder.totalPrice.toFixed(2)}</TableCell>
+                <TableCell className="text-right">{new Date(purchaseOrder.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell className="text-right">{new Date(purchaseOrder.updatedAt).toLocaleDateString()}</TableCell>
               </TableRow>
             );
           })}

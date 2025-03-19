@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { CustomerDto } from '../dtos/customer.dto';
 import { CustomersService } from '../customers.service';
+import { Customer } from 'src/domain/customer/customer';
 
 @ApiTags('Customers')
 @Controller('customers')
@@ -40,7 +41,8 @@ export class CustomersController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Invalid input' })
   @ApiBody({ type: CreateCustomerDto })
   async createCustomer(@Body() dto: CreateCustomerDto): Promise<CustomerDto> {
-    return this.customersService.create(dto);
+    const customer = await this.customersService.create(dto);
+    return this.mapCustomerToDto(customer);
   }
 
   @Get()
@@ -51,7 +53,8 @@ export class CustomersController {
     type: [CustomerDto],
   })
   async getAllCustomers(): Promise<CustomerDto[]> {
-    return this.customersService.findAll();
+    const customers = await this.customersService.findAll();
+    return customers.map(this.mapCustomerToDto);
   }
 
   @Get(':id')
@@ -67,7 +70,8 @@ export class CustomersController {
     description: 'Customer not found',
   })
   async getCustomerById(@Param('id') id: string): Promise<CustomerDto> {
-    return this.customersService.findOne(id);
+    const customer = await this.customersService.findOne(id);
+    return this.mapCustomerToDto(customer);
   }
 
   @Put(':id')
@@ -88,7 +92,8 @@ export class CustomersController {
     @Param('id') id: string,
     @Body() data: Partial<CreateCustomerDto>,
   ): Promise<CustomerDto> {
-    return this.customersService.update(id, data);
+    const customer = await this.customersService.update(id, data);
+    return this.mapCustomerToDto(customer);
   }
 
   @Delete(':id')
@@ -105,5 +110,18 @@ export class CustomersController {
   })
   async deleteCustomer(@Param('id') id: string): Promise<void> {
     return this.customersService.remove(id);
+  }
+
+  private mapCustomerToDto(customer: Customer): CustomerDto {
+    return {
+      id: customer.id,
+      readableId: customer.readableId,
+      name: customer.name,
+      contact: customer.contact,
+      address: customer.address,
+      paymentTerm: customer.paymentTerm,
+      createdAt: customer.createdAt,
+      updatedAt: customer.updatedAt,
+    };
   }
 }

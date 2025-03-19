@@ -9,6 +9,11 @@ export const $CustomerDto = {
       description: `The unique identifier of the customer`,
       isRequired: true,
     },
+    readableId: {
+      type: 'string',
+      description: `The readable identifier of the customer`,
+      isRequired: true,
+    },
     name: {
       type: 'string',
       description: `The name of the customer company`,
