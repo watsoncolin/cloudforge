@@ -10,7 +10,7 @@ export class InventoryEventMapper {
       eventType: entity.eventType,
       batchId: entity.batchId,
       purchaseOrderId: entity.purchaseOrderId,
-      salesOrderId: entity.salesOrderId,
+      orderId: entity.orderId,
       quantity: entity.quantity,
       inventoryId: entity.inventory.id,
       createdAt: entity.createdAt,

@@ -26,8 +26,9 @@ import { CustomersService } from 'src/modules/customers/customers.service';
 import { UpdateRFQDto } from '../dtos/update-rfq.dto';
 import { InventoryService } from 'src/modules/inventory/inventory.service';
 import { Material } from 'src/enums';
-import { QuoteDto } from '../dtos/quote.dto';
+import { QuoteDto, QuoteItemDto } from '../dtos/quote.dto';
 import { Quote } from 'src/domain/quote/quote';
+import { QuoteItem } from 'src/domain/quote/quote-item';
 
 @ApiTags('RFQs')
 @Controller('rfqs')
@@ -147,16 +148,37 @@ export class RFQController {
     return this.mapQuoteToDto(quote, customer);
   }
 
-  private mapQuoteToDto(quote: Quote, customer: CustomerDto): QuoteDto {
+  private async mapQuoteToDto(
+    quote: Quote,
+    customer: CustomerDto,
+  ): Promise<QuoteDto> {
     return {
       id: quote.id,
       readableId: quote.readableId,
       customerId: quote.customerId,
       customer: customer,
-      items: quote.items,
+      items: await Promise.all(
+        quote.items.map((item) => this.mapQuoteItemToDto(item)),
+      ),
       status: quote.status,
       createdAt: quote.createdAt,
       updatedAt: quote.updatedAt,
+    };
+  }
+
+  private async mapQuoteItemToDto(item: QuoteItem): Promise<QuoteItemDto> {
+    const inventory = await this.inventoryService.findByMaterial(
+      item.materialType,
+      item.grade,
+      item.dimensions,
+    );
+    return {
+      ...item,
+      quantities: {
+        available: inventory?.quantities.availableQuantity,
+        allocated: inventory?.quantities.allocatedQuantity,
+        total: inventory?.quantities.totalQuantity,
+      },
     };
   }
 

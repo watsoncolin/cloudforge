@@ -30,6 +30,7 @@ export class InventoryMapper {
       createdAt: new Date(),
       events: [],
       batches: [],
+      orderItems: [],
     };
   }
 }

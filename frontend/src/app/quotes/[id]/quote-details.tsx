@@ -108,6 +108,7 @@ export function QuoteDetails({ id }: { id: string }) {
               <TableHeader>Quantity</TableHeader>
               <TableHeader>Unit Price</TableHeader>
               <TableHeader>Total Price</TableHeader>
+              {quote.status == QuoteDto.status.PENDING && <TableHeader>Available Inventory</TableHeader>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -126,11 +127,14 @@ export function QuoteDetails({ id }: { id: string }) {
                 <TableCell>
                   {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(item.total)}
                 </TableCell>
+                {quote.status == QuoteDto.status.PENDING && (
+                  <TableCell>{item.quantities?.available ? item.quantities?.available : 0}</TableCell>
+                )}
               </TableRow>
             ))}
 
             <TableRow>
-              <TableCell colSpan={3}>Total</TableCell>
+              <TableCell colSpan={4}>Total</TableCell>
               <TableCell className="text-right">
                 {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
                   quote.items.reduce((acc, item) => acc ?? 0 + item.total ?? 0, 0)

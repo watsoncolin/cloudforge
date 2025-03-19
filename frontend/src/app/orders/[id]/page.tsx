@@ -1,115 +1,45 @@
-import { getSalesOrder } from "@/data";
-import { BanknotesIcon, CalendarIcon, ChevronLeftIcon } from "@heroicons/react/16/solid";
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { Badge } from "@/components/catalyst-ui/badge";
-import { Link } from "@/components/catalyst-ui/link";
-import { Heading, Subheading } from "@/components/catalyst-ui/heading";
-import { Divider } from "@/components/catalyst-ui/divider";
-import { DescriptionList, DescriptionTerm, DescriptionDetails } from "@/components/catalyst-ui/description-list";
-import { Button } from "@/components/catalyst-ui/button";
-import { Table, TableHead, TableRow, TableCell, TableHeader, TableBody } from "@/components/catalyst-ui/table";
+import { api } from "@/api/client";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
+import { queryKeys } from "@/hooks/api-hooks";
+import OrderDetails from "./order-details";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const order = await getSalesOrder(params.id);
-
-  return {
-    title: order && `Order #${order.orderId}`,
-  };
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  try {
+    const { id } = await params;
+    const order = await api.orders.orderControllerGetOrderById(id);
+    return {
+      title: `Order: ${order.readableId}`,
+    };
+  } catch {
+    return {
+      title: "Order Not Found",
+    };
+  }
 }
 
-export default async function Order({ params }: { params: { id: string } }) {
-  const order = await getSalesOrder(params.id);
+export default async function OrderPage({ params }: { params: Promise<{ id: string }> }) {
+  const queryClient = new QueryClient();
 
-  if (!order) {
-    notFound();
-  }
+  const { id } = await params;
+  // Prefetch the customer data on the server
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.orders.detail(id),
+    queryFn: () => api.orders.orderControllerGetOrderById(id),
+  });
 
   return (
-    <>
-      <div className="max-lg:hidden">
-        <Link href="/orders" className="inline-flex items-center gap-2 text-sm/6 text-zinc-500 dark:text-zinc-400">
-          <ChevronLeftIcon className="size-4 fill-zinc-400 dark:fill-zinc-500" />
-          Orders
-        </Link>
-      </div>
-      <div className="mt-4 lg:mt-8">
-        <div className="flex items-center gap-4">
-          <Heading>Order #{order.orderId}</Heading>
-          <Badge color="lime">Successful</Badge>
-        </div>
-        <div className="isolate mt-2.5 flex flex-wrap justify-between gap-x-6 gap-y-4">
-          <div className="flex flex-wrap gap-x-10 gap-y-4 py-1.5">
-            <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
-              <BanknotesIcon className="size-4 shrink-0 fill-zinc-400 dark:fill-zinc-500" />
-              <span>{order.totalPrice}</span>
-            </span>
-            <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
-              <CalendarIcon className="size-4 shrink-0 fill-zinc-400 dark:fill-zinc-500" />
-              <span>{order.orderDate}</span>
-            </span>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
           </div>
-          <div className="flex gap-4">
-            <Button>Resend Invoice</Button>
-          </div>
-        </div>
-      </div>
-      <div className="mt-12">
-        <Subheading>Summary</Subheading>
-        <Divider className="mt-4" />
-        <DescriptionList>
-          <DescriptionTerm>Customer</DescriptionTerm>
-          <DescriptionDetails>
-            {order.customer.name} {order.customer.contact.name}
-          </DescriptionDetails>
-          <DescriptionTerm>Amount</DescriptionTerm>
-          <DescriptionDetails>{order.totalPrice}</DescriptionDetails>
-          <DescriptionTerm>Status</DescriptionTerm>
-          <DescriptionDetails>{order.status}</DescriptionDetails>
-          <DescriptionTerm>Order Date</DescriptionTerm>
-          <DescriptionDetails>{order.orderDate}</DescriptionDetails>
-          <DescriptionTerm>Tracking Number</DescriptionTerm>
-          <DescriptionDetails>{order.trackingNumber}</DescriptionDetails>
-          <DescriptionTerm>Shipping Date</DescriptionTerm>
-          <DescriptionDetails>{order.shippingDate}</DescriptionDetails>
-          <DescriptionTerm>Delivery Date</DescriptionTerm>
-          <DescriptionDetails>{order.deliveryDate}</DescriptionDetails>
-        </DescriptionList>
-      </div>
-      <div className="mt-12">
-        <Subheading>Materials</Subheading>
-        <Divider className="mt-4" />
-        <Table className="mt-8 [--gutter:--spacing(6)] lg:[--gutter:--spacing(10)]">
-          <TableHead>
-            <TableRow>
-              <TableHeader>Material</TableHeader>
-              <TableHeader>Quantity</TableHeader>
-              <TableHeader>Unit Price</TableHeader>
-              <TableHeader>Total Price</TableHeader>
-              <TableHeader>Batches</TableHeader>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {order.items.map((item) => (
-              <TableRow key={item.lineItemId}>
-                <TableCell>
-                  {item.materialType} {item.grade} {item.dimensions.thickness} x {item.dimensions.width}
-                </TableCell>
-                <TableCell>{item.quantity}</TableCell>
-                <TableCell>{item.basePrice}</TableCell>
-                <TableCell>{item.totalPrice}</TableCell>
-                <TableCell>
-                  {item.allocatedBatches.map((batch) => (
-                    <div key={batch.batchId}>
-                      {batch.batchId} - {batch.allocatedQuantity} qty
-                    </div>
-                  ))}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </>
+        }
+      >
+        <OrderDetails id={id} />
+      </Suspense>
+    </HydrationBoundary>
   );
 }

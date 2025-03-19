@@ -24,6 +24,7 @@ import { ReadInventoryByIdHandler } from './queries/read-inventory-by-id/read-in
 import { ReadBatchesByInventoryIdHandler } from './queries/read-batches-by-inventory-id/read-batches-by-inventory-id.handler';
 import { InventoryBatchController } from './batch.controller';
 import { UpdateBatchLocationHandler } from './commands/update-batch-location/update-batch-location.handler';
+import { ReadInventoryByMaterialHandler } from './queries/read-inventory-quantities-by-material/read-inventory-quantities-by-material.handler';
 
 const CommandHandlers = [
   AddItemsToInventoryHandler,
@@ -34,6 +35,7 @@ const QueryHandlers = [
   ReadAllInventoryHandler,
   ReadInventoryByIdHandler,
   ReadBatchesByInventoryIdHandler,
+  ReadInventoryByMaterialHandler,
 ];
 const Sagas = [PurchaseOrderSaga, InventorySaga];
 
@@ -62,6 +64,11 @@ const Sagas = [PurchaseOrderSaga, InventorySaga];
     ...QueryHandlers,
     ...Sagas,
   ],
-  exports: [InventoryService, InventoryMapper],
+  exports: [
+    InventoryService,
+    InventoryMapper,
+    // TODO: remove this
+    InventoryRepository,
+  ],
 })
 export class InventoryModule {}

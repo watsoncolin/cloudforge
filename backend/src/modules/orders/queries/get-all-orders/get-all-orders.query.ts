@@ -1,4 +1,4 @@
 import { IQuery } from '@nestjs/cqrs';
 
 // TODO add pagination
-export class GetAllQuotesQuery implements IQuery {}
+export class GetAllOrdersQuery implements IQuery {}

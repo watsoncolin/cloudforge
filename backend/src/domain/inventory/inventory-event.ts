@@ -5,7 +5,7 @@ export class InventoryEvent {
   eventType: InventoryEventType;
   batchId?: string;
   purchaseOrderId?: string;
-  salesOrderId?: string;
+  orderId?: string;
   quantity: number;
   inventoryId: string;
   createdAt: Date;

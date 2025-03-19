@@ -6,10 +6,12 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 import { CustomerEntity } from 'src/modules/customers/entities/customer.entity';
 import { QuoteItemEntity } from './quote-item.entity';
 import { QuoteStatus, RFQSource } from 'src/enums';
+import { OrderEntity } from 'src/modules/orders/entities/order.entity';
 
 @Entity('quotes')
 export class QuoteEntity {
@@ -35,6 +37,9 @@ export class QuoteEntity {
 
   @Column({ type: 'enum', enum: QuoteStatus, default: QuoteStatus.PENDING })
   status: QuoteStatus;
+
+  @OneToOne(() => OrderEntity, (order) => order.quote, { cascade: true })
+  order: OrderEntity;
 
   @CreateDateColumn()
   createdAt: Date;

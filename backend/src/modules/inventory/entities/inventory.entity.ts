@@ -3,7 +3,8 @@ import { Material, UnitOfMeasure } from 'src/enums';
 import { InventoryEventEntity } from './inventory-event.entity';
 import { InventoryBatchEntity } from './inventory-batch.entity';
 import { Transform } from 'class-transformer';
-
+import { OrderItemEntity } from 'src/modules/orders/entities/order-item.entity';
+import { QuoteItemEntity } from 'src/modules/quotes/entities/quote-item.entity';
 @Entity('inventory')
 export class InventoryEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -52,12 +53,15 @@ export class InventoryEntity {
   @Column()
   unitOfMeasure: UnitOfMeasure;
 
+  @Column()
+  createdAt: Date;
+
   @OneToMany(() => InventoryEventEntity, (event) => event.inventory)
   events: InventoryEventEntity[];
 
   @OneToMany(() => InventoryBatchEntity, (batch) => batch.inventory)
   batches: InventoryBatchEntity[];
 
-  @Column()
-  createdAt: Date;
+  @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.inventory)
+  orderItems: OrderItemEntity[];
 }

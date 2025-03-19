@@ -17,8 +17,9 @@ export class CreatePurchaseOrderHandler
 
   async execute(command: CreatePurchaseOrderCommand): Promise<PurchaseOrder> {
     const readableId = await this.sequenceService.getNextSequenceNumber('PO');
+    const id = uuidv4();
     const purchaseOrder: PurchaseOrder = new PurchaseOrder(
-      uuidv4(),
+      id,
       readableId,
       command.createPurchaseOrderDto.supplierId,
       command.createPurchaseOrderDto.orderDate,
@@ -26,7 +27,7 @@ export class CreatePurchaseOrderHandler
       command.createPurchaseOrderDto.items.map((item) => {
         const purchaseOrderItem = new PurchaseOrderItem(
           uuidv4(),
-          purchaseOrder.id,
+          id,
           item.materialType,
           item.grade,
           item.dimensions,

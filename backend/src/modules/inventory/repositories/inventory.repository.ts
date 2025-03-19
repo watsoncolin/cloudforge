@@ -94,6 +94,7 @@ export class InventoryRepository {
       bin: data.bin,
       id: data.id,
       batchNumber: data.batchNumber,
+      orderItems: [],
     };
     const savedEntity = await this.batchRepository.save(entity);
     const batch = this.inventoryBatchMapper.toDomain(savedEntity);
@@ -148,25 +149,16 @@ export class InventoryRepository {
     await this.repository.delete(id);
   }
 
-  async getQuantities(inventoryId: string): Promise<Quantities> {
-    const entity = await this.repository.findOne({
-      where: { id: inventoryId },
-    });
-    if (!entity) {
-      throw new NotFoundException('Inventory not found');
-    }
-    const inventoryEvents = await this.inventoryEventRepository.find({
-      where: { inventory: { id: inventoryId } },
-    });
-
+  private calculateQuantitiesFromEvents(
+    events: InventoryEventEntity[],
+  ): Quantities {
     const quantities: Quantities = {
       totalQuantity: 0,
       availableQuantity: 0,
       allocatedQuantity: 0,
     };
 
-    // TODO: Move to an aggregation on the database
-    for (const event of inventoryEvents) {
+    for (const event of events) {
       if (event.eventType === InventoryEventType.RECEIVED) {
         quantities.totalQuantity += event.quantity;
         quantities.availableQuantity += event.quantity;
@@ -182,7 +174,86 @@ export class InventoryRepository {
         quantities.totalQuantity += event.quantity;
       }
     }
+
     return quantities;
+  }
+
+  async getQuantities(inventoryId: string): Promise<Quantities> {
+    const entity = await this.repository.findOne({
+      where: { id: inventoryId },
+    });
+    if (!entity) {
+      throw new NotFoundException('Inventory not found');
+    }
+    const inventoryEvents = await this.inventoryEventRepository.find({
+      where: { inventory: { id: inventoryId } },
+    });
+
+    return this.calculateQuantitiesFromEvents(inventoryEvents);
+  }
+
+  /**
+   * Returns the batches that can be used to fulfill the order.
+   * The batches are sorted by receivedAt date.
+   * The quantity is the quantity of the batch that can be used to fulfill the order.
+   */
+  async getQuantitiesForOrder(
+    inventoryId: string,
+    quantityRequired: number,
+  ): Promise<{
+    batches: {
+      batchId: string;
+      quantity: number;
+    }[];
+  }> {
+    const entity = await this.repository.findOne({
+      where: { id: inventoryId },
+    });
+    if (!entity) {
+      throw new NotFoundException('Inventory not found');
+    }
+
+    // Sort the batches by receivedAt date
+    const inventoryBatches = await this.findBatchesByInventoryId(inventoryId);
+    const sortedBatches = inventoryBatches.sort(
+      (a, b) => a.receivedAt.getTime() - b.receivedAt.getTime(),
+    );
+
+    const batches: {
+      batchId: string;
+      quantity: number;
+    }[] = [];
+
+    let remainingQuantity = quantityRequired;
+
+    for (const batch of sortedBatches) {
+      if (remainingQuantity <= 0) {
+        break;
+      }
+
+      const availableQuantity = await this.findAvailableQuantityForBatch(
+        batch.id,
+      );
+
+      batches.push({
+        batchId: batch.id,
+        quantity: Math.min(
+          availableQuantity.availableQuantity,
+          remainingQuantity,
+        ),
+      });
+      remainingQuantity -= availableQuantity.availableQuantity;
+    }
+
+    return { batches };
+  }
+
+  async findAvailableQuantityForBatch(batchId: string): Promise<Quantities> {
+    const inventoryEvents = await this.inventoryEventRepository.find({
+      where: { batchId },
+    });
+
+    return this.calculateQuantitiesFromEvents(inventoryEvents);
   }
 
   async findBatchById(id: string): Promise<InventoryBatch | null> {
@@ -206,7 +277,7 @@ export class InventoryRepository {
       eventType: event.eventType,
       batchId: event.batchId,
       purchaseOrderId: event.purchaseOrderId,
-      salesOrderId: event.salesOrderId,
+      orderId: event.orderId,
       quantity: event.quantity,
       inventory,
       createdAt: event.createdAt,

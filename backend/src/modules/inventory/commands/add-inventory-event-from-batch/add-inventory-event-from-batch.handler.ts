@@ -39,7 +39,7 @@ export class AddInventoryEventFromBatchHandler
       eventType: InventoryEventType.RECEIVED,
       batchId: inventoryBatch.id,
       purchaseOrderId: null,
-      salesOrderId: null,
+      orderId: null,
       quantity: inventoryBatch.quantity,
       inventoryId: inventory.id,
       createdAt: new Date(),

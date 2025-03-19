@@ -19,6 +19,23 @@ import {
 import { CustomerDto } from 'src/modules/customers/dtos/customer.dto';
 import { DimensionsDto } from 'src/modules/purchase-orders/dto/purchase-order-item.dto';
 
+export class QuantitiesDto {
+  @ApiProperty({ description: 'The quantity of the inventory' })
+  @IsNumber()
+  @IsNotEmpty()
+  available: number;
+
+  @ApiProperty({ description: 'The quantity of the inventory' })
+  @IsNumber()
+  @IsNotEmpty()
+  allocated: number;
+
+  @ApiProperty({ description: 'The quantity of the inventory' })
+  @IsNumber()
+  @IsNotEmpty()
+  total: number;
+}
+
 export class QuoteItemDto {
   @ApiProperty({ description: 'The item ID' })
   @IsString()
@@ -59,6 +76,10 @@ export class QuoteItemDto {
   @IsNumber()
   @IsOptional()
   total?: number;
+
+  @ApiProperty({ description: 'The inventory quantities', type: QuantitiesDto })
+  @IsObject()
+  quantities: QuantitiesDto;
 }
 
 export class QuoteDto {

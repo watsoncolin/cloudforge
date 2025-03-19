@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DimensionsDto } from './DimensionsDto';
+import type { QuantitiesDto } from './QuantitiesDto';
 export type QuoteItemDto = {
   /**
    * The item ID
@@ -36,6 +37,10 @@ export type QuoteItemDto = {
    * The item total
    */
   total: number;
+  /**
+   * The inventory quantities
+   */
+  quantities: QuantitiesDto;
 };
 export namespace QuoteItemDto {
   /**

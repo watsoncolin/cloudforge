@@ -7,6 +7,9 @@ import { InventoryBatch } from 'src/domain/inventory/inventory-batch';
 import { ReadBatchesByInventoryIdQuery } from './queries/read-batches-by-inventory-id/read-batches-by-inventory-id.query';
 import { UpdateBatchLocationCommand } from './commands/update-batch-location/update-batch-location.command';
 import { WarehouseLocation } from 'src/domain/value-objects/warehouse-location';
+import { Material } from 'src/enums';
+import { Dimensions } from 'src/domain/value-objects';
+import { ReadInventoryByMaterialQuery } from './queries/read-inventory-quantities-by-material/read-inventory-quantities-by-material.query';
 
 @Injectable()
 export class InventoryService {
@@ -34,6 +37,16 @@ export class InventoryService {
   ): Promise<void> {
     return this.commandBus.execute(
       new UpdateBatchLocationCommand(inventoryId, batchId, warehouseLocation),
+    );
+  }
+
+  async findByMaterial(
+    materialType: Material,
+    grade: string,
+    dimensions: Dimensions,
+  ): Promise<InventoryWithQuantities> {
+    return this.queryBus.execute(
+      new ReadInventoryByMaterialQuery(materialType, grade, dimensions),
     );
   }
 }

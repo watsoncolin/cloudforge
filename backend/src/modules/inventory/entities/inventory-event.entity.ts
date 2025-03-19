@@ -20,7 +20,7 @@ export class InventoryEventEntity {
   purchaseOrderId?: string;
 
   @Column({ nullable: true })
-  salesOrderId?: string;
+  orderId?: string;
 
   @Column({ nullable: true })
   batchId?: string;

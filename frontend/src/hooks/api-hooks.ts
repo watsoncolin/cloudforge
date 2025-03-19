@@ -19,6 +19,7 @@ import type {
   CreateRFQDto,
   UpdateRFQDto,
   QuoteDto,
+  OrderDto,
 } from "@/api/generated";
 
 // Query keys for caching and invalidation
@@ -50,6 +51,11 @@ export const queryKeys = {
     all: ["rfqs"] as const,
     detail: (id: string) => ["rfqs", id] as const,
     customer: (customerId: string) => ["rfqs", "customer", customerId] as const,
+  },
+  orders: {
+    all: ["orders"] as const,
+    detail: (id: string) => ["orders", id] as const,
+    customer: (customerId: string) => ["orders", "customer", customerId] as const,
   },
 } as const;
 
@@ -392,6 +398,7 @@ export function useConvertToQuote(options?: Omit<UseMutationOptions<QuoteDto, Ap
       queryClient.invalidateQueries({ queryKey: queryKeys.rfqs.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.quotes.all });
     },
+    retry: false,
   });
 }
 
@@ -408,6 +415,47 @@ export function useQuoteById(id: string, options?: Omit<UseQueryOptions<QuoteDto
   return useQuery<QuoteDto, ApiError>({
     queryKey: queryKeys.quotes.detail(id),
     queryFn: () => toPromise(api.quotes.quoteControllerGetQuoteById(id)),
+    ...options,
+  });
+}
+
+export function useConvertToOrder(options?: Omit<UseMutationOptions<OrderDto, ApiError, string>, "mutationFn">) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => toPromise(api.quotes.quoteControllerConvertToOrder(id)),
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.quotes.detail(id) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.quotes.all });
+    },
+    ...options,
+    retry: false,
+  });
+}
+
+// Order hooks
+export function useOrders(options?: Omit<UseQueryOptions<OrderDto[], ApiError>, "queryKey" | "queryFn">) {
+  return useQuery({
+    queryKey: queryKeys.orders.all,
+    queryFn: () => toPromise(api.orders.orderControllerGetAllOrders()),
+    ...options,
+  });
+}
+
+export function useOrderById(id: string, options?: Omit<UseQueryOptions<OrderDto, ApiError>, "queryKey" | "queryFn">) {
+  return useQuery<OrderDto, ApiError>({
+    queryKey: queryKeys.orders.detail(id),
+    queryFn: () => toPromise(api.orders.orderControllerGetOrderById(id)),
+    ...options,
+  });
+}
+
+export function useOrdersForCustomer(
+  customerId: string,
+  options?: Omit<UseQueryOptions<OrderDto[], ApiError>, "queryKey" | "queryFn">
+) {
+  return useQuery({
+    queryKey: queryKeys.orders.customer(customerId),
+    queryFn: () => toPromise(api.orders.orderControllerGetAllOrdersForCustomer(customerId)),
     ...options,
   });
 }

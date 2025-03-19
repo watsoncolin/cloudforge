@@ -8,6 +8,7 @@ import { FetchHttpRequest } from './core/FetchHttpRequest';
 import { AuthService } from './services/AuthService';
 import { CustomersService } from './services/CustomersService';
 import { InventoryService } from './services/InventoryService';
+import { OrdersService } from './services/OrdersService';
 import { PurchaseOrdersService } from './services/PurchaseOrdersService';
 import { QuotesService } from './services/QuotesService';
 import { RfQsService } from './services/RfQsService';
@@ -17,6 +18,7 @@ export class ApiClient {
   public readonly auth: AuthService;
   public readonly customers: CustomersService;
   public readonly inventory: InventoryService;
+  public readonly orders: OrdersService;
   public readonly purchaseOrders: PurchaseOrdersService;
   public readonly quotes: QuotesService;
   public readonly rfQs: RfQsService;
@@ -37,6 +39,7 @@ export class ApiClient {
     this.auth = new AuthService(this.request);
     this.customers = new CustomersService(this.request);
     this.inventory = new InventoryService(this.request);
+    this.orders = new OrdersService(this.request);
     this.purchaseOrders = new PurchaseOrdersService(this.request);
     this.quotes = new QuotesService(this.request);
     this.rfQs = new RfQsService(this.request);

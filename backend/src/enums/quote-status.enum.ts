@@ -4,4 +4,5 @@ export enum QuoteStatus {
   QUOTE = 'QUOTE',
   REJECTED = 'REJECTED',
   COMPLETED = 'COMPLETED',
+  ORDERED = 'ORDERED',
 }

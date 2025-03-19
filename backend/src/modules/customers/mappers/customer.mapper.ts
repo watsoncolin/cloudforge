@@ -42,6 +42,7 @@ export class CustomerMapper {
       updatedAt: customer.updatedAt,
       rfqs: [],
       quotes: [],
+      orders: [],
     };
   }
 }

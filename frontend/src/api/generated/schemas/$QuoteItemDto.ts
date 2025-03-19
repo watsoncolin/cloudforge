@@ -46,5 +46,13 @@ export const $QuoteItemDto = {
       description: `The item total`,
       isRequired: true,
     },
+    quantities: {
+      type: 'all-of',
+      description: `The inventory quantities`,
+      contains: [{
+        type: 'QuantitiesDto',
+      }],
+      isRequired: true,
+    },
   },
 } as const;

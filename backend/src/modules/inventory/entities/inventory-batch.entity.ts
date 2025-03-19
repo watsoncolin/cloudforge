@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { InventoryEntity } from './inventory.entity';
 import { SupplierEntity } from 'src/modules/suppliers/entities/supplier.entity';
 import { InventoryBatchStatus } from 'src/enums/inventory-batch-status.enum';
+import { OrderItemEntity } from 'src/modules/orders/entities/order-item.entity';
 
 @Entity('inventory_batches')
 export class InventoryBatchEntity {
@@ -50,4 +57,7 @@ export class InventoryBatchEntity {
 
   @Column()
   receivedAt: Date;
+
+  @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.batches)
+  orderItems: OrderItemEntity[];
 }

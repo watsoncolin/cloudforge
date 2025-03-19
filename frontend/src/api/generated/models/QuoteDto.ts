@@ -52,6 +52,7 @@ export namespace QuoteDto {
     QUOTE = 'QUOTE',
     REJECTED = 'REJECTED',
     COMPLETED = 'COMPLETED',
+    ORDERED = 'ORDERED',
   }
 }
 
