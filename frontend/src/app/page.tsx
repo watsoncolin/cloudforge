@@ -4,17 +4,13 @@ import {
   Subheading,
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/catalyst-ui";
 import { Stat } from "@/components/catalyst-ui/stat";
-import { getRecentOrders } from "@/data";
 
 export default async function Home() {
-  const orders = await getRecentOrders();
-
   return (
     <>
       <Heading>Good afternoon, Colin</Heading>
@@ -47,14 +43,14 @@ export default async function Home() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((order) => (
+          {/* {orders.map((order) => (
             <TableRow key={order.orderId} href={`/orders/${order.orderId}`} title={`Order #${order.orderId}`}>
               <TableCell>{order.orderId}</TableCell>
               <TableCell className="text-zinc-500">{order.orderDate}</TableCell>
               <TableCell>{order.customer.name}</TableCell>
               <TableCell className="text-right">USD {order.totalPrice}</TableCell>
             </TableRow>
-          ))}
+          ))} */}
         </TableBody>
       </Table>
     </>

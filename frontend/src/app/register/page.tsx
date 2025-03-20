@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/layout/AuthLayout";
-import apiClient from "@/api/client";
+import { api } from "@/api/client";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      const response = await apiClient.post("/auth/register", { email, password });
+      const response = await api.auth.authControllerRegister({ email, password });
       localStorage.setItem("token", response.data.accessToken);
       router.push("/dashboard");
     } catch (err: unknown) {

@@ -13,7 +13,6 @@ import {
   Label,
   Select,
 } from "@/components/catalyst-ui";
-import { getCountries } from "@/data";
 import { useState } from "react";
 import { queryKeys, useCreateCustomer } from "@/hooks/api-hooks";
 import { CreateCustomerDto } from "@/api/generated";
@@ -49,7 +48,23 @@ export function AddCustomer() {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<CustomerFormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<CustomerFormData>>({});
-  const countries = getCountries();
+  const countries: {
+    code: string;
+    name: string;
+  }[] = [
+    {
+      code: "US",
+      name: "United States",
+    },
+    {
+      code: "CA",
+      name: "Canada",
+    },
+    {
+      code: "MX",
+      name: "Mexico",
+    },
+  ];
   const queryClient = useQueryClient();
 
   const {

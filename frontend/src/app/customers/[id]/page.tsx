@@ -5,9 +5,10 @@ import { api } from "@/api/client";
 import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks/api-hooks";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
   try {
-    const customer = await api.customers.customersControllerGetCustomerById(params.id);
+    const customer = await api.customers.customersControllerGetCustomerById(id);
     return {
       title: `Customer: ${customer.name}`,
     };
@@ -18,13 +19,14 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function CustomerPage({ params }: { params: { id: string } }) {
+export default async function CustomerPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const queryClient = new QueryClient();
 
   // Prefetch the customer data on the server
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.customers.detail(params.id),
-    queryFn: () => api.customers.customersControllerGetCustomerById(params.id),
+    queryKey: queryKeys.customers.detail(id),
+    queryFn: () => api.customers.customersControllerGetCustomerById(id),
   });
 
   return (
@@ -36,7 +38,7 @@ export default async function CustomerPage({ params }: { params: { id: string } 
           </div>
         }
       >
-        <CustomerDetails id={params.id} />
+        <CustomerDetails id={id} />
       </Suspense>
     </HydrationBoundary>
   );

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AuthLayout from "@/components/layout/AuthLayout";
-import apiClient from "@/api/client";
+import { api } from "@/api/client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await apiClient.post("/auth/login", { email, password });
+      const response = await api.auth.authControllerLogin({ email, password });
       localStorage.setItem("token", response.data.accessToken);
       router.push("/dashboard");
     } catch (err: unknown) {

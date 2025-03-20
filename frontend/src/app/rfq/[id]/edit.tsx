@@ -115,6 +115,7 @@ export function EditRFQ({ id }: { id: string }) {
       items: formData.items.map((item) => ({
         id: item.id,
         materialType: item.materialType as UpdateRFQItemDto.materialType,
+        processingType: item.processingType as UpdateRFQItemDto.processingType,
         grade: item.grade,
         dimensions: item.dimensions,
         quantity: item.quantity,
@@ -390,6 +391,7 @@ export function EditRFQ({ id }: { id: string }) {
                           {
                             id: "",
                             materialType: Material.STEEL,
+                            processingType: UpdateRFQItemDto.processingType.HRB,
                             grade: "",
                             dimensions: {
                               thickness: 0,

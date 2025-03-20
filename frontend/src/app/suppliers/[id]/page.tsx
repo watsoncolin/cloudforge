@@ -5,9 +5,10 @@ import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query
 import { queryKeys } from "@/hooks/api-hooks";
 import { SupplierDetails } from "./supplier-details";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
   try {
-    const supplier = await api.suppliers.suppliersControllerFindOne(params.id);
+    const supplier = await api.suppliers.suppliersControllerFindOne(id);
     return {
       title: `Supplier: ${supplier.name}`,
     };
@@ -18,13 +19,14 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function SupplierPage({ params }: { params: { id: string } }) {
+export default async function SupplierPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const queryClient = new QueryClient();
 
   // Prefetch the supplier data on the server
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.suppliers.detail(params.id),
-    queryFn: () => api.suppliers.suppliersControllerFindOne(params.id),
+    queryKey: queryKeys.suppliers.detail(id),
+    queryFn: () => api.suppliers.suppliersControllerFindOne(id),
   });
 
   return (
@@ -36,7 +38,7 @@ export default async function SupplierPage({ params }: { params: { id: string } 
           </div>
         }
       >
-        <SupplierDetails id={params.id} />
+        <SupplierDetails id={id} />
       </Suspense>
     </HydrationBoundary>
   );

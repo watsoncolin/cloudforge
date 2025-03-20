@@ -13,14 +13,14 @@ import {
   Label,
 } from "@/components/catalyst-ui";
 import { useState, useEffect } from "react";
-import { Supplier } from "@/domain/supplier";
+import { SupplierDto } from "@/api/client";
 
 interface DisableSupplierFormData {
   reason: string;
 }
 
 interface DisableSupplierProps {
-  supplier: Supplier;
+  supplier: SupplierDto;
 }
 
 export function DisableSupplier({ supplier }: DisableSupplierProps) {

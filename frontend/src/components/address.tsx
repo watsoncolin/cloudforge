@@ -2,11 +2,26 @@
 
 import { Input } from "@/components/catalyst-ui/input";
 import { Listbox, ListboxLabel, ListboxOption } from "@/components/catalyst-ui/listbox";
-import { getCountries } from "@/data";
 import { useState } from "react";
 
 export function Address() {
-  const countries = getCountries();
+  const countries: {
+    code: string;
+    name: string;
+  }[] = [
+    {
+      code: "US",
+      name: "United States",
+    },
+    {
+      code: "CA",
+      name: "Canada",
+    },
+    {
+      code: "MX",
+      name: "Mexico",
+    },
+  ];
   const [country, setCountry] = useState(countries[0]);
 
   return (
@@ -19,13 +34,7 @@ export function Address() {
         className="col-span-2"
       />
       <Input aria-label="City" name="city" placeholder="City" defaultValue="Toronto" className="col-span-2" />
-      <Listbox aria-label="Region" name="region" placeholder="Region" defaultValue="Ontario">
-        {country.regions.map((region) => (
-          <ListboxOption key={region} value={region}>
-            <ListboxLabel>{region}</ListboxLabel>
-          </ListboxOption>
-        ))}
-      </Listbox>
+
       <Input aria-label="Postal code" name="postal_code" placeholder="Postal Code" defaultValue="A1A 1A1" />
       <Listbox
         aria-label="Country"
@@ -38,7 +47,6 @@ export function Address() {
       >
         {countries.map((country) => (
           <ListboxOption key={country.code} value={country}>
-            <img className="w-5 sm:w-4" src={country.flagUrl} alt="" />
             <ListboxLabel>{country.name}</ListboxLabel>
           </ListboxOption>
         ))}

@@ -5,9 +5,10 @@ import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query
 import { queryKeys } from "@/hooks/api-hooks";
 import { PurchaseOrderDetails } from "./purchase-order-details";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
   try {
-    const purchaseOrder = await api.purchaseOrders.purchaseOrdersControllerFindOne(params.id);
+    const purchaseOrder = await api.purchaseOrders.purchaseOrdersControllerFindOne(id);
     return {
       title: `Purchase Order: ${purchaseOrder.id}`,
     };
@@ -18,13 +19,14 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function PurchaseOrderPage({ params }: { params: { id: string } }) {
+export default async function PurchaseOrderPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const queryClient = new QueryClient();
 
   // Prefetch the supplier data on the server
   await queryClient.prefetchQuery({
-    queryKey: queryKeys.purchaseOrders.detail(params.id),
-    queryFn: () => api.purchaseOrders.purchaseOrdersControllerFindOne(params.id),
+    queryKey: queryKeys.purchaseOrders.detail(id),
+    queryFn: () => api.purchaseOrders.purchaseOrdersControllerFindOne(id),
   });
 
   return (
@@ -36,7 +38,7 @@ export default async function PurchaseOrderPage({ params }: { params: { id: stri
           </div>
         }
       >
-        <PurchaseOrderDetails id={params.id} />
+        <PurchaseOrderDetails id={id} />
       </Suspense>
     </HydrationBoundary>
   );

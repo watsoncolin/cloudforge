@@ -15,7 +15,6 @@ import {
   Label,
   Select,
 } from "@/components/catalyst-ui";
-import { getCountries } from "@/data";
 import { queryKeys } from "@/hooks/api-hooks";
 import { useCreateSupplier } from "@/hooks/api-hooks";
 import { useQueryClient } from "@tanstack/react-query";
@@ -62,7 +61,23 @@ export function AddSupplier() {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<SupplierFormData>(initialFormData);
   const [errors, setErrors] = useState<Partial<SupplierFormData>>({});
-  const countries = getCountries();
+  const countries: {
+    code: string;
+    name: string;
+  }[] = [
+    {
+      code: "US",
+      name: "United States",
+    },
+    {
+      code: "CA",
+      name: "Canada",
+    },
+    {
+      code: "MX",
+      name: "Mexico",
+    },
+  ];
   const queryClient = useQueryClient();
 
   const {
