@@ -123,4 +123,43 @@ export class RfQsService {
       },
     });
   }
+  /**
+   * Generate a quote for a RFQ from a PDF file
+   * @param formData
+   * @returns RFQDto Quote generated successfully
+   * @throws ApiError
+   */
+  public rfqControllerGenerateQuote(
+    formData: {
+      /**
+       * PDF file to generate quote from
+       */
+      file: Blob;
+    },
+  ): CancelablePromise<RFQDto> {
+    return this.httpRequest.request({
+      method: 'POST',
+      url: '/rfqs/generate-quote/file',
+      formData: formData,
+      mediaType: 'multipart/form-data',
+    });
+  }
+  /**
+   * Generate a quote for a RFQ from a text
+   * @param requestBody
+   * @returns RFQDto Quote generated successfully
+   * @throws ApiError
+   */
+  public rfqControllerGenerateQuoteFromText(
+    requestBody: {
+      text: string;
+    },
+  ): CancelablePromise<RFQDto> {
+    return this.httpRequest.request({
+      method: 'POST',
+      url: '/rfqs/generate-quote/text',
+      body: requestBody,
+      mediaType: 'application/json',
+    });
+  }
 }

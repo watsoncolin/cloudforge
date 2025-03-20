@@ -250,7 +250,7 @@ export function EditRFQ({ id }: { id: string }) {
                                 <Input
                                   type="number"
                                   min="0"
-                                  step="0.01"
+                                  step="0.0001"
                                   placeholder="T"
                                   value={item.dimensions.thickness}
                                   onChange={(e) => {
@@ -273,7 +273,7 @@ export function EditRFQ({ id }: { id: string }) {
                                 <Input
                                   type="number"
                                   min="0"
-                                  step="0.01"
+                                  step="0.0001"
                                   placeholder="W"
                                   value={item.dimensions.width}
                                   onChange={(e) => {
@@ -296,7 +296,7 @@ export function EditRFQ({ id }: { id: string }) {
                                 <Input
                                   type="number"
                                   min="0"
-                                  step="0.01"
+                                  step="0.0001"
                                   placeholder="L"
                                   value={item.dimensions.length}
                                   onChange={(e) => {

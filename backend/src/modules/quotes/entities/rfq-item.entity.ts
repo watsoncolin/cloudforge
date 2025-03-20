@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { RFQEntity } from './rfq.entity';
-import { UnitOfMeasure, Material } from 'src/enums';
+import { UnitOfMeasure, Material, ProcessingType } from 'src/enums';
 @Entity()
 export class RFQItemEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -11,6 +11,9 @@ export class RFQItemEntity {
 
   @Column({ type: 'enum', enum: Material })
   materialType: Material; // e.g., Steel Coil, Aluminum Sheet
+
+  @Column({ type: 'enum', enum: ProcessingType })
+  processingType: ProcessingType; // e.g., HRB, HRPO, CR
 
   @Column({ type: 'varchar', length: 100 })
   grade: string; // e.g., 316 Stainless Steel
@@ -30,9 +33,9 @@ export class RFQItemEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   quantity: number; // Requested quantity
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  price: number; // Price per unit
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  price?: number; // Price per unit
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  total: number; // Total price
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  total?: number; // Total price
 }

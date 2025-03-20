@@ -5,3 +5,5 @@ add db types and constraints
 add event emitter for purchase order received event
 
 add pagination
+
+add thickness range to RFQ/Quote

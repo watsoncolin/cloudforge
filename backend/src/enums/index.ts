@@ -7,3 +7,4 @@ export * from './rfq-status.enum';
 export * from './rfq-source.enum';
 export * from './quote-status.enum';
 export * from './order-status.enum';
+export * from './processing-type.enum';

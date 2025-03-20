@@ -9,6 +9,10 @@ export type CreateRFQItemDto = {
    */
   materialType: string;
   /**
+   * The item processing type
+   */
+  processingType: CreateRFQItemDto.processingType;
+  /**
    * The item grade
    */
   grade: string;
@@ -34,6 +38,14 @@ export type CreateRFQItemDto = {
   total: number;
 };
 export namespace CreateRFQItemDto {
+  /**
+   * The item processing type
+   */
+  export enum processingType {
+    HRB = 'HRB',
+    HRPO = 'HRPO',
+    CR = 'CR',
+  }
   /**
    * The item unit of measure
    */

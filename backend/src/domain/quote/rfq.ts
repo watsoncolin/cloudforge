@@ -29,6 +29,7 @@ export class RFQ {
           item.id == null ? uuidv4() : item.id.length > 0 ? item.id : uuidv4(),
         rfqId: this.id,
         materialType: item.materialType,
+        processingType: item.processingType,
         grade: item.grade,
         dimensions: {
           length: item.dimensions.length,

@@ -31,9 +31,9 @@ export class QuoteItemEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   quantity: number; // Requested quantity
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  price: number; // Price per unit
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  price?: number; // Price per unit
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  total: number; // Total price
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  total?: number; // Total price
 }

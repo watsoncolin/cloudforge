@@ -12,6 +12,7 @@ export class RFQMapper {
       entity.items?.map((item) => ({
         id: item.id,
         materialType: item.materialType,
+        processingType: item.processingType,
         grade: item.grade,
         dimensions: {
           width: item.width,

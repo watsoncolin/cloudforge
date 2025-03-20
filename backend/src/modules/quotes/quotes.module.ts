@@ -28,6 +28,8 @@ import { GetRFQByIdHandler } from './queries/get-rfq-by-id/get-rfq-by-id.handler
 import { ConvertToQuoteHandler } from './commands/convert-to-quote/convert-to-quote.handler';
 import { QuoteService } from './quote.service';
 import { UpdateQuoteStatusHandler } from './commands/update-quote-status/update-quote-status.handler';
+import { AIService } from './ai.service';
+
 const CommandHandlers = [
   ConvertToQuoteHandler,
   CreateRFQHandler,
@@ -63,9 +65,10 @@ const QueryHandlers = [
     QuoteMapper,
     QuoteItemMapper,
     QuoteService,
+    AIService,
     ...CommandHandlers,
     ...QueryHandlers,
   ],
-  exports: [RFQService, QuoteService],
+  exports: [RFQService, QuoteService, AIService],
 })
 export class QuotesModule {}

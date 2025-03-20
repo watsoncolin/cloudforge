@@ -13,6 +13,10 @@ export type UpdateRFQItemDto = {
    */
   materialType: UpdateRFQItemDto.materialType;
   /**
+   * The item processing type
+   */
+  processingType: UpdateRFQItemDto.processingType;
+  /**
    * The item grade
    */
   grade: string;
@@ -46,6 +50,14 @@ export namespace UpdateRFQItemDto {
     ALUMINUM = 'aluminum',
     COPPER = 'copper',
     STAINLESS_STEEL = 'stainless_steel',
+  }
+  /**
+   * The item processing type
+   */
+  export enum processingType {
+    HRB = 'HRB',
+    HRPO = 'HRPO',
+    CR = 'CR',
   }
   /**
    * The item unit of measure

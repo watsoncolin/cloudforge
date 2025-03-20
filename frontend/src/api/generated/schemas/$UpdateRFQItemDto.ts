@@ -13,6 +13,10 @@ export const $UpdateRFQItemDto = {
       type: 'Enum',
       isRequired: true,
     },
+    processingType: {
+      type: 'Enum',
+      isRequired: true,
+    },
     grade: {
       type: 'string',
       description: `The item grade`,

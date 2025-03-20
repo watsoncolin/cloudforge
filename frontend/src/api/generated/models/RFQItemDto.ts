@@ -13,6 +13,10 @@ export type RFQItemDto = {
    */
   materialType: string;
   /**
+   * The item processing type
+   */
+  processingType: RFQItemDto.processingType;
+  /**
    * The item grade
    */
   grade: string;
@@ -38,6 +42,14 @@ export type RFQItemDto = {
   total: number;
 };
 export namespace RFQItemDto {
+  /**
+   * The item processing type
+   */
+  export enum processingType {
+    HRB = 'HRB',
+    HRPO = 'HRPO',
+    CR = 'CR',
+  }
   /**
    * The item unit of measure
    */

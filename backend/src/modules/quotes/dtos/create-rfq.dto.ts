@@ -8,7 +8,13 @@ import {
   IsObject,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { RFQStatus, RFQSource, UnitOfMeasure, Material } from 'src/enums';
+import {
+  RFQStatus,
+  RFQSource,
+  UnitOfMeasure,
+  Material,
+  ProcessingType,
+} from 'src/enums';
 import { DimensionsDto } from 'src/modules/purchase-orders/dto/purchase-order-item.dto';
 
 export class CreateRFQItemDto {
@@ -16,6 +22,14 @@ export class CreateRFQItemDto {
   @IsString()
   @IsNotEmpty()
   materialType: Material;
+
+  @ApiProperty({
+    description: 'The item processing type',
+    enum: ProcessingType,
+  })
+  @IsEnum(ProcessingType)
+  @IsNotEmpty()
+  processingType: ProcessingType;
 
   @ApiProperty({ description: 'The item grade' })
   @IsString()

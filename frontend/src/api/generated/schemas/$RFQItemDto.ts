@@ -14,6 +14,10 @@ export const $RFQItemDto = {
       description: `The item inventory item id`,
       isRequired: true,
     },
+    processingType: {
+      type: 'Enum',
+      isRequired: true,
+    },
     grade: {
       type: 'string',
       description: `The item grade`,

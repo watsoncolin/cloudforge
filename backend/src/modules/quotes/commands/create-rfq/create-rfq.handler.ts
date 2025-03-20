@@ -25,6 +25,7 @@ export class CreateRFQHandler implements ICommandHandler<CreateRFQCommand> {
         id: uuidv4(),
         rfqId: id,
         materialType: item.materialType,
+        processingType: item.processingType,
         grade: item.grade,
         dimensions: item.dimensions,
         quantity: item.quantity,

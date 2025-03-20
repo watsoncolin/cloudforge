@@ -3,7 +3,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/catalyst-ui";
 import { ListPageHeader } from "@/components/list-page-header";
 import { useRFQs } from "@/hooks/api-hooks";
-import { AddRFQ } from "./add-rfq";
+import AddRFQ from "./add-rfq";
 
 export function RFQList() {
   const { data: rfqs = [], isLoading, error } = useRFQs();

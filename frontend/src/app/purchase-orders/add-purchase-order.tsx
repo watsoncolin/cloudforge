@@ -271,7 +271,7 @@ export function AddPurchaseOrder() {
                                 <Input
                                   type="number"
                                   min="0"
-                                  step="0.01"
+                                  step="0.0001"
                                   placeholder="T"
                                   value={item.dimensions.thickness}
                                   onChange={(e) => {
@@ -294,7 +294,7 @@ export function AddPurchaseOrder() {
                                 <Input
                                   type="number"
                                   min="0"
-                                  step="0.01"
+                                  step="0.0001"
                                   placeholder="W"
                                   value={item.dimensions.width}
                                   onChange={(e) => {
@@ -317,7 +317,7 @@ export function AddPurchaseOrder() {
                                 <Input
                                   type="number"
                                   min="0"
-                                  step="0.01"
+                                  step="0.0001"
                                   placeholder="L"
                                   value={item.dimensions.length}
                                   onChange={(e) => {
@@ -342,7 +342,7 @@ export function AddPurchaseOrder() {
                             <Input
                               type="number"
                               min="0"
-                              step="0.01"
+                              step="0.0001"
                               value={item.quantity}
                               onChange={(e) => {
                                 const newItems = [...formData.items];

@@ -1,6 +1,4 @@
 import { Customer } from "./customer";
-import { MaterialType } from "./enums.ts/materialTypes.enum";
-import { Units } from "./enums.ts/units.enum";
 
 export interface Invoice {
   invoiceId: string; // "INV-20240316-001"

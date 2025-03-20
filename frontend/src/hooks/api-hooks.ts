@@ -388,17 +388,37 @@ export function useDeleteRFQ(options?: Omit<UseMutationOptions<void, ApiError, s
   });
 }
 
+export function useGenerateAiGeneratedRfqFromText(
+  options?: Omit<UseMutationOptions<RFQDto, ApiError, { text: string }>, "mutationFn">
+) {
+  return useMutation({
+    mutationFn: ({ text }) => toPromise(api.rfQs.rfqControllerGenerateQuoteFromText({ text })),
+    ...options,
+  });
+}
+
+export function useGenerateAiGeneratedRfqFromFile(
+  options?: Omit<UseMutationOptions<RFQDto, ApiError, { file: File }>, "mutationFn">
+) {
+  return useMutation({
+    mutationFn: async ({ file }) => {
+      return toPromise(api.rfQs.rfqControllerGenerateQuote({ file: file }));
+    },
+    ...options,
+    retry: false,
+  });
+}
+
 export function useConvertToQuote(options?: Omit<UseMutationOptions<QuoteDto, ApiError, string>, "mutationFn">) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => toPromise(api.rfQs.rfqControllerConvertToQuote(id)),
     ...options,
+    retry: false,
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.rfqs.detail(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.rfqs.all });
-      queryClient.invalidateQueries({ queryKey: queryKeys.quotes.all });
     },
-    retry: false,
   });
 }
 

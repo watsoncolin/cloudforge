@@ -8,6 +8,7 @@ export class RFQItemMapper {
       id: entity.id,
       rfqId: entity.rfq.id,
       materialType: entity.materialType,
+      processingType: entity.processingType,
       grade: entity.grade,
       dimensions: {
         width: entity.width,
@@ -26,6 +27,7 @@ export class RFQItemMapper {
       id: rfqItem.id,
       rfq,
       materialType: rfqItem.materialType,
+      processingType: rfqItem.processingType,
       grade: rfqItem.grade,
       width: rfqItem.dimensions.width,
       length: rfqItem.dimensions.length,
