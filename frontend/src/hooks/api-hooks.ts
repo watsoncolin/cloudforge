@@ -446,6 +446,8 @@ export function useConvertToOrder(options?: Omit<UseMutationOptions<OrderDto, Ap
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.quotes.detail(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.quotes.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.orders.detail(id) });
     },
     ...options,
     retry: false,

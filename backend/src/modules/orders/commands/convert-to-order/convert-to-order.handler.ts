@@ -99,8 +99,9 @@ export class ConvertToOrderHandler
         batchIds,
         quantity: quantity,
         unitOfMeasure: item.unitOfMeasure,
-        price: item.price,
-        total: item.total,
+        // TODO: add pricing
+        price: item.price ?? 55,
+        total: item.total ?? quantity * 55,
       });
 
       for (const batch of quantities.batches) {
