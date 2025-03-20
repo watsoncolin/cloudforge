@@ -298,8 +298,9 @@ export default function AddRFQ() {
                     <TableHead>
                       <TableRow>
                         <TableHeader>Material</TableHeader>
+                        <TableHeader>Processing Type</TableHeader>
                         <TableHeader>Grade</TableHeader>
-                        <TableHeader>Dimensions</TableHeader>
+                        <TableHeader>Dimensions (T x W x L)</TableHeader>
                         <TableHeader>Quantity</TableHeader>
                         <TableHeader>Unit</TableHeader>
                       </TableRow>

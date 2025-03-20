@@ -44,6 +44,7 @@ export class OrderController {
   })
   async getAllOrders(): Promise<OrderDto[]> {
     const orders = await this.orderService.findAll();
+
     return await Promise.all(orders.map((order) => this.mapOrderToDto(order)));
   }
 
@@ -80,10 +81,12 @@ export class OrderController {
   }
 
   private async mapOrderToDto(order: Order): Promise<OrderDto> {
+    const customer = await this.customersService.findOne(order.customerId);
     return {
       id: order.id,
       readableId: order.readableId,
       customerId: order.customerId,
+      customerName: customer.name,
       quoteId: order.quoteId,
       status: order.status,
       items: await Promise.all(

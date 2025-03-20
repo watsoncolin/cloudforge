@@ -10,8 +10,6 @@ import { OrdersModule } from './modules/orders/order.module';
 import { getDatabaseConfig } from './config/database.config';
 import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
-import * as crypto from 'crypto';
-(global as any).crypto = crypto;
 
 @Module({
   imports: [

@@ -63,6 +63,11 @@ export class OrderDto {
   customerId: string;
 
   @ApiProperty({
+    description: 'The name of the customer that the order is for',
+  })
+  customerName: string;
+
+  @ApiProperty({
     description: 'The items in the order',
     type: [OrderItemDto],
   })

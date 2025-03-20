@@ -26,6 +26,7 @@ export class RFQRepository {
       items: data.items.map((item) => ({
         id: item.id,
         materialType: item.materialType,
+        processingType: item.processingType,
         grade: item.grade,
         width: item.dimensions.width,
         length: item.dimensions.length,

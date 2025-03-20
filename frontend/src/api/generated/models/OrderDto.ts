@@ -25,6 +25,10 @@ export type OrderDto = {
    */
   customerId: string;
   /**
+   * The name of the customer that the order is for
+   */
+  customerName: string;
+  /**
    * The items in the order
    */
   items: Array<OrderItemDto>;

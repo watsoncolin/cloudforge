@@ -41,7 +41,7 @@ export function OrderList() {
           {orders.map((order) => (
             <TableRow key={order.id} href={`/orders/${order.id}`} title={order.customerId}>
               <TableCell>{order.readableId}</TableCell>
-              <TableCell>{order.customerId}</TableCell>
+              <TableCell>{order.customerName}</TableCell>
               <TableCell>{order.items.length}</TableCell>
               <TableCell>{order.status}</TableCell>
               <TableCell>{order.createdAt}</TableCell>

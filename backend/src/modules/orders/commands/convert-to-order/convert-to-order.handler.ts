@@ -57,7 +57,7 @@ export class ConvertToOrderHandler
         item.dimensions,
       );
 
-      if (!inventory) {
+      if (!inventory || inventory?.id.length === 0) {
         errors.push(
           new Error(
             `Inventory not available for ${item.materialType} ${item.grade} ${item.dimensions}`,

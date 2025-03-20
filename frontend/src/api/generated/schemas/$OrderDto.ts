@@ -28,6 +28,11 @@ export const $OrderDto = {
       description: `The ID of the customer that the order is for`,
       isRequired: true,
     },
+    customerName: {
+      type: 'string',
+      description: `The name of the customer that the order is for`,
+      isRequired: true,
+    },
     items: {
       type: 'array',
       contains: {

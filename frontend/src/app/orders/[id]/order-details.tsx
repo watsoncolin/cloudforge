@@ -111,13 +111,16 @@ export default function OrderDetails({ id }: { id: string }) {
                 <TableCell>{item.price}</TableCell>
                 <TableCell>{item.total}</TableCell>
                 <TableCell>
-                  {item.batches.map((batch) => (
-                    <div key={batch.id}>
-                      <div>{batch.location.warehouse}</div>
-                      <div>{batch.location.zone}</div>
-                      <div>{batch.location.bin}</div>
-                    </div>
-                  ))}
+                  <div>
+                    <div>Location:</div>
+                    {item.batches.map((batch) => (
+                      <div key={batch.id}>
+                        <div>{batch.location.warehouse}</div>
+                        <div>{batch.location.zone}</div>
+                        <div>{batch.location.bin}</div>
+                      </div>
+                    ))}
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
